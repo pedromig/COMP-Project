@@ -20,4 +20,4 @@ The constructiong of a compiler for the language "UC", a subset of the C program
 
 
 ## Collaborators
-  - [Gabriel Fernandes](https://github.com/TLDart)
+  - [Gabriel Fernandes](https://github.com/gabrielmendesfernandes)
