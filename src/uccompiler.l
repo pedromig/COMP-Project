@@ -1,10 +1,14 @@
+%{
+    #include <stdio.h>
+%}
+
 CHR             [a-zA-Z_]
 
-OOO             "\\"[0-7]{1-3}
+OOO             "\\"[0-7]{1,3}
 
 INTLIT          [0-9]+
 ID              {CHR}({CHR}|{INTLIT})*
-CHRLIT          [a-zA-Z0-9 \t\"\\]|{OOO}
+CHRLIT          ([a-zA-Z0-9\t\"\\]|{OOO})
 REALLIT         {INTLIT}"."({INTLIT}?([eE][-+]?{INTLIT})?)
 CHAR            "char"
 ELSE            "else"
@@ -50,11 +54,41 @@ int parentesis = 0; //if it is zero we know that all open parentesis were closed
 %}
 
 
+
 %%
-{ELSE}      {printf("ELSE");}
-{WHILE}     {printf("WHILE");}
-{IF}        {printf("IF");}
-{INT}       {printf("INT");}
+
+{ELSE}      {printf("ELSE\n");}
+{WHILE}     {printf("WHILE\n");}
+{IF}        {printf("IF\n");}
+{INT}       {printf("INT\n");}
+{SHORT}     {printf("SHORT\n");}
+{DOUBLE}    {printf("DOUBLE\n");}
+{RETURN}    {printf("RETURN\n");}
+{VOID}      {printf("VOID\n");}
+{BITWISEAND}    {printf("BITWISEAND\n");}
+{BITWISEOR}     {printf("BITWISEOR\n");}
+{BITWISEXOR}    {printf("BITWISEXOR\n");}
+{AND}       {printf("AND\n");}
+{OR}        {printf("OR\n");}
+{NOT}       {printf("NOT\n");}
+{ASSIGN}    {printf("ASSIGN\n");}
+{MUL}       {printf("MUL\n");}
+{DIV}       {printf("DIV\n");}
+{PLUS}      {printf("PLUS\n");}
+{MINUS}     {printf("MINUS\n");}
+{MOD}       {printf("MOD\n");}
+{COMMA}     {printf("COMMA\n");}
+{SEMI}      {printf("SEMI\n");}
+{EQ}        {printf("EQ\n");}
+{NE}        {printf("NE\n");}
+{GE}        {printf("GE\n");}
+{GT}        {printf("GT\n");}
+{LE}        {printf("LE\n");}
+{LT}        {printf("LT\n");}
+{LBRACE}    {printf("LBRACE\n");}
+{RBRACE}    {printf("RBRACE\n");}
+{LPAR}      {printf("LPAR\n");}
+{RPAR}      {printf("RPAR\n");}
 {CHAR}      {printf("CHAR");}
 {INTLIT}    {printf("INTLIT\(%s)", yytext);}
 {CHRLIT}    {printf("CHRLIT\('%s')\n", yytext);}
@@ -62,20 +96,24 @@ int parentesis = 0; //if it is zero we know that all open parentesis were closed
 {ID}        {printf("ID\(%s)\n", yytext);}
 
 
+
 "/*"        {BEGIN COMMENT;}
+
 <COMMENT>.  ;
 <COMMENT>\n ;
-<COMMENT> "*/"  {BEGIN 0;}
+<COMMENT>"*/"  {BEGIN 0;}
+
 
 
 %%
+
 
 
 int yywrap() {
     return 1;
 }
 
-int main(){
+int main() {
     yylex();
     return 0;
 }
