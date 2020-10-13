@@ -17,7 +17,7 @@ function run_tests() {
 
         (./$UC_COMPILER $COMPILER_FLAGS < $1/$ucfile) > $2/$outfile
 
-        diff -y --suppress-common-lines $1/$outfile $2/$outfile
+        diff $1/$outfile $2/$outfile > /dev/null
 
         if [ $? -eq 0 ]; then
             echo -e ✅ "${GREEN}TEST PASSED!!${RESET}" $ucfile
@@ -28,8 +28,8 @@ function run_tests() {
 
 }
 
-if [[ ! -f $1 ]]; then
-    ./make.sh $1
+if [[ -f $1 ]]; then
+    ./make.sh $UC_COMPILER
 fi
 
 run_tests $INPUT_DIR $OUTPUT_DIR
