@@ -1,0 +1,39 @@
+ID(simple)
+ CHAR ELSE
+ WHILE
+ IF
+ INT
+ SHORT
+ DOUBLE
+ RETURN
+ VOID
+
+ID(reserved)
+ PLUS
+PLUS
+ MINUS
+MINUS
+ [ ] ID(auto)
+ ID(break)
+ ID(case)
+ ID(const)
+ ID(continue)
+ ID(default)
+ ID(do)
+ ID(long)
+ ID(register)
+ ID(signed)
+ ID(sizeof)
+ ID(static)
+ ID(struct)
+ ID(switch)
+ ID(typedef)
+ ID(union)
+ ID(unsigned)
+ ID(volatile)
+ ID(enum)
+ ID(extern)
+ ID(float)
+ ID(for)
+ ID(goto)
+

@@ -1,0 +1,56 @@
+ID(long)
+ INT
+ ID(multiplyNumbers)
+LPAR
+INT
+ CHRLIT('n')
+RPAR
+SEMI
+
+INT
+ ID(main)
+LPAR
+RPAR
+ LBRACE
+
+    INT
+ CHRLIT('n')
+SEMI
+
+    RETURN
+ INTLIT(0)SEMI
+
+RBRACE
+
+
+ID(long)
+ INT
+ ID(multiplyNumbers)
+LPAR
+INT
+ CHRLIT('n')
+RPAR
+ LBRACE
+
+    IF
+ LPAR
+CHRLIT('n')
+GE
+INTLIT(1)RPAR
+
+        RETURN
+ CHRLIT('n')
+MUL
+ID(multiplyNumbers)
+LPAR
+CHRLIT('n')
+MINUS
+INTLIT(1)RPAR
+SEMI
+
+    ELSE
+
+        RETURN
+ INTLIT(1)SEMI
+
+RBRACE

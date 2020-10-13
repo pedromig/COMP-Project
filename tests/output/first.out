@@ -1,0 +1,40 @@
+INT
+ ID(main)
+LPAR
+VOID
+RPAR
+ LBRACE
+
+  CHAR CHRLIT('i')
+ ASSIGN
+ 'CHRLIT('A')
+'SEMI
+
+  WHILE
+ LPAR
+CHRLIT('i')
+ LE
+ 'CHRLIT('Z')
+'RPAR
+
+  LBRACE
+
+    ID(putchar)
+LPAR
+CHRLIT('i')
+RPAR
+SEMI
+
+    CHRLIT('i')
+ ASSIGN
+ CHRLIT('i')
+ PLUS
+ INTLIT(1)SEMI
+
+  RBRACE
+
+  RETURN
+ INTLIT(0)SEMI
+
+RBRACE
+
