@@ -15,9 +15,9 @@ function run_tests() {
         ucfile=$(basename "$file_path")
         outfile=${ucfile%.*}.out
 
-        (./$UC_COMPILER $COMPILER_FLAGS < $1/$ucfile) > $2/$outfile
+        (./$UC_COMPILER $COMPILER_FLAGS <$1/$ucfile) >$2/$outfile
 
-        diff $1/$outfile $2/$outfile > /dev/null
+        diff $1/$outfile $2/$outfile >/dev/null
 
         if [ $? -eq 0 ]; then
             echo -e ✅ "${GREEN}TEST PASSED!!${RESET}" $ucfile
@@ -28,7 +28,7 @@ function run_tests() {
 
 }
 
-if [[ -f $1 ]]; then
+if [[ ! -f $UC_COMPILER ]]; then
     ./make.sh $UC_COMPILER
 fi
 
