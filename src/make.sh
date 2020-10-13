@@ -11,20 +11,21 @@ RESET="\x1B[0m"
 LEXER="uccompiler.l"
 COMPILER_NAME="ucc"
 
-
-if [[ ! -f $LEXER ]]; then 
+if [[ ! -f $LEXER ]]; then
     echo -e "${RED}ERROR:${RESET} $LEXER file does not exist! "
     echo -ne "${BLUE}INFO:${RESET} Creating file... " && touch $LEXER && echo -e "${GREEN}DONE!${RESET}"
-fi 
+fi
 
-
-if [ $# -eq 1 ]; then 
+if [ $# -eq 1 ]; then
     COMPILER_NAME=$1
 fi
 
-echo -ne "${BLUE}INFO:${RESET} Compiling... "
+echo -e "${BLUE}INFO:${RESET} Compiling... "
 
-flex $LEXER
-clang-3.9 lex.yy.c -o $COMPILER_NAME 
+flex $LEXER && clang-3.9 lex.yy.c -o $COMPILER_NAME
 
-echo -e "${GREEN}DONE!${RESET}" 
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}DONE!${RESET}"
+else
+    echo -e "${RED}FAILED!!${RESET}"
+fi
