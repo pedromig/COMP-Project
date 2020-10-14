@@ -27,7 +27,7 @@ function run_tests() {
 
         ./$UC_COMPILER $COMPILER_FLAGS <$file_path >$2/$outfile
 
-        (diff -y $1/$outfile $2/$outfile) &>DIFFOUT
+        (diff -y --suppress-common-lines $1/$outfile $2/$outfile) &>DIFFOUT
 
         if [ $? -eq 0 ]; then
             echo -e ✅ "${GREEN}TEST PASSED!!${RESET}" $ucfile
@@ -40,8 +40,7 @@ function run_tests() {
 }
 
 function compile() {
-    flex $1
-    clang-3.9 -Wall -Wno-unused-function lex.yy.c -o $2
+    flex $1 && clang-3.9 -Wall -Wno-unused-function lex.yy.c -o $2
 }
 
 if [ $# -eq 0 ]; then

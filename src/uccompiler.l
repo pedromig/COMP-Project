@@ -25,7 +25,7 @@
     #define ilegal_char_error(line, column, c)\
         printf("Line %d, col %d: illegal character \(%s)\n", line, column, c)
 
-    
+
     #define begin_multi_line_comment(line, column)\
         BEGIN MULTI_LINE_COMMENT;\
         yysavedlineno = line;\
@@ -52,11 +52,13 @@
 %}
 
 
-CHR             [a-zA-Z_]+
+CHR             [a-zA-Z_]+   
 OOO             "\\"[0-7]{1,3}
 
+LINE_END        (\n|\r\n)
+                
 INTLIT          [0-9]+
-CHRLIT          ([a-zA-Z0-9\t.?]|{OOO})|(\\')|(\\\\)|(\\n)|(\")
+CHRLIT          ([^\n\'\\]|{OOO}|("\\t")|("\\'")|("\\\"")|("\\n")|("\\\\")|(\t))
 REALLIT         ({INTLIT}"."{INTLIT}?|"."({INTLIT}))([eE][-+]?{INTLIT})?
                 
 ID              {CHR}({CHR}|{INTLIT})*
@@ -99,7 +101,7 @@ RPAR            ")"
 
 CHAR_LITERAL_DELIM              "'"
 
-SINGLE_LINE_COMMENT             "//".*(\n$)?
+SINGLE_LINE_COMMENT             "//".*({LINE_END}$)?
 MULTI_LINE_COMMENT_BEGIN        "/*"
 MULTI_LINE_COMMENT_END          "*/"
 
@@ -149,10 +151,11 @@ MULTI_LINE_COMMENT_END          "*/"
 {INTLIT}                                              {printl("INTLIT\(%s)\n", yytext); yycolumno += yyleng;}
 {REALLIT}                                             {printl("REALLIT\(%s)\n", yytext); yycolumno += yyleng;}
 
-{CHAR_LITERAL_DELIM}                                  {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
-<CHAR_LITERAL>{CHRLIT}{1}"'"                          {printl("CHRLIT\('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
-<CHAR_LITERAL>({CHRLIT}|[ ])*"'"                      {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
-<CHAR_LITERAL>{CHRLIT}*[\nEOF]                          {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno += yyleng;}
+{CHAR_LITERAL_DELIM}                                             {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
+<CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                       {printl("CHRLIT\('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
+<CHAR_LITERAL>"'"|({CHRLIT}|"\\"?[^\'\n\\]+)*"'"        {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
+<CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\]+)*(\\)?{LINE_END}                    {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
+
 
 
 {SINGLE_LINE_COMMENT}                                 {;}                       
@@ -163,14 +166,14 @@ MULTI_LINE_COMMENT_END          "*/"
 <MULTI_LINE_COMMENT>{MULTI_LINE_COMMENT_END}          {BEGIN 0; yycolumno += yyleng;}
 <MULTI_LINE_COMMENT><<EOF>>                           {unterm_comment_error(yysavedlineno, yysavedcolumno); BEGIN 0;}
                                                       
-\n                                                    {yycolumno = 1;}                                                 
+{LINE_END}                                            {yycolumno = 1;}                                                 
 [ \t]+                                                {yycolumno += yyleng;}
 .                                                     {ilegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
 <<EOF>>                                               {return 0;}
 
 %%
 
-void argparse(int argc, char *argv[]){
+void argparse(int argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "-l"))
             l_flag = true;
