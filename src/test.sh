@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Compiler Tester!
+# @version 1.0
 # @author Pedro Miguel Duque Rodrigues
 
 # Terminal Escape Colors
@@ -14,7 +17,7 @@ OUTPUT_DIR="../tests/output"
 # Default Configurations
 LEXER="uccompiler.l"
 COMPILER_FLAGS=""
-SHOW_DIFF="true"
+SHOW_DIFF="false"
 
 function run_tests() {
 
@@ -24,23 +27,29 @@ function run_tests() {
 
         ./$UC_COMPILER $COMPILER_FLAGS <$file_path >$2/$outfile
 
-        diff $1/$outfile $2/$outfile >/dev/null
+        (diff -y $1/$outfile $2/$outfile) &>DIFFOUT
 
         if [ $? -eq 0 ]; then
             echo -e ✅ "${GREEN}TEST PASSED!!${RESET}" $ucfile
         else
             echo -e ❌ "${RED}TEST FAILED!!${RESET}" $ucfile
-            if [[ SHOW_DIFF == "true" ]]; then
-                cat DIFFOUT
-            fi
+            [[ $SHOW_DIFF == "true" ]] && echo && cat -n DIFFOUT && echo
         fi
     done
+    rm DIFFOUT
+}
+
+function compile() {
+    flex $1
+    clang-3.9 -Wall -Wno-unused-function lex.yy.c -o $2
 }
 
 if [ $# -eq 0 ]; then
     echo "Usage: ./test.sh [compiler] [-lex="lex_file"] [-args="compiler_args"] [-i="input_dir"] [-o="output_dir"]" [-diff]
     echo "Examples: "
     echo "      user@computer$ ./test.sh ucc -args=\"-l\" "
+    echo "      user@computer$ ./test.sh ucc -args=\"-e1\" "
+    echo "      user@computer$ ./test.sh ucc -args=\"-l\" -diff"
     echo "      user@computer$ ./test.sh my_compiler -args=\"-e1 -l\""
     echo "      user@computer$ ./test.sh ucc -lex=\"compiler.l\" -args=\"-l\" -i=tests/input_folder -o=tests/my_output_folder"
     exit 1
@@ -73,10 +82,10 @@ else
 
     [[ ! -f $LEXER ]] && (echo -e "${RED}ERROR:${RESET} $LEXER file does not exist!" && exit 1)
 
-    if [[ ! -f $UC_COMPILER ]]; then
+    if [[ ! -f $UC_COMPILER || $LEXER -nt $UC_COMPILER ]]; then
         echo -e "${BLUE}INFO:${RESET} Compiling... "
 
-        flex $LEXER && clang-3.9 -Wall -Wno-unused-function lex.yy.c -o $UC_COMPILER
+        compile $LEXER $UC_COMPILER
 
         if [ $? -eq 0 ]; then
             echo -e "${GREEN}DONE!${RESET}"
