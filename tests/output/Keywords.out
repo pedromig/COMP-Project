@@ -1,39 +1,38 @@
 ID(simple)
- CHAR ELSE
- WHILE
- IF
- INT
- SHORT
- DOUBLE
- RETURN
- VOID
-
+CHAR
+ELSE
+WHILE
+IF
+INT
+SHORT
+DOUBLE
+RETURN
+VOID
 ID(reserved)
- PLUS
-PLUS
- MINUS
-MINUS
- [ ] ID(auto)
- ID(break)
- ID(case)
- ID(const)
- ID(continue)
- ID(default)
- ID(do)
- ID(long)
- ID(register)
- ID(signed)
- ID(sizeof)
- ID(static)
- ID(struct)
- ID(switch)
- ID(typedef)
- ID(union)
- ID(unsigned)
- ID(volatile)
- ID(enum)
- ID(extern)
- ID(float)
- ID(for)
- ID(goto)
-
+RESERVED(++)
+RESERVED(--)
+RESERVED([)
+RESERVED(])
+RESERVED(auto)
+RESERVED(break)
+RESERVED(case)
+RESERVED(const)
+RESERVED(continue)
+RESERVED(default)
+RESERVED(do)
+RESERVED(long)
+RESERVED(register)
+RESERVED(signed)
+RESERVED(sizeof)
+RESERVED(static)
+RESERVED(struct)
+RESERVED(switch)
+RESERVED(typedef)
+RESERVED(union)
+RESERVED(unsigned)
+RESERVED(volatile)
+RESERVED(enum)
+RESERVED(extern)
+RESERVED(float)
+RESERVED(for)
+RESERVED(goto)

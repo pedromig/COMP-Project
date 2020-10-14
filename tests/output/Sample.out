@@ -1,56 +1,49 @@
-ID(long)
- INT
- ID(multiplyNumbers)
+RESERVED(long)
+INT
+ID(multiplyNumbers)
 LPAR
 INT
- CHRLIT('n')
+ID(n)
 RPAR
 SEMI
-
 INT
- ID(main)
+ID(main)
 LPAR
 RPAR
- LBRACE
-
-    INT
- CHRLIT('n')
+LBRACE
+INT
+ID(n)
 SEMI
-
-    RETURN
- INTLIT(0)SEMI
-
+RETURN
+INTLIT(0)
+SEMI
 RBRACE
-
-
-ID(long)
- INT
- ID(multiplyNumbers)
+RESERVED(long)
+INT
+ID(multiplyNumbers)
 LPAR
 INT
- CHRLIT('n')
+ID(n)
 RPAR
- LBRACE
-
-    IF
- LPAR
-CHRLIT('n')
+LBRACE
+IF
+LPAR
+ID(n)
 GE
-INTLIT(1)RPAR
-
-        RETURN
- CHRLIT('n')
+INTLIT(1)
+RPAR
+RETURN
+ID(n)
 MUL
 ID(multiplyNumbers)
 LPAR
-CHRLIT('n')
+ID(n)
 MINUS
-INTLIT(1)RPAR
+INTLIT(1)
+RPAR
 SEMI
-
-    ELSE
-
-        RETURN
- INTLIT(1)SEMI
-
+ELSE
+RETURN
+INTLIT(1)
+SEMI
 RBRACE

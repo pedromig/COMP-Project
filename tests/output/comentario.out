@@ -1,13 +1,1 @@
-DIV
-DIV
-ID(Normal)
- ID(comment)
-
-
-DIV
-DIV
-ID(Normal)
- ID(comment)
- 
-
-
+Line 9, col 1: unterminated comment

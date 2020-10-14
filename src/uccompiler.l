@@ -1,20 +1,55 @@
 %{
-    #include <stdio.h>
+    /**
+     * Licenciatura em Engenharia Informática | Faculdade de Ciências e Tecnologia da Universidade de Coimbra
+     * Projeto de Compiladores 2020/2021
+     *
+     * 2018288117 Gabriel Mendes Fernandes
+     * 2018283166 Pedro Miguel Duque Rodrigues
+     *   
+    */
 
-    int line = 0; //to keep track of the line in the input (changed everytime we read a \n)
-    int col = 0;  //to know the column that we're on (reset whenever we read a \n and incremented everytime we read a new character. Unless we're in a comment)
-    int parentesis = 0; //if it is zero we know that all open parentesis were closed (increment whenever we read a "(" and decrement when we read ")". We need to verify if the number is >0 to decrement it, otherwise something is wrong)
+    // C Standard library Includes
+    #include <stdio.h>
+    #include <stdbool.h>
+
+    // Custom Error Print Messages
+    #define inv_char_const_error(line, column, c) printf("Line %d, col %d: invalid char constant \(%s)\n", line, column, c)
+    #define unterm_comment_error(line, column) printf("Line %d, col %d: unterminated comment\n",line, column)
+    #define unterm_char_const_error(line, column) printf("Line %d, col %d: unterminated char constant\n",line, column)
+    #define ilegal_char_error(line, column, c) printf("Line %d, col %d: illegal character \(%s)\n", line, column, c)
+
+    #define begin_multi_line_comment(line, column) BEGIN MULTI_LINE_COMMENT; comment_start_line = line; comment_start_column = column; 
+    #define begin_charlit(line,column) BEGIN CHAR_LITERAL; char_start_line = line; char_start_column = column;
+
+    #define printl(...) if((l_flag)) printf(__VA_ARGS__);
+
+    // Column Counter
+    int yycolumno = 1;
+
+    // Comment Errors
+    int comment_start_line;
+    int comment_start_column;    
+
+    //Char Errors
+    int char_start_line;
+    int char_start_column;
+
+    // Compiler Flags
+    bool l_flag = false;
+    bool e1_flag = false;
 
 %}
 
-CHR             [a-zA-Z_]
 
+CHR             [a-zA-Z_]+
 OOO             "\\"[0-7]{1,3}
 
 INTLIT          [0-9]+
-ID              {CHR}({CHR}|{INTLIT})*
 CHRLIT          ([a-zA-Z0-9\t\"\\]|{OOO})
-REALLIT         {INTLIT}"."({INTLIT}?([eE][-+]?{INTLIT})?)
+REALLIT         ({INTLIT}"."{INTLIT}?|"."({INTLIT}))([eE][-+]?{INTLIT})?
+                
+ID              {CHR}({CHR}|{INTLIT})*
+
 CHAR            "char"
 ELSE            "else"
 WHILE           "while"
@@ -24,6 +59,8 @@ SHORT           "short"
 DOUBLE          "double"
 RETURN          "return"
 VOID            "void"
+RESERVED        ("]"|"["|"--"|"++"|"auto"|"break"|"case"|"const"|"continue"|"default"|"do"|"enum"|"extern"|"float"|"for"|"goto"|"inline"|"int"|"long"|"register"|"restrict"|"signed"|"sizeof"|"static"|"struct"|"switch"|"typedef"|"union"|"unsigned"|"volatile"|"_Bool"|"_Complex"|"_Imaginary")
+
 BITWISEAND      "&"
 BITWISEOR       "|"
 BITWISEXOR      "^"
@@ -49,63 +86,93 @@ RBRACE          "}"
 LPAR            "("
 RPAR            ")"
 
-%X COMMENT
+CHAR_LITERAL_DELIM              "'"
+
+SINGLE_LINE_COMMENT             "//".*(\n$)?
+MULTI_LINE_COMMENT_BEGIN        "/*"
+MULTI_LINE_COMMENT_END          "*/"
+
+%option yylineno
+%X MULTI_LINE_COMMENT CHAR_LITERAL
 
 %%
 
-{ELSE}              {printf("ELSE\n");}
-{WHILE}             {printf("WHILE\n");}
-{IF}                {printf("IF\n");}
-{INT}               {printf("INT\n");}
-{SHORT}             {printf("SHORT\n");}
-{DOUBLE}            {printf("DOUBLE\n");}
-{RETURN}            {printf("RETURN\n");}
-{VOID}              {printf("VOID\n");}
-{BITWISEAND}        {printf("BITWISEAND\n");}
-{BITWISEOR}         {printf("BITWISEOR\n");}
-{BITWISEXOR}        {printf("BITWISEXOR\n");}
-{AND}               {printf("AND\n");}
-{OR}                {printf("OR\n");}
-{NOT}               {printf("NOT\n");}
-{ASSIGN}            {printf("ASSIGN\n");}
-{MUL}               {printf("MUL\n");}
-{DIV}               {printf("DIV\n");}
-{PLUS}              {printf("PLUS\n");}
-{MINUS}             {printf("MINUS\n");}
-{MOD}               {printf("MOD\n");}
-{COMMA}             {printf("COMMA\n");}
-{SEMI}              {printf("SEMI\n");}
-{EQ}                {printf("EQ\n");}
-{NE}                {printf("NE\n");}
-{GE}                {printf("GE\n");}
-{GT}                {printf("GT\n");}
-{LE}                {printf("LE\n");}
-{LT}                {printf("LT\n");}
-{LBRACE}            {printf("LBRACE\n");}
-{RBRACE}            {printf("RBRACE\n");}
-{LPAR}              {printf("LPAR\n");}
-{RPAR}              {printf("RPAR\n");}
-{CHAR}              {printf("CHAR");}
-{INTLIT}            {printf("INTLIT\(%s)", yytext);}
-{CHRLIT}            {printf("CHRLIT\('%s')\n", yytext);}
-{REALLIT}           {printf("REALLIT\(%s)\n", yytext);}
-{ID}                {printf("ID\(%s)\n", yytext);}
+{CHAR}                                                {printl("CHAR\n"); yycolumno += yyleng;}
+{ELSE}                                                {printl("ELSE\n"); yycolumno += yyleng;}
+{WHILE}                                               {printl("WHILE\n"); yycolumno += yyleng;}
+{IF}                                                  {printl("IF\n"); yycolumno += yyleng;}
+{INT}                                                 {printl("INT\n"); yycolumno += yyleng;}
+{SHORT}                                               {printl("SHORT\n"); yycolumno += yyleng;}
+{DOUBLE}                                              {printl("DOUBLE\n"); yycolumno += yyleng;}
+{RETURN}                                              {printl("RETURN\n"); yycolumno += yyleng;}
+{VOID}                                                {printl("VOID\n"); yycolumno += yyleng;}
+{RESERVED}                                            {printl("RESERVED\(%s)\n", yytext); yycolumno += yyleng;}
+
+{ID}                                                  {printl("ID\(%s)\n", yytext); yycolumno += yyleng;}
+
+{BITWISEAND}                                          {printl("BITWISEAND\n"); yycolumno += yyleng;}
+{BITWISEOR}                                           {printl("BITWISEOR\n"); yycolumno += yyleng;}
+{BITWISEXOR}                                          {printl("BITWISEXOR\n"); yycolumno += yyleng;}
+{AND}                                                 {printl("AND\n"); yycolumno += yyleng;}
+{OR}                                                  {printl("OR\n"); yycolumno += yyleng;}
+{NOT}                                                 {printl("NOT\n"); yycolumno += yyleng;}
+{ASSIGN}                                              {printl("ASSIGN\n"); yycolumno += yyleng;}
+{MUL}                                                 {printl("MUL\n"); yycolumno += yyleng;}
+{DIV}                                                 {printl("DIV\n"); yycolumno += yyleng;}
+{PLUS}                                                {printl("PLUS\n"); yycolumno += yyleng;}
+{MINUS}                                               {printl("MINUS\n"); yycolumno += yyleng;}
+{MOD}                                                 {printl("MOD\n"); yycolumno += yyleng;} 
+{COMMA}                                               {printl("COMMA\n"); yycolumno += yyleng;}
+{SEMI}                                                {printl("SEMI\n"); yycolumno += yyleng;}
+{EQ}                                                  {printl("EQ\n"); yycolumno += yyleng;}
+{NE}                                                  {printl("NE\n"); yycolumno += yyleng;}
+{GE}                                                  {printl("GE\n"); yycolumno += yyleng;}
+{GT}                                                  {printl("GT\n"); yycolumno += yyleng;}
+{LE}                                                  {printl("LE\n"); yycolumno += yyleng;}
+{LT}                                                  {printl("LT\n"); yycolumno += yyleng;}
+{LBRACE}                                              {printl("LBRACE\n"); yycolumno += yyleng;}
+{RBRACE}                                              {printl("RBRACE\n"); yycolumno += yyleng;}
+{LPAR}                                                {printl("LPAR\n"); yycolumno += yyleng;}
+{RPAR}                                                {printl("RPAR\n"); yycolumno += yyleng;}
+
+{INTLIT}                                              {printl("INTLIT\(%s)\n", yytext); yycolumno += yyleng;}
+{REALLIT}                                             {printl("REALLIT\(%s)\n", yytext); yycolumno += yyleng;}
+
+{CHAR_LITERAL_DELIM}                                  {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
+<CHAR_LITERAL>{CHRLIT}{1}"'"                          {printl("CHRLIT\('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
+<CHAR_LITERAL>{CHRLIT}*"'"                            {inv_char_const_error(char_start_line, char_start_column, yytext); BEGIN 0;}
+<CHAR_LITERAL>{CHRLIT}                                {unterm_char_const_error(char_start_line, char_start_column); BEGIN 0;}
 
 
-"/*"                {BEGIN COMMENT;}
-<COMMENT>.          ;
-<COMMENT>\n         ;
-<COMMENT>"*/"       {BEGIN 0;}
+{SINGLE_LINE_COMMENT}                                 {;}                       
+{MULTI_LINE_COMMENT_BEGIN}                            {begin_multi_line_comment(yylineno, yycolumno); yycolumno += yyleng;}
 
+<MULTI_LINE_COMMENT>\n                                {yycolumno = 1;}
+<MULTI_LINE_COMMENT>.                                 {yycolumno += yyleng;}
+<MULTI_LINE_COMMENT>{MULTI_LINE_COMMENT_END}          {BEGIN 0; yycolumno += yyleng;}
+<MULTI_LINE_COMMENT><<EOF>>                           {unterm_comment_error(comment_start_line, comment_start_column); BEGIN 0;}
+                                                      
+\n                                                    {yycolumno = 1;}                                                 
+[ \t]+                                                {yycolumno += yyleng;}
+.                                                     {ilegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
+<<EOF>>                                               {return 0;}
 
 %%
 
+void argparse(int argc, char *argv[]){
+    for (int i = 1; i < argc; ++i) {
+        if (!strcmp(argv[i], "-l"))
+            l_flag = true;
+        else if (!strcmp(argv[i], "-e1"))
+            e1_flag = true;
+    }
+}
 
 int yywrap() {
     return 1;
 }
 
-int main() {
-    yylex();
-    return 0;
+int main(int argc, char *argv[]) {
+    argparse(argc, argv);
+    return yylex();
 }
