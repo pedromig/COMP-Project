@@ -1,129 +1,52 @@
 CHRLIT('f')
-Line 2, col 1: invalid char constant (')
-Line 3, col 1: unterminated char constant
-Line 3, col 2: illegal character (")
-CHRLIT('\')
-
-Line 4, col 4: invalid char constant (')
-Line 4, col 5: illegal character (\)
-
-Line 4, col 6: invalid char constant (')
-Line 4, col 7: invalid char constant (')
-
-Line 4, col 8: invalid char constant (')
-Line 4, col 9: illegal character (?)
-
-Line 4, col 10: invalid char constant (')
-Line 4, col 11: illegal character (\)
-Line 4, col 12: illegal character (\)
-INTLIT(1)
-Line 4, col 14: invalid char constant (')
-Line 4, col 15: illegal character (\)
-INTLIT(12)
-Line 4, col 18: invalid char constant (')
-Line 4, col 19: illegal character (\)
-INTLIT(123)
-Line 4, col 23: invalid char constant (')
-Line 4, col 24: illegal character (\)
-INTLIT(1234)
- Line 4, col 29: invalid char constant (')
-Line 4, col 30: illegal character (Â)
-Line 4, col 31: illegal character (´)
-
-Line 4, col 32: invalid char constant (')
-Line 4, col 33: illegal character (\)
-INTLIT(777)
-
-Line 4, col 37: invalid char constant (')
-Line 4, col 38: illegal character (\)
-INTLIT(000)
-
-Line 4, col 42: invalid char constant (')
-Line 4, col 43: illegal character (\)
-INTLIT(007)
-
-Line 4, col 47: invalid char constant (')
-Line 4, col 48: illegal character (\)
-INTLIT(07)
-
-Line 4, col 51: invalid char constant (')
-Line 4, col 52: illegal character (\)
-INTLIT(377)
-
-Line 4, col 56: invalid char constant (')
-Line 4, col 57: illegal character (\)
-INTLIT(378)
-
-Line 4, col 61: invalid char constant (')
-Line 4, col 62: illegal character (\)
-INTLIT(477)
-
-Line 4, col 66: invalid char constant (')
-Line 4, col 67: illegal character (\)
-INTLIT(0000)
-
-Line 4, col 72: invalid char constant (')
-Line 4, col 73: illegal character (\)
-Line 4, col 74: illegal character (\)
-ID(v)
-
-Line 4, col 76: invalid char constant (')
-Line 4, col 77: illegal character (\)
-ID(v)
-
-Line 4, col 79: invalid char constant (')
-Line 4, col 80: illegal character (\)
-Line 4, col 81: illegal character (\)
-ID(f)
-
-Line 4, col 83: invalid char constant (')
-Line 4, col 84: illegal character (\)
-ID(f)
-
-Line 4, col 86: invalid char constant (')
-Line 4, col 87: illegal character (\)
-INTLIT(0)
-
-Line 4, col 89: invalid char constant (')
-Line 4, col 90: illegal character (\)
-Line 4, col 91: illegal character (")
-Line 5, col 1: invalid char constant (\"')
+Line 2, col 1: invalid char constant ('')
+\Line 3, col 1: unterminated char constant
+CHRLIT('\'')
+Line 5, col 1: unterminated char constant
+Line 6, col 5: invalid char constant ('')
+Line 6, col 7: invalid char constant ('')
+CHRLIT('?')
+Line 8, col 1: invalid char constant ('\\1')
+CHRLIT('\12')
+CHRLIT('\123')
+Line 8, col 17: invalid char constant ('\1234')
+Â´Line 8, col 25: invalid char constant ('')
+CHRLIT('\777')
+CHRLIT('\000')
+CHRLIT('\007')
+CHRLIT('\07')
+CHRLIT('\377')
+Line 14, col 1: invalid char constant ('\378')
+CHRLIT('\477')
+Line 16, col 1: invalid char constant ('\0000')
+Line 17, col 1: invalid char constant ('\\v')
+\CHRLIT('v')
+Line 19, col 1: invalid char constant ('\\f')
+\CHRLIT('f')
+CHRLIT('\0')
+\Line 22, col 1: unterminated char constant
+\CHRLIT('"')
 CHRLIT('"')
-Line 7, col 1: invalid char constant (')
-
-Line 7, col 2: invalid char constant (')
-
-Line 7, col 3: invalid char constant (')
-Line 7, col 4: illegal character (\)
-INTLIT(444)
-
-Line 7, col 8: invalid char constant (')
-Line 7, col 9: illegal character (Â)
-Line 7, col 10: illegal character (´)
-
-Line 7, col 11: invalid char constant (')
-Line 7, col 12: illegal character (.)
-
-Line 7, col 13: invalid char constant (')
-Line 7, col 14: illegal character (Â)
-Line 7, col 15: illegal character (´)
-.
-Line 8, col 1: invalid char constant (')
-Line 8, col 2: illegal character (\)
-ID(n)
-Line 9, col 1: invalid char constant (\n')
-Line 10, col 1: illegal character (")
-=Line 11, col 1: invalid char constant (')
-<Line 12, col 1: invalid char constant (')
+Line 25, col 1: invalid char constant ('')
+Line 25, col 3: unterminated char constant
+Line 26, col 5: invalid char constant ('')
+CHRLIT('\444')
+Â´Line 28, col 1: invalid char constant ('')
+CHRLIT('.')
+Â´Line 30, col 1: unterminated char constant
+Line 31, col 3: unterminated char constant
+Line 32, col 6: unterminated char constant
+CHRLIT('\n')
+Line 34, col 1: illegal character (")
+=Line 35, col 1: invalid char constant ('')
+<Line 36, col 1: invalid char constant ('')
 ID(ola)
-
-Line 13, col 4: unterminated char constant
-ID(la)
+Line 37, col 4: unterminated char constant
+ID(ola)
 ID(e)
-Line 13, col 10: invalid char constant (')
+Line 38, col 12: invalid char constant ('')
 ID(adeus)
-Line 13, col 17: invalid char constant (asd')
-
-Line 13, col 18: invalid char constant (')
-
-Line 13, col 20: invalid char constant (')
+Line 38, col 20: invalid char constant ('asd')
+Line 38, col 25: unterminated char constant
+CHRLIT('	')
+Line 40, col 1: invalid char constant ('		')

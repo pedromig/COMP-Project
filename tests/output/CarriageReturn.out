@@ -1,0 +1,12 @@
+Line 1, col 1: unterminated char constant
+Line 2, col 3: invalid char constant ('')
+Line 2, col 6: invalid char constant ('')
+Line 2, col 8: illegal character (")
+Line 2, col 9: invalid char constant ('')
+Line 2, col 11: illegal character (\)
+Line 2, col 12: illegal character (\)
+Line 2, col 13: invalid char constant ('')
+Line 2, col 15: illegal character (\)
+ID(o)
+Line 2, col 17: unterminated char constant
+Line 4, col 1: illegal character ()

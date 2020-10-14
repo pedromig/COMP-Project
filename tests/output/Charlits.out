@@ -1,53 +1,19 @@
 CHRLIT('1')
 CHRLIT('a')
-Line 3, col 1: invalid char constant (\n')
+CHRLIT('\n')
 CHRLIT('\013')
-Line 5, col 1: invalid char constant (\t')
-Line 6, col 1: invalid char constant (\\')
+\CHRLIT('t')
+CHRLIT('\\')
 CHRLIT('\017')
-CHRLIT('\')
-
-Line 8, col 4: invalid char constant (')
-Line 8, col 5: illegal character (\)
-Line 8, col 6: illegal character (")
-
-Line 8, col 7: invalid char constant (')
-Line 8, col 8: illegal character (\)
-INTLIT(018)
-
-Line 8, col 12: invalid char constant (')
-Line 8, col 13: illegal character (\)
-Line 8, col 14: illegal character (")
-Line 8, col 15: illegal character (")
-
-Line 8, col 16: invalid char constant (')
-Line 8, col 17: illegal character (\)
-Line 8, col 18: illegal character (\)
-Line 8, col 19: illegal character (")
-
-Line 8, col 20: invalid char constant (')
-Line 8, col 21: illegal character (\)
-INTLIT(12)
-
-Line 8, col 24: invalid char constant (')
-
-Line 8, col 26: invalid char constant (')
-Line 8, col 27: illegal character (\)
-INTLIT(0)
-
-Line 8, col 29: invalid char constant (')
-Line 8, col 30: illegal character (\)
-INTLIT(000)
-
-Line 8, col 34: invalid char constant (')
-Line 8, col 35: illegal character (\)
-INTLIT(777)
-
-Line 8, col 39: invalid char constant (')
-Line 8, col 40: illegal character (\)
-INTLIT(787)
-
-Line 8, col 44: invalid char constant (')
-Line 8, col 45: illegal character (\)
-Line 8, col 46: illegal character (\)
-
+CHRLIT('\'')
+\CHRLIT('"')
+Line 10, col 1: invalid char constant ('\018')
+\Line 11, col 1: invalid char constant ('""')
+Line 12, col 1: invalid char constant ('\\"')
+CHRLIT('\12')
+CHRLIT('	')
+CHRLIT('\0')
+CHRLIT('\000')
+CHRLIT('\777')
+Line 18, col 1: invalid char constant ('\787')
+CHRLIT('\\')

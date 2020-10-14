@@ -13,31 +13,42 @@
     #include <stdbool.h>
 
     // Custom Error Print Messages
-    #define inv_char_const_error(line, column, c) printf("Line %d, col %d: invalid char constant \(%s)\n", line, column, c)
-    #define unterm_comment_error(line, column) printf("Line %d, col %d: unterminated comment\n",line, column)
-    #define unterm_char_const_error(line, column) printf("Line %d, col %d: unterminated char constant\n",line, column)
-    #define ilegal_char_error(line, column, c) printf("Line %d, col %d: illegal character \(%s)\n", line, column, c)
+    #define inv_char_const_error(line, column, c)\
+        printf("Line %d, col %d: invalid char constant \('%s)\n", line, column, c)
 
-    #define begin_multi_line_comment(line, column) BEGIN MULTI_LINE_COMMENT; comment_start_line = line; comment_start_column = column; 
-    #define begin_charlit(line,column) BEGIN CHAR_LITERAL; char_start_line = line; char_start_column = column;
+    #define unterm_comment_error(line, column)\
+        printf("Line %d, col %d: unterminated comment\n",line, column)
 
-    #define printl(...) if((l_flag)) printf(__VA_ARGS__);
+    #define unterm_char_const_error(line, column)\
+        printf("Line %d, col %d: unterminated char constant\n",line, column)
+
+    #define ilegal_char_error(line, column, c)\
+        printf("Line %d, col %d: illegal character \(%s)\n", line, column, c)
+
+    
+    #define begin_multi_line_comment(line, column)\
+        BEGIN MULTI_LINE_COMMENT;\
+        yysavedlineno = line;\
+        yysavedcolumno = column; 
+
+    #define begin_charlit(line,column)\
+        BEGIN CHAR_LITERAL;\
+        yysavedlineno = line;\
+        yysavedcolumno = column;
+
+    #define printl(...)\
+        if((l_flag))\
+            printf(__VA_ARGS__);
 
     // Column Counter
     int yycolumno = 1;
 
-    // Comment Errors
-    int comment_start_line;
-    int comment_start_column;    
-
-    //Char Errors
-    int char_start_line;
-    int char_start_column;
+    // Helper Variables for Line Errors
+    int yysavedlineno;
+    int yysavedcolumno;    
 
     // Compiler Flags
-    bool l_flag = false;
-    bool e1_flag = false;
-
+    bool l_flag = false; // print -e1 option by default 
 %}
 
 
@@ -45,7 +56,7 @@ CHR             [a-zA-Z_]+
 OOO             "\\"[0-7]{1,3}
 
 INTLIT          [0-9]+
-CHRLIT          ([a-zA-Z0-9\t\"\\]|{OOO})
+CHRLIT          ([a-zA-Z0-9\t.?]|{OOO})|(\\')|(\\\\)|(\\n)|(\")
 REALLIT         ({INTLIT}"."{INTLIT}?|"."({INTLIT}))([eE][-+]?{INTLIT})?
                 
 ID              {CHR}({CHR}|{INTLIT})*
@@ -140,8 +151,8 @@ MULTI_LINE_COMMENT_END          "*/"
 
 {CHAR_LITERAL_DELIM}                                  {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
 <CHAR_LITERAL>{CHRLIT}{1}"'"                          {printl("CHRLIT\('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
-<CHAR_LITERAL>{CHRLIT}*"'"                            {inv_char_const_error(char_start_line, char_start_column, yytext); BEGIN 0;}
-<CHAR_LITERAL>{CHRLIT}                                {unterm_char_const_error(char_start_line, char_start_column); BEGIN 0;}
+<CHAR_LITERAL>({CHRLIT}|[ ])*"'"                      {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
+<CHAR_LITERAL>{CHRLIT}*[\nEOF]                          {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno += yyleng;}
 
 
 {SINGLE_LINE_COMMENT}                                 {;}                       
@@ -150,7 +161,7 @@ MULTI_LINE_COMMENT_END          "*/"
 <MULTI_LINE_COMMENT>\n                                {yycolumno = 1;}
 <MULTI_LINE_COMMENT>.                                 {yycolumno += yyleng;}
 <MULTI_LINE_COMMENT>{MULTI_LINE_COMMENT_END}          {BEGIN 0; yycolumno += yyleng;}
-<MULTI_LINE_COMMENT><<EOF>>                           {unterm_comment_error(comment_start_line, comment_start_column); BEGIN 0;}
+<MULTI_LINE_COMMENT><<EOF>>                           {unterm_comment_error(yysavedlineno, yysavedcolumno); BEGIN 0;}
                                                       
 \n                                                    {yycolumno = 1;}                                                 
 [ \t]+                                                {yycolumno += yyleng;}
@@ -164,7 +175,7 @@ void argparse(int argc, char *argv[]){
         if (!strcmp(argv[i], "-l"))
             l_flag = true;
         else if (!strcmp(argv[i], "-e1"))
-            e1_flag = true;
+            l_flag = false;
     }
 }
 
