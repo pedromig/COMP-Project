@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compiler Tester!
-# @version 1.0
+# @version 2.0
 # @author Pedro Miguel Duque Rodrigues
 
 # Terminal Escape Colors
@@ -20,7 +20,6 @@ COMPILER_FLAGS=""
 SHOW_DIFF="false"
 
 function run_tests() {
-
     for file_path in $1/*.{uc,c}; do
         ucfile=$(basename "$file_path")
         outfile=${ucfile%.*}.out
@@ -44,14 +43,52 @@ function compile() {
 }
 
 if [ $# -eq 0 ]; then
-    echo "Usage: ./test.sh [compiler] [-lex="lex_file"] [-args="compiler_args"] [-i="input_dir"] [-o="output_dir"]" [-diff]
-    echo "Examples: "
-    echo "      user@computer$ ./test.sh ucc -args=\"-l\" "
-    echo "      user@computer$ ./test.sh ucc -args=\"-e1\" "
-    echo "      user@computer$ ./test.sh ucc -args=\"-l\" -diff"
-    echo "      user@computer$ ./test.sh my_compiler -args=\"-e1 -l\""
-    echo "      user@computer$ ./test.sh ucc -lex=\"compiler.l\" -args=\"-l\" -i=tests/input_folder -o=tests/my_output_folder"
+    echo "
+    Usage: ./test.sh [compiler] [-args="compiler_args"] [-lex="lex_file"] [-i="input_dir"] [-o="output_dir"] [-diff]
+    Description:
+
+        [compiler] -> REQUIRED
+            The nam e / path of the compiler executable. 
+            If the name suplied for the executable does not correspond to a existing executable
+            the script will atempt to generate one for you using the default .l file (uccompiler.l)
+            or the one that you specify using the -lex flag.
+
+            NOTE: Everytime that the changes are made to the .l file the script will attempt to recompile
+
+        [-args="FLAGS"] -> OPTIONAL
+            A string with space separated flags that will be passed to the compiler.
+            NOTE: There is the option to always provide a bunch of flags by default. To achive this
+            edit the COMPILER_FLAGS
+
+        [-lex="PATH"] -> OPTIONAL
+            A string with the name / path of the lex file used to produce the compiler
+            NOTE: You may change the default name / path by editing the LEXER variable in the script.
+
+        [-i="PATH"] -> OPTIONAL
+            A string with the name / path of the directory that contains the source code files (.uc, .c)
+            and the files containing the expected output (.out)
+            NOTE: You may change the default name / path by editing the INPUT_DIR variavle in the script
+
+        [-o="PATH"] -> OPTIONAL
+            A string with the name / path of the directory that will contain the output obtained from
+            running your compiler on the source code file (.uc, .c) provided.
+            NOTE: You may change the default name / path by editing the OUTPUT_DIR variable in the script
+
+        [-diff] -> OPTIONAL
+            On the test cases where there are errors it shows a numerated list of lines where there are differences
+            between the expected compiler output and yours. If this flag is not specified it will not show the diff
+            by default but this behaviour can be changed by edition the SHOW_DIFF variable and setting it to "true"
+            
+    Example Usage: 
+        user@computer$ ./test.sh ucc -args=\"-l\" 
+        user@computer$ ./test.sh ucc -args=\"-e1\" 
+        user@computer$ ./test.sh ucc -args=\"-l\" -diff
+        user@computer$ ./test.sh my_compiler -args=\"-e1 -l\"
+        user@computer$ ./test.sh ucc -lex=\"compiler.l\" -args=\"-l\" -i=tests/input_folder -o=tests/my_output_folder
+    "
+    
     exit 1
+
 else
     UC_COMPILER=$1
     for option in "$@"; do

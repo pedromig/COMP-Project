@@ -55,11 +55,11 @@
 CHR             [a-zA-Z_]+   
 OOO             "\\"[0-7]{1,3}
 
-LINE_END        (\n|\r\n)
+LINE_END        (\n|\r\n|\r)
                 
 INTLIT          [0-9]+
 CHRLIT          ([^\n\'\\]|{OOO}|("\\t")|("\\'")|("\\\"")|("\\n")|("\\\\")|(\t))
-REALLIT         ({INTLIT}"."{INTLIT}?|"."({INTLIT}))([eE][-+]?{INTLIT})?
+REALLIT         (({INTLIT}"."{INTLIT}?|"."({INTLIT}))([eE][-+]?{INTLIT})?)|({INTLIT}([eE][-+]?{INTLIT}))
                 
 ID              {CHR}({CHR}|{INTLIT})*
 
@@ -153,8 +153,8 @@ MULTI_LINE_COMMENT_END          "*/"
 
 {CHAR_LITERAL_DELIM}                                             {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
 <CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                       {printl("CHRLIT\('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
-<CHAR_LITERAL>"'"|({CHRLIT}|"\\"?[^\'\n\\]+)*"'"        {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
-<CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\]+)*(\\)?{LINE_END}                    {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
+<CHAR_LITERAL>"'"|({CHRLIT}|"\\"?[^\'\n\\])*"'"                  {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
+<CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*"\\"?{LINE_END}          {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
 
 
 
