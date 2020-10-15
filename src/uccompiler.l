@@ -25,7 +25,7 @@
     #define ilegal_char_error(line, column, c)\
         printf("Line %d, col %d: illegal character \(%s)\n", line, column, c)
 
-
+	// Helper state begin functions/definitions
     #define begin_multi_line_comment(line, column)\
         BEGIN MULTI_LINE_COMMENT;\
         yysavedlineno = line;\
@@ -110,46 +110,46 @@ MULTI_LINE_COMMENT_END          "*/"
 
 %%
 
-{CHAR}                                                {printl("CHAR\n"); yycolumno += yyleng;}
-{ELSE}                                                {printl("ELSE\n"); yycolumno += yyleng;}
-{WHILE}                                               {printl("WHILE\n"); yycolumno += yyleng;}
-{IF}                                                  {printl("IF\n"); yycolumno += yyleng;}
-{INT}                                                 {printl("INT\n"); yycolumno += yyleng;}
-{SHORT}                                               {printl("SHORT\n"); yycolumno += yyleng;}
-{DOUBLE}                                              {printl("DOUBLE\n"); yycolumno += yyleng;}
-{RETURN}                                              {printl("RETURN\n"); yycolumno += yyleng;}
-{VOID}                                                {printl("VOID\n"); yycolumno += yyleng;}
-{RESERVED}                                            {printl("RESERVED\(%s)\n", yytext); yycolumno += yyleng;}
+{CHAR}                                                			 {printl("CHAR\n"); yycolumno += yyleng;}
+{ELSE}                                                			 {printl("ELSE\n"); yycolumno += yyleng;}
+{WHILE}                                               			 {printl("WHILE\n"); yycolumno += yyleng;}
+{IF}                                                  			 {printl("IF\n"); yycolumno += yyleng;}
+{INT}                                                 			 {printl("INT\n"); yycolumno += yyleng;}
+{SHORT}                                               		 	 {printl("SHORT\n"); yycolumno += yyleng;}
+{DOUBLE}                                              			 {printl("DOUBLE\n"); yycolumno += yyleng;}
+{RETURN}                                              			 {printl("RETURN\n"); yycolumno += yyleng;}
+{VOID}                                                			 {printl("VOID\n"); yycolumno += yyleng;}
+{RESERVED}                                            			 {printl("RESERVED\(%s)\n", yytext); yycolumno += yyleng;}
 
-{ID}                                                  {printl("ID\(%s)\n", yytext); yycolumno += yyleng;}
+{ID}                                                  			 {printl("ID\(%s)\n", yytext); yycolumno += yyleng;}
 
-{BITWISEAND}                                          {printl("BITWISEAND\n"); yycolumno += yyleng;}
-{BITWISEOR}                                           {printl("BITWISEOR\n"); yycolumno += yyleng;}
-{BITWISEXOR}                                          {printl("BITWISEXOR\n"); yycolumno += yyleng;}
-{AND}                                                 {printl("AND\n"); yycolumno += yyleng;}
-{OR}                                                  {printl("OR\n"); yycolumno += yyleng;}
-{NOT}                                                 {printl("NOT\n"); yycolumno += yyleng;}
-{ASSIGN}                                              {printl("ASSIGN\n"); yycolumno += yyleng;}
-{MUL}                                                 {printl("MUL\n"); yycolumno += yyleng;}
-{DIV}                                                 {printl("DIV\n"); yycolumno += yyleng;}
-{PLUS}                                                {printl("PLUS\n"); yycolumno += yyleng;}
-{MINUS}                                               {printl("MINUS\n"); yycolumno += yyleng;}
-{MOD}                                                 {printl("MOD\n"); yycolumno += yyleng;} 
-{COMMA}                                               {printl("COMMA\n"); yycolumno += yyleng;}
-{SEMI}                                                {printl("SEMI\n"); yycolumno += yyleng;}
-{EQ}                                                  {printl("EQ\n"); yycolumno += yyleng;}
-{NE}                                                  {printl("NE\n"); yycolumno += yyleng;}
-{GE}                                                  {printl("GE\n"); yycolumno += yyleng;}
-{GT}                                                  {printl("GT\n"); yycolumno += yyleng;}
-{LE}                                                  {printl("LE\n"); yycolumno += yyleng;}
-{LT}                                                  {printl("LT\n"); yycolumno += yyleng;}
-{LBRACE}                                              {printl("LBRACE\n"); yycolumno += yyleng;}
-{RBRACE}                                              {printl("RBRACE\n"); yycolumno += yyleng;}
-{LPAR}                                                {printl("LPAR\n"); yycolumno += yyleng;}
-{RPAR}                                                {printl("RPAR\n"); yycolumno += yyleng;}
+{BITWISEAND}                                          			 {printl("BITWISEAND\n"); yycolumno += yyleng;}
+{BITWISEOR}                                           			 {printl("BITWISEOR\n"); yycolumno += yyleng;}
+{BITWISEXOR}                                          			 {printl("BITWISEXOR\n"); yycolumno += yyleng;}
+{AND}                                                 			 {printl("AND\n"); yycolumno += yyleng;}
+{OR}                                                  			 {printl("OR\n"); yycolumno += yyleng;}
+{NOT}                                                 			 {printl("NOT\n"); yycolumno += yyleng;}
+{ASSIGN}                                              			 {printl("ASSIGN\n"); yycolumno += yyleng;}
+{MUL}                                                 			 {printl("MUL\n"); yycolumno += yyleng;}
+{DIV}                                                 			 {printl("DIV\n"); yycolumno += yyleng;}
+{PLUS}                                                		     {printl("PLUS\n"); yycolumno += yyleng;}
+{MINUS}                                               	 		 {printl("MINUS\n"); yycolumno += yyleng;}
+{MOD}                                                 			 {printl("MOD\n"); yycolumno += yyleng;} 
+{COMMA}                                               			 {printl("COMMA\n"); yycolumno += yyleng;}
+{SEMI}                                                	 		 {printl("SEMI\n"); yycolumno += yyleng;}
+{EQ}                                                   			 {printl("EQ\n"); yycolumno += yyleng;}
+{NE}                                                  			 {printl("NE\n"); yycolumno += yyleng;}
+{GE}                                                  			 {printl("GE\n"); yycolumno += yyleng;}
+{GT}                                                  			 {printl("GT\n"); yycolumno += yyleng;}
+{LE}                                                  		     {printl("LE\n"); yycolumno += yyleng;}
+{LT}                                                 			 {printl("LT\n"); yycolumno += yyleng;}
+{LBRACE}                                              			 {printl("LBRACE\n"); yycolumno += yyleng;}
+{RBRACE}                                              			 {printl("RBRACE\n"); yycolumno += yyleng;}
+{LPAR}                                                		 	 {printl("LPAR\n"); yycolumno += yyleng;}
+{RPAR}                                                 			 {printl("RPAR\n"); yycolumno += yyleng;}
 
-{INTLIT}                                              {printl("INTLIT\(%s)\n", yytext); yycolumno += yyleng;}
-{REALLIT}                                             {printl("REALLIT\(%s)\n", yytext); yycolumno += yyleng;}
+{INTLIT}                                              			 {printl("INTLIT\(%s)\n", yytext); yycolumno += yyleng;}
+{REALLIT}                                             			 {printl("REALLIT\(%s)\n", yytext); yycolumno += yyleng;}
 
 {CHAR_LITERAL_DELIM}                                             {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
 <CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                       {printl("CHRLIT\('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
@@ -158,18 +158,18 @@ MULTI_LINE_COMMENT_END          "*/"
 
 
 
-{SINGLE_LINE_COMMENT}                                 {;}                       
-{MULTI_LINE_COMMENT_BEGIN}                            {begin_multi_line_comment(yylineno, yycolumno); yycolumno += yyleng;}
+{SINGLE_LINE_COMMENT}                                 			 {;}                       
+{MULTI_LINE_COMMENT_BEGIN}                            			 {begin_multi_line_comment(yylineno, yycolumno); yycolumno += yyleng;}
 
-<MULTI_LINE_COMMENT>\n                                {yycolumno = 1;}
-<MULTI_LINE_COMMENT>.                                 {yycolumno += yyleng;}
-<MULTI_LINE_COMMENT>{MULTI_LINE_COMMENT_END}          {BEGIN 0; yycolumno += yyleng;}
-<MULTI_LINE_COMMENT><<EOF>>                           {unterm_comment_error(yysavedlineno, yysavedcolumno); BEGIN 0;}
+<MULTI_LINE_COMMENT>\n                                			 {yycolumno = 1;}
+<MULTI_LINE_COMMENT>.                                 			 {yycolumno += yyleng;}
+<MULTI_LINE_COMMENT>{MULTI_LINE_COMMENT_END}          			 {BEGIN 0; yycolumno += yyleng;}
+<MULTI_LINE_COMMENT><<EOF>>                           			 {unterm_comment_error(yysavedlineno, yysavedcolumno); BEGIN 0;}
                                                       
-{LINE_END}                                            {yycolumno = 1;}                                                 
-[ \t]+                                                {yycolumno += yyleng;}
-.                                                     {ilegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
-<<EOF>>                                               {return 0;}
+{LINE_END}                                            			 {yycolumno = 1;}                                                 
+[ \t]+                                                			 {yycolumno += yyleng;}
+.                                                     			 {ilegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
+<<EOF>>                                               			 {return 0;}
 
 %%
 

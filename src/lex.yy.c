@@ -763,7 +763,7 @@ char *yytext;
     #define ilegal_char_error(line, column, c)\
         printf("Line %d, col %d: illegal character \(%s)\n", line, column, c)
 
-
+	// Helper state begin functions/definitions
     #define begin_multi_line_comment(line, column)\
         BEGIN MULTI_LINE_COMMENT;\
         yysavedlineno = line;\
@@ -2376,3 +2376,4 @@ int main(int argc, char *argv[]) {
     argparse(argc, argv);
     return yylex();
 }
+
