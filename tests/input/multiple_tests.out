@@ -142,11 +142,11 @@ SEMI
 CHAR
 ID(low_escape)
 ASSIGN
-Line 35, col 23: invalid char constant ('\000')
+CHRLIT('\000')
 COMMA
 ID(high_escape)
 ASSIGN
-Line 35, col 45: invalid char constant ('\777')
+CHRLIT('\777')
 SEMI
 ID(wrong_escape)
 ASSIGN
