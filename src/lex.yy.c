@@ -1282,6 +1282,10 @@ YY_RULE_SETUP
 #line 157 "uccompiler.l"
 {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
 	YY_BREAK
+case YY_STATE_EOF(CHAR_LITERAL):
+#line 158 "uccompiler.l"
+{unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
+	YY_BREAK
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
@@ -1330,7 +1334,6 @@ YY_RULE_SETUP
 {ilegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-case YY_STATE_EOF(CHAR_LITERAL):
 #line 172 "uccompiler.l"
 {return 0;}
 	YY_BREAK
@@ -1339,7 +1342,7 @@ YY_RULE_SETUP
 #line 174 "uccompiler.l"
 ECHO;
 	YY_BREAK
-#line 1343 "lex.yy.c"
+#line 1346 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{

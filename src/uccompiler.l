@@ -153,9 +153,9 @@ MULTI_LINE_COMMENT_END          "*/"
 
 {CHAR_LITERAL_DELIM}                                                      {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
 <CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                                {printl("CHRLIT\('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
-<CHAR_LITERAL>"'"|({CHRLIT}|"\\"?[^\'\n\\])*"'"                           {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
+<CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*{CHAR_LITERAL_DELIM}              {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
 <CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*"\\"?{LINE_END}                   {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
-
+<CHAR_LITERAL><<EOF>>                                                     {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
 
 
 {SINGLE_LINE_COMMENT}                                 			          {;}                       
