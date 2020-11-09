@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compiler Tester!
-# @version 2.0
+# @version 3.0
 # @author Pedro Miguel Duque Rodrigues
 
 # Terminal Escape Colors
@@ -16,15 +16,21 @@ OUTPUT_DIR="../tests/output"
 
 # Default Configurations
 LEXER="uccompiler.l"
-COMPILER_FLAGS=""
+GRAMMAR="uccompiler.y"
 SHOW_DIFF="false"
+
+# ProgramFlags
+LEX_FLAGS=""
+YACC_FLAGS="-d"
+CLANG_FLAGS=""
+UCCOMPILER_FLAGS=""
 
 function run_tests() {
     for file_path in $1/*.{uc,c}; do
         ucfile=$(basename "$file_path")
         outfile=${ucfile%.*}.out
 
-        ./$UC_COMPILER $COMPILER_FLAGS <$file_path >$2/$outfile
+        ./$UC_COMPILER $UCCOMPILER_FLAGS <$file_path >$2/$outfile
 
         (diff -y --suppress-common-lines $1/$outfile $2/$outfile) &>DIFFOUT
 
@@ -39,12 +45,12 @@ function run_tests() {
 }
 
 function compile() {
-    flex $1 && clang-3.9 -Wall -Wno-unused-function lex.yy.c -o $2
+    flex $1 $LEX_FLAGS && yacc $2 $YACC_FLAGS -d && clang-3.9 -Wall -Wno-unused-function *.c -o $3
 }
 
 if [ $# -eq 0 ]; then
     echo "
-    Usage: ./test.sh [compiler] [-args="compiler_args"] [-lex="lex_file"] [-i="input_dir"] [-o="output_dir"] [-diff]
+    Usage: ./test.sh [compiler] [-l|-e1|-e2|-t] [-diff] [-compile] [-lex="lex_file"] [-yacc="lex_file"] [-i="input_dir"] [-o="output_dir"]
     Description:
 
         [compiler] -> REQUIRED
@@ -55,14 +61,19 @@ if [ $# -eq 0 ]; then
 
             NOTE: Everytime that the changes are made to the .l file the script will attempt to recompile
 
-        [-args="FLAGS"] -> OPTIONAL
-            A string with space separated flags that will be passed to the compiler.
+        [-l|-e1|-e2|-t] -> OPTIONAL
+            Multiple compiler flags that may be passed to the compiler to see more check the UC compiler
+            specification document.
             NOTE: There is the option to always provide a bunch of flags by default. To achive this
-            edit the COMPILER_FLAGS
+            edit the UCCOMPILER_FLAGS
 
         [-lex="PATH"] -> OPTIONAL
             A string with the name / path of the lex file used to produce the compiler
             NOTE: You may change the default name / path by editing the LEXER variable in the script.
+
+        [-yacc="PATH"] -> OPTIONAL
+            A string with the name / path of the yacc file used to produce the compiler
+            NOTE: You may change the default name / path by editing the GRAMMAR variable in the script.
 
         [-i="PATH"] -> OPTIONAL
             A string with the name / path of the directory that contains the source code files (.uc, .c)
@@ -74,40 +85,59 @@ if [ $# -eq 0 ]; then
             running your compiler on the source code file (.uc, .c) provided.
             NOTE: You may change the default name / path by editing the OUTPUT_DIR variable in the script
 
+        [-compile] -> OPTIONAL
+            Call the compile function that is defined in this script only and do not run any tests
+    
         [-diff] -> OPTIONAL
             On the test cases where there are errors it shows a numerated list of lines where there are differences
             between the expected compiler output and yours. If this flag is not specified it will not show the diff
             by default but this behaviour can be changed by edition the SHOW_DIFF variable and setting it to "true"
             
     Example Usage: 
-        user@computer$ ./test.sh ucc -args=\"-l\" 
-        user@computer$ ./test.sh ucc -args=\"-e1\" 
-        user@computer$ ./test.sh ucc -args=\"-l\" -diff
-        user@computer$ ./test.sh my_compiler -args=\"-e1 -l\"
-        user@computer$ ./test.sh ucc -lex=\"compiler.l\" -args=\"-l\" -i=tests/input_folder -o=tests/my_output_folder
+        user@computer$ ./test.sh ucc -l 
+        user@computer$ ./test.sh ucc -e1 
+        user@computer$ ./test.sh ucc -l -diff
+        user@computer$ ./test.sh my_compiler -e1 -l
+        user@computer$ ./test.sh ucc -l -lex=\"compiler.l\" -i=tests/input_folder -o=tests/my_output_folder
     "
-    
+
     exit 1
 
 else
     UC_COMPILER=$1
     for option in "$@"; do
         case $option in
-        -args=* | --compiler-arguments=*)
-            COMPILER_FLAGS="${option#*=}"
+        -l)
+            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS -l"
+            shift
+            ;;
+        -e1)
+            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS -e1"
+            shift
+            ;;
+        -e2)
+            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS -e2"
+            shift
+            ;;
+        -t)
+            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS -t"
             shift
             ;;
         -i=* | --input-dir=*)
             INPUT_DIR="${option#*=}"
             shift
             ;;
-            
+
         -o=* | --output-dir=*)
             OUTPUT_DIR="${option#*=}"
             shift
             ;;
         -lex=* | --lexer=*)
             LEXER="${option#*=}"
+            shift
+            ;;
+        -yacc=*)
+            GRAMMAR="${option#*=}"
             shift
             ;;
         -diff)
@@ -117,17 +147,18 @@ else
         esac
     done
 
-    [[ ! -f $LEXER ]] && (echo -e "${RED}ERROR:${RESET} $LEXER file does not exist!" && exit 1)
+    [[ ! -f $LEXER ]] && (echo -e "${RED}ERROR:${RESET} ${LEXER} file does not exist!" && exit 1)
+    [[ ! -f $GRAMMAR ]] && (echo -e "${RED}ERROR:${RESET} ${GRAMMAR} file does not exist!" && exit 1)
 
-    if [[ ! -f $UC_COMPILER || $LEXER -nt $UC_COMPILER ]]; then
+    if [[ ! -f $UC_COMPILER || $LEXER -nt $UC_COMPILER || $GRAMMAR -nt $UC_COMPILER || *.c -nt $UC_COMPILER ]]; then
         echo -e "${BLUE}INFO:${RESET} Compiling... "
 
-        compile $LEXER $UC_COMPILER
+        compile $LEXER $GRAMMAR $UC_COMPILER
 
         if [ $? -eq 0 ]; then
-            echo -e "${GREEN}DONE!${RESET}"
+            echo -e "${GREEN}COMPILATION SUCCESSFUL!${RESET}"
         else
-            echo -e "${RED}FAILED!!${RESET}"
+            echo -e "${RED}COMPILATION FAILED!!${RESET}"
             exit 1
         fi
     fi
