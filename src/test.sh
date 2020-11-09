@@ -101,6 +101,7 @@ else
             INPUT_DIR="${option#*=}"
             shift
             ;;
+            
         -o=* | --output-dir=*)
             OUTPUT_DIR="${option#*=}"
             shift

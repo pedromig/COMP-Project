@@ -10,6 +10,7 @@
 
     // C Standard library Includes
     #include <stdio.h>
+    #include <stdlib.h>
     #include <stdbool.h>
 
     // Custom Error Print Messages
@@ -22,7 +23,7 @@
     #define unterm_char_const_error(line, column)\
         printf("Line %d, col %d: unterminated char constant\n",line, column)
 
-    #define ilegal_char_error(line, column, c)\
+    #define illegal_char_error(line, column, c)\
         printf("Line %d, col %d: illegal character \(%s)\n", line, column, c)
 
 	// Helper state begin functions/definitions
@@ -56,11 +57,11 @@ CHR             [a-zA-Z_]+
 OOO             "\\"[0-7]{1,3}
 
 LINE_END        (\n|\r\n|\r)
-                
+
 INTLIT          [0-9]+
 CHRLIT          ([^\n\'\\]|{OOO}|("\\t")|("\\'")|("\\\"")|("\\n")|("\\\\")|(\t))
 REALLIT         (({INTLIT}"."{INTLIT}?|"."({INTLIT}))([eE][-+]?{INTLIT})?)|({INTLIT}([eE][-+]?{INTLIT}))
-                
+
 ID              {CHR}({CHR}|{INTLIT})*
 
 CHAR            "char"
@@ -106,7 +107,7 @@ MULTI_LINE_COMMENT_BEGIN        "/*"
 MULTI_LINE_COMMENT_END          "*/"
 
 %option yylineno
-%X MULTI_LINE_COMMENT CHAR_LITERAL
+%x MULTI_LINE_COMMENT CHAR_LITERAL
 
 %%
 
@@ -119,9 +120,9 @@ MULTI_LINE_COMMENT_END          "*/"
 {DOUBLE}                                              			          {printl("DOUBLE\n"); yycolumno += yyleng;}
 {RETURN}                                              			          {printl("RETURN\n"); yycolumno += yyleng;}
 {VOID}                                                			          {printl("VOID\n"); yycolumno += yyleng;}
-{RESERVED}                                            			          {printl("RESERVED\(%s)\n", yytext); yycolumno += yyleng;}
+{RESERVED}                                            			          {printl("RESERVED(%s)\n", yytext); yycolumno += yyleng;}
     
-{ID}                                                  			          {printl("ID\(%s)\n", yytext); yycolumno += yyleng;}
+{ID}                                                  			          {printl("ID(%s)\n", yytext); yycolumno += yyleng;}
     
 {BITWISEAND}                                          			          {printl("BITWISEAND\n"); yycolumno += yyleng;}
 {BITWISEOR}                                           			          {printl("BITWISEOR\n"); yycolumno += yyleng;}
@@ -148,11 +149,11 @@ MULTI_LINE_COMMENT_END          "*/"
 {LPAR}                                                		 	          {printl("LPAR\n"); yycolumno += yyleng;}
 {RPAR}                                                 			          {printl("RPAR\n"); yycolumno += yyleng;}
 
-{INTLIT}                                              			          {printl("INTLIT\(%s)\n", yytext); yycolumno += yyleng;}
-{REALLIT}                                             			          {printl("REALLIT\(%s)\n", yytext); yycolumno += yyleng;}
+{INTLIT}                                              			          {printl("INTLIT(%s)\n", yytext); yycolumno += yyleng;}
+{REALLIT}                                             			          {printl("REALLIT(%s)\n", yytext); yycolumno += yyleng;}
 
 {CHAR_LITERAL_DELIM}                                                      {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
-<CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                                {printl("CHRLIT\('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
+<CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                                {printl("CHRLIT('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
 <CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*{CHAR_LITERAL_DELIM}              {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
 <CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*"\\"?{LINE_END}                   {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
 <CHAR_LITERAL><<EOF>>                                                     {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
@@ -168,7 +169,7 @@ MULTI_LINE_COMMENT_END          "*/"
                                                       
 {LINE_END}                                            			          {yycolumno = 1;}                                                 
 [ \t]+                                                			          {yycolumno += yyleng;}
-.                                                     			          {ilegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
+.                                                     			          {illegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
 <<EOF>>                                               			          {return 0;}
 
 %%
