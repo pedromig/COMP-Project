@@ -92,7 +92,7 @@
    extern void yyerror(char *str);
 
    // Compiler Flags
-   extern bool l_flag, e1_flag;
+   bool l_flag, e1_flag;
    bool e2_flag, t_flag;   
 
 
@@ -1808,7 +1808,7 @@ void argparse(int argc, char *argv[]) {
             e1_flag = e2_flag = true;
         } else if (!strcmp(argv[i], "-t")) {
             l_flag = e2_flag = e1_flag = false;
-            t_flag = true;
+            t_flag = true; 
         } else {
             l_flag = e1_flag = t_flag = false;
             e2_flag = true;
@@ -1818,5 +1818,14 @@ void argparse(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
     argparse(argc, argv);
-    return yyparse();
+
+    if (l_flag || e1_flag) {
+        yylex();
+    } else if (t_flag) {
+        yyparse();
+        // print_ast()
+    } else  {
+        yyparse();
+    }  
+    return 0;
 }

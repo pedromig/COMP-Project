@@ -62,11 +62,10 @@
     int yysavedlineno;
     int yysavedcolumno;  
     
-    
+ 
     // Compiler Flags
     extern bool e2_flag, t_flag; 
-    bool l_flag, e1_flag ; 
-   
+    extern bool l_flag, e1_flag; 
 %}
 
 
@@ -128,7 +127,7 @@ MULTI_LINE_COMMENT_END          "*/"
 
 %%
 
-{CHAR}                                                			          {printl("CHAR\n"); yycolumno += yyleng; SEND_TOKEN(CHAR);}
+{CHAR}                                                			          {printl("CHAR\n"); yycolumno += yyleng;}
 {ELSE}                                                			          {printl("ELSE\n"); yycolumno += yyleng;}
 {WHILE}                                               			          {printl("WHILE\n"); yycolumno += yyleng;}
 {IF}                                                  			          {printl("IF\n"); yycolumno += yyleng;}

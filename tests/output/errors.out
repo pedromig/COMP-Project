@@ -1,1 +1,9 @@
-Line 13 col 1: syntax error: char
+INT
+ID(main)
+LPAR
+VOID
+RPAR
+LBRACE
+ASSIGN
+SEMI
+CHAR

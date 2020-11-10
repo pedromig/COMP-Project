@@ -1,1 +1,7 @@
-Line 10 col 0: syntax error: 
+INT
+ID(main)
+LPAR
+VOID
+RPAR
+LBRACE
+CHAR
