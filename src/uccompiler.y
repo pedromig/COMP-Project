@@ -23,9 +23,8 @@
    extern void yyerror(char *str);
 
    // Compiler Flags
-   bool l_flag, e1_flag;
-   bool e2_flag, t_flag;   
-
+   bool l_flag = false, e1_flag = false;
+   bool e2_flag = true, t_flag = false;  // print -e2 flag by default
 
 %}
 
@@ -208,34 +207,26 @@ ExpressionError: ID LPAR error RPAR
 void argparse(int argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "-l")) {
-            t_flag = e2_flag = false;
-            e1_flag = l_flag = true;  
+             e1_flag = t_flag = e2_flag = false;
+            l_flag = true;  
         } else if (!strcmp(argv[i], "-e1")){
             t_flag = l_flag = e2_flag = false;
             e1_flag = true;
         } else if (!strcmp(argv[i], "-e2")) {
-            t_flag = l_flag = false;
-            e1_flag = e2_flag = true;
+            e1_flag = t_flag = l_flag = false;
+            e2_flag = true;
         } else if (!strcmp(argv[i], "-t")) {
             l_flag = e2_flag = e1_flag = false;
             t_flag = true; 
-        } else {
-            l_flag = e1_flag = t_flag = false;
-            e2_flag = true;
         }
     }
 }
 
 int main(int argc, char *argv[]) {
     argparse(argc, argv);
-
-    if (l_flag || e1_flag) {
+    if (l_flag || e1_flag) 
         yylex();
-    } else if (t_flag) {
+    else if (t_flag || e2_flag) 
         yyparse();
-        // print_ast()
-    } else  {
-        yyparse();
-    }  
     return 0;
 }

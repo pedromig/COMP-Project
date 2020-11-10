@@ -92,12 +92,11 @@
    extern void yyerror(char *str);
 
    // Compiler Flags
-   bool l_flag, e1_flag;
-   bool e2_flag, t_flag;   
+   bool l_flag = false, e1_flag = false;
+   bool e2_flag = true, t_flag = false;  // print -e2 flag by default
 
 
-
-#line 101 "y.tab.c"
+#line 100 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -227,12 +226,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 33 "uccompiler.y"
+#line 32 "uccompiler.y"
 
     token_t token;
     ast_node_t *node;
 
-#line 236 "y.tab.c"
+#line 235 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -611,15 +610,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    56,    56,    59,    60,    61,    65,    66,    67,    71,
-      75,    76,    80,    81,    82,    83,    87,    90,    93,    96,
-      97,    98,   102,   103,   107,   108,   112,   113,   114,   118,
-     119,   120,   121,   122,   125,   126,   129,   130,   131,   132,
-     133,   134,   135,   138,   139,   140,   143,   144,   148,   149,
-     150,   151,   151,   151,   151,   151,   155,   156,   157,   160,
-     161,   162,   165,   166,   167,   168,   169,   170,   171,   172,
-     173,   174,   175,   176,   177,   178,   179,   182,   183,   186,
-     187,   188,   192,   195,   196,   197
+       0,    55,    55,    58,    59,    60,    64,    65,    66,    70,
+      74,    75,    79,    80,    81,    82,    86,    89,    92,    95,
+      96,    97,   101,   102,   106,   107,   111,   112,   113,   117,
+     118,   119,   120,   121,   124,   125,   128,   129,   130,   131,
+     132,   133,   134,   137,   138,   139,   142,   143,   147,   148,
+     149,   150,   150,   150,   150,   150,   154,   155,   156,   159,
+     160,   161,   164,   165,   166,   167,   168,   169,   170,   171,
+     172,   173,   174,   175,   176,   177,   178,   181,   182,   185,
+     186,   187,   191,   194,   195,   196
 };
 #endif
 
@@ -1559,7 +1558,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1563 "y.tab.c"
+#line 1562 "y.tab.c"
 
       default: break;
     }
@@ -1791,41 +1790,33 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 205 "uccompiler.y"
+#line 204 "uccompiler.y"
 
 
 
 void argparse(int argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "-l")) {
-            t_flag = e2_flag = false;
-            e1_flag = l_flag = true;  
+             e1_flag = t_flag = e2_flag = false;
+            l_flag = true;  
         } else if (!strcmp(argv[i], "-e1")){
             t_flag = l_flag = e2_flag = false;
             e1_flag = true;
         } else if (!strcmp(argv[i], "-e2")) {
-            t_flag = l_flag = false;
-            e1_flag = e2_flag = true;
+            e1_flag = t_flag = l_flag = false;
+            e2_flag = true;
         } else if (!strcmp(argv[i], "-t")) {
             l_flag = e2_flag = e1_flag = false;
             t_flag = true; 
-        } else {
-            l_flag = e1_flag = t_flag = false;
-            e2_flag = true;
         }
     }
 }
 
 int main(int argc, char *argv[]) {
     argparse(argc, argv);
-
-    if (l_flag || e1_flag) {
+    if (l_flag || e1_flag) 
         yylex();
-    } else if (t_flag) {
+    else if (t_flag || e2_flag) 
         yyparse();
-        // print_ast()
-    } else  {
-        yyparse();
-    }  
     return 0;
 }

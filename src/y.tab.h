@@ -131,7 +131,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 33 "uccompiler.y"
+#line 32 "uccompiler.y"
 
     token_t token;
     ast_node_t *node;
