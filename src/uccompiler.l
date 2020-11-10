@@ -36,7 +36,7 @@
 
 
     // A helper define to send a token to yacc
-    #define SEND_TOKEN(token, value) yylval = token(value); return token; 
+    #define SEND_TOKEN(token, value) yylval.token = token(value); return token; 
 
 	// Helper state begin functions/definitions
     #define begin_multi_line_comment(line, column)\
