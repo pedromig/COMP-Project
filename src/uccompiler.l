@@ -36,7 +36,9 @@
 
 
     // A helper define to send a token to yacc
-    #define SEND_TOKEN(token, value) yylval.token = token(value); return token; 
+    #define SEND_TOKEN(...)\
+            yylval.token = token(yytext);\
+            return __VA_ARGS__
 
 	// Helper state begin functions/definitions
     #define begin_multi_line_comment(line, column)\
@@ -126,7 +128,7 @@ MULTI_LINE_COMMENT_END          "*/"
 
 %%
 
-{CHAR}                                                			          {printl("CHAR\n"); yycolumno += yyleng; SEND_TOKEN(CHAR, yytext)}
+{CHAR}                                                			          {printl("CHAR\n"); yycolumno += yyleng; SEND_TOKEN(CHAR);}
 {ELSE}                                                			          {printl("ELSE\n"); yycolumno += yyleng;}
 {WHILE}                                               			          {printl("WHILE\n"); yycolumno += yyleng;}
 {IF}                                                  			          {printl("IF\n"); yycolumno += yyleng;}

@@ -29,12 +29,11 @@
 
 %}
 
-// yylval types
+// Token types
 %union {
-    token_t *token;
+    token_t token;
     ast_node_t *node;
 }
-
 
 %token <token> INTLIT CHRLIT REALLIT
 %token <token> IF ELSE WHILE RETURN 
@@ -51,7 +50,6 @@
 %type  <node> Expr ExprList OperatorList
 %type  <node> TypeSpec Operator BinaryOperator UnaryOperator 
 %type  <node> DeclarationError StatementError ExpressionError
-
 
 %% 
 

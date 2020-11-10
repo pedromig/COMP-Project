@@ -4,10 +4,17 @@
 
 #include "ast.h"
 
-token_t *token(char *value) {
+token_t token(char *value) {
     // TODO
+    token_t t = {.value=NULL};
+    return t;
 }
 ast_node_t *ast_node(char *id, token_t *token) {
+    // TODO
+    return NULL;
+}
+
+void add_node(ast_list_t *children, ast_node_t *child) {
     // TODO
 }
 
@@ -20,14 +27,10 @@ void add_children(ast_node_t *parent, int argc, ...) {
     va_end(args);
 }
 
-void add_node(ast_list_t *add_children, ast_node_t *child) {
-    // TODO
-}
-
 void free_ast(ast_node_t *head) {
     // TODO
 }
 
-__print_ast(ast_node_t *head, int ident_level) {
+void __print_ast(ast_node_t *head, int ident_level) {
     // TODO
 }

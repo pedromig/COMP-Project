@@ -5,7 +5,8 @@
 #define print_ast(head) __print_ast(head, 0)
 
 typedef struct ASTNode ast_node_t;
-typedef struct ASTNodeList ast_list_t;
+typedef struct ASTList ast_list_t;
+typedef struct ASTListNode ast_list_node_t;
 
 typedef struct Token {
     char *value;
@@ -13,21 +14,23 @@ typedef struct Token {
 
 struct ASTNode {
     char *id;
-    token_t *token;
+    token_t token;
     ast_list_t *children;
 };
 
-struct ASTNodeList {
+struct ASTListNode {
     ast_node_t *node;
-    ast_list_t *next;
-    ast_list_t *last;
+    ast_list_node_t *next;
 };
 
+struct ASTList {
+    ast_list_node_t *head;
+    ast_list_node_t *tail;
+};
 
-
-token_t *token(char *value);
+token_t token(char *value);
 ast_node_t *ast_node(char *id, token_t *token);
-void add_children(ast_node_t *parent, int n, ...);
+void add_children(ast_node_t *parent, int argc, ...);
 void free_ast(ast_node_t *head);
 
 #endif // __AST_H

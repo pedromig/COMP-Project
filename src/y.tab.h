@@ -44,10 +44,102 @@
 extern int yydebug;
 #endif
 
+/* Token type.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+  enum yytokentype
+  {
+    INTLIT = 258,
+    CHRLIT = 259,
+    REALLIT = 260,
+    IF = 261,
+    ELSE = 262,
+    WHILE = 263,
+    RETURN = 264,
+    CHAR = 265,
+    INT = 266,
+    SHORT = 267,
+    DOUBLE = 268,
+    VOID = 269,
+    PLUS = 270,
+    MINUS = 271,
+    MUL = 272,
+    DIV = 273,
+    MOD = 274,
+    EQ = 275,
+    NE = 276,
+    GE = 277,
+    GT = 278,
+    LE = 279,
+    LT = 280,
+    AND = 281,
+    OR = 282,
+    NOT = 283,
+    BITWISEAND = 284,
+    BITWISEOR = 285,
+    BITWISEXOR = 286,
+    ASSIGN = 287,
+    COMMA = 288,
+    LBRACE = 289,
+    LPAR = 290,
+    RBRACE = 291,
+    RPAR = 292,
+    SEMI = 293,
+    ID = 294
+  };
+#endif
+/* Tokens.  */
+#define INTLIT 258
+#define CHRLIT 259
+#define REALLIT 260
+#define IF 261
+#define ELSE 262
+#define WHILE 263
+#define RETURN 264
+#define CHAR 265
+#define INT 266
+#define SHORT 267
+#define DOUBLE 268
+#define VOID 269
+#define PLUS 270
+#define MINUS 271
+#define MUL 272
+#define DIV 273
+#define MOD 274
+#define EQ 275
+#define NE 276
+#define GE 277
+#define GT 278
+#define LE 279
+#define LT 280
+#define AND 281
+#define OR 282
+#define NOT 283
+#define BITWISEAND 284
+#define BITWISEOR 285
+#define BITWISEXOR 286
+#define ASSIGN 287
+#define COMMA 288
+#define LBRACE 289
+#define LPAR 290
+#define RBRACE 291
+#define RPAR 292
+#define SEMI 293
+#define ID 294
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 33 "uccompiler.y"
+
+    token_t token;
+    ast_node_t *node;
+
+#line 140 "y.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
