@@ -13,18 +13,30 @@
     #include <stdlib.h>
     #include <stdbool.h>
 
+    // Yacc and other Includes...
+    #include "ast.h"
+    #include "y.tab.h"
+    
     // Custom Error Print Messages
     #define inv_char_const_error(line, column, c)\
-        printf("Line %d, col %d: invalid char constant \('%s)\n", line, column, c)
+        if (!t_flag)\
+            printf("Line %d, col %d: invalid char constant ('%s)\n", line, column, c)
 
     #define unterm_comment_error(line, column)\
-        printf("Line %d, col %d: unterminated comment\n",line, column)
+        if (!t_flag)\
+            printf("Line %d, col %d: unterminated comment\n",line, column)
 
     #define unterm_char_const_error(line, column)\
-        printf("Line %d, col %d: unterminated char constant\n",line, column)
+        if (!t_flag)\
+            printf("Line %d, col %d: unterminated char constant\n",line, column)
 
     #define illegal_char_error(line, column, c)\
-        printf("Line %d, col %d: illegal character \(%s)\n", line, column, c)
+        if (!t_flag)\
+            printf("Line %d, col %d: illegal character (%s)\n", line, column, c)
+
+
+    // A helper define to send a token to yacc
+    #define SEND_TOKEN(token, value) yylval = token(value); return token; 
 
 	// Helper state begin functions/definitions
     #define begin_multi_line_comment(line, column)\
@@ -38,18 +50,21 @@
         yysavedcolumno = column;
 
     #define printl(...)\
-        if((l_flag))\
+        if (l_flag)\
             printf(__VA_ARGS__);
 
-    // Column Counter
+    // Line / Column Counter definitions
     int yycolumno = 1;
 
     // Helper Variables for Line Errors
     int yysavedlineno;
-    int yysavedcolumno;    
-
+    int yysavedcolumno;  
+    
+    
     // Compiler Flags
-    bool l_flag = false; // print -e1 option by default 
+    extern bool e2_flag, t_flag; 
+    bool l_flag, e1_flag ; 
+   
 %}
 
 
@@ -111,7 +126,7 @@ MULTI_LINE_COMMENT_END          "*/"
 
 %%
 
-{CHAR}                                                			          {printl("CHAR\n"); yycolumno += yyleng;}
+{CHAR}                                                			          {printl("CHAR\n"); yycolumno += yyleng; SEND_TOKEN(CHAR, yytext)}
 {ELSE}                                                			          {printl("ELSE\n"); yycolumno += yyleng;}
 {WHILE}                                               			          {printl("WHILE\n"); yycolumno += yyleng;}
 {IF}                                                  			          {printl("IF\n"); yycolumno += yyleng;}
@@ -174,20 +189,10 @@ MULTI_LINE_COMMENT_END          "*/"
 
 %%
 
-void argparse(int argc, char *argv[]) {
-    for (int i = 1; i < argc; ++i) {
-        if (!strcmp(argv[i], "-l"))
-            l_flag = true;
-        else if (!strcmp(argv[i], "-e1"))
-            l_flag = false;
-    }
-}
-
 int yywrap() {
     return 1;
 }
 
-int main(int argc, char *argv[]) {
-    argparse(argc, argv);
-    return yylex();
+void yyerror(char *str) {
+    printf("Line %d col %d: %s: %s\n", yylineno, yycolumno - yyleng, str, yytext);
 }
