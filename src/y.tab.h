@@ -86,7 +86,7 @@ extern int yydebug;
     RPAR = 292,
     SEMI = 293,
     ID = 294,
-    IF_PREC = 295,
+    NO_ELSE = 295,
     UNARY_OPERATOR = 296
   };
 #endif
@@ -128,7 +128,7 @@ extern int yydebug;
 #define RPAR 292
 #define SEMI 293
 #define ID 294
-#define IF_PREC 295
+#define NO_ELSE 295
 #define UNARY_OPERATOR 296
 
 /* Value type.  */

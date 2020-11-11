@@ -28,12 +28,13 @@
 
 %}
 
-// Token types
+// YYSTYPE (yylval) possible values
 %union {
     token_t token;
     ast_node_t *node;
 }
 
+// Yacc Token type declarations
 %token <token> INTLIT CHRLIT REALLIT
 %token <token> IF ELSE WHILE RETURN 
 %token <token> CHAR INT SHORT DOUBLE VOID
@@ -41,14 +42,16 @@
 %token <token> EQ NE GE GT LE LT AND OR NOT BITWISEAND BITWISEOR BITWISEXOR 
 %token <token> ASSIGN COMMA LBRACE LPAR RBRACE RPAR SEMI ID 
 
-%type  <node> Program 
-%type  <node> FunctionsAndDeclarations FunctionsAndDeclarationsList FunctionDefinition FunctionBody FunctionDeclarator
-%type  <node> Declaration Declarator DeclaratorList DeclarationsAndStatements
-%type  <node> ParameterList ParameterDeclaration ParameterDeclarationList
-%type  <node> Statement StatementList
-%type  <node> Expr 
-%type  <node> TypeSpec OperatorExpression
+// Yacc Rule type declarations
+%type <node> Program 
+%type <node> FunctionsAndDeclarations FunctionsAndDeclarationsList FunctionDefinition FunctionBody FunctionDeclarator
+%type <node> Declaration Declarator DeclaratorList DeclarationsAndStatements
+%type <node> ParameterList ParameterDeclaration ParameterDeclarationList
+%type <node> Statement StatementList StatementOrError
+%type <node> Expr 
+%type <node> TypeSpec OperatorExpression
 
+// Operator Precedences acording to C99 standard
 %left COMMA
 %right ASSIGN 
 %left OR
@@ -62,7 +65,7 @@
 %left MUL DIV MOD
 %right NOT
 
-%nonassoc IF_PREC
+%nonassoc NO_ELSE
 %nonassoc ELSE
 %nonassoc UNARY_OPERATOR
 
@@ -97,7 +100,6 @@ DeclarationsAndStatements: Statement DeclarationsAndStatements                  
                          | Declaration DeclarationsAndStatements                                    {;}
                          | Statement                                                                {;}
                          | Declaration                                                              {;}
-                         | error SEMI                                                               {;}
                          ;
 
 
@@ -120,7 +122,7 @@ ParameterDeclaration: TypeSpec ID                                               
                        
 
 Declaration: TypeSpec Declarator DeclaratorList SEMI                                                {;}
-
+           | error SEMI                                                                             {;}
 
 DeclaratorList: DeclaratorList COMMA Declarator                                                     {;}
               |  /* epsilon */                                                                      {;}
@@ -138,20 +140,24 @@ Declarator: ID ASSIGN Expr                                                      
           | ID                                                                                      {;}
           ;
 
-Statement: IF LPAR Expr RPAR Statement %prec IF_PREC                                                {;}
-         | IF LPAR Expr RPAR Statement ELSE Statement                                               {;}
-         | WHILE LPAR Expr RPAR Statement                                                           {;}
+Statement: IF LPAR Expr RPAR StatementOrError %prec NO_ELSE                                         {;}
+         | IF LPAR Expr RPAR StatementOrError ELSE StatementOrError                                 {;}
+         | WHILE LPAR Expr RPAR StatementOrError                                                    {;}
          | LBRACE StatementList RBRACE                                                              {;}
-         | LBRACE error RBRACE                                                                      {;}
          | RETURN Expr SEMI                                                                         {;}
          | Expr SEMI                                                                                {;}
+         | LBRACE error RBRACE                                                                      {;}
+         | LBRACE RBRACE                                                                            {;}
          | RETURN SEMI                                                                              {;}
          | SEMI                                                                                     {;}
          ;
 
-StatementList: StatementList  Statement                                                             {;}                                                                    {;}
-             | /* epsilon */                                                                        {;}
+StatementList: StatementList  StatementOrError                                                      {;}                                                                    {;}
+             | StatementOrError                                                                     {;}
              ;
+
+StatementOrError: Statement                                                                         {;}
+                | error SEMI                                                                        {;}
 
 
 Expr: OperatorExpression                                                                            {;}                                                                 {;}
@@ -197,7 +203,7 @@ void argparse(int argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "-l")) {
              e1_flag = t_flag = e2_flag = false;
-            l_flag = true;  
+             l_flag = true;  
         } else if (!strcmp(argv[i], "-e1")){
             t_flag = l_flag = e2_flag = false;
             e1_flag = true;
@@ -213,9 +219,10 @@ void argparse(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
     argparse(argc, argv);
+    
     if (l_flag || e1_flag) 
         yylex();
     else if (t_flag || e2_flag) 
         yyparse();
     return 0;
-}
+} 

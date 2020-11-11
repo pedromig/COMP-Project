@@ -19,26 +19,28 @@
     
     // Custom Error Print Messages
     #define inv_char_const_error(line, column, c)\
-        if (!t_flag)\
+        if (!(t_flag))\
             printf("Line %d, col %d: invalid char constant ('%s)\n", line, column, c)
 
     #define unterm_comment_error(line, column)\
-        if (!t_flag)\
+        if (!(t_flag))\
             printf("Line %d, col %d: unterminated comment\n",line, column)
 
     #define unterm_char_const_error(line, column)\
-        if (!t_flag)\
+        if (!(t_flag))\
             printf("Line %d, col %d: unterminated char constant\n",line, column)
 
     #define illegal_char_error(line, column, c)\
-        if (!t_flag)\
+        if (!(t_flag))\
             printf("Line %d, col %d: illegal character (%s)\n", line, column, c)
 
 
     // A helper define to send a token to yacc
     #define SEND_TOKEN(...)\
-            yylval.token = token(yytext);\
-            return __VA_ARGS__
+            if (e2_flag || t_flag) { \
+                yylval.token = token(yytext);\
+                return __VA_ARGS__;\
+            }
 
 	// Helper state begin functions/definitions
     #define begin_multi_line_comment(line, column)\
@@ -185,7 +187,7 @@ MULTI_LINE_COMMENT_END          "*/"
 {LINE_END}                                            			          {yycolumno = 1;}                                                 
 [ \t]+                                                			          {yycolumno += yyleng;}
 .                                                     			          {illegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
-<<EOF>>                                               			          {return 0;}
+<<EOF>>                                               			          {yycolumno += yyleng; return 0;}
 
 %%
 
@@ -194,5 +196,5 @@ int yywrap() {
 } 
 
 void yyerror(char *str) {
-    printf("Line %d col %d: %s: %s\n", yylineno, yycolumno - yyleng, str, yytext);
+    printf("Line %d, col %d: %s: %s\n", yylineno, yycolumno - yyleng, str, yytext);
 }
