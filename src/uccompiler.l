@@ -191,7 +191,7 @@ MULTI_LINE_COMMENT_END          "*/"
 
 int yywrap() {
     return 1;
-}
+} 
 
 void yyerror(char *str) {
     printf("Line %d col %d: %s: %s\n", yylineno, yycolumno - yyleng, str, yytext);

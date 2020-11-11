@@ -53,9 +53,12 @@ function compile() {
     flex $1 $LEX_FLAGS && yacc $2 $YACC_FLAGS -d && clang-3.9 -Wall -Wno-unused-function *.c -o $3
 }
 
-function recompile() {
-    for f in $LEXER $GRAMMAR $(ls *.{c,h}); do
-        [[ f -nt $UC_COMPILER ]] && return 1
+function need_recompile() {
+    for f in $LEXER $GRAMMAR *.{c,h}; do 
+        if [[ $f -nt $UC_COMPILER ]]; then 
+            return 1
+           
+        fi
     done
     return 0
 }
@@ -162,8 +165,9 @@ else
 
     [[ ! -f $LEXER ]] && (echo -e "${RED}ERROR:${RESET} ${LEXER} file does not exist!" && exit 1)
     [[ ! -f $GRAMMAR ]] && (echo -e "${RED}ERROR:${RESET} ${GRAMMAR} file does not exist!" && exit 1)
-
-    if [[ ! -f $UC_COMPILER || recompile ]]; then
+    
+    need_recompile
+    if [[ $? -eq 1 ]]; then
         echo -e "${BLUE} INFO:${RESET} Compiling... "
 
         compile $LEXER $GRAMMAR $UC_COMPILER

@@ -1861,7 +1861,7 @@ yyreduce:
 
   case 49:
 #line 158 "uccompiler.y"
-                                                                                           {;}
+                                                                                                    {;}
 #line 1866 "y.tab.c"
     break;
 
