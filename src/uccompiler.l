@@ -62,7 +62,6 @@
     int yysavedlineno;
     int yysavedcolumno;  
     
- 
     // Compiler Flags
     extern bool e2_flag, t_flag; 
     extern bool l_flag, e1_flag; 
@@ -127,49 +126,49 @@ MULTI_LINE_COMMENT_END          "*/"
 
 %%
 
-{CHAR}                                                			          {printl("CHAR\n"); yycolumno += yyleng;}
-{ELSE}                                                			          {printl("ELSE\n"); yycolumno += yyleng;}
-{WHILE}                                               			          {printl("WHILE\n"); yycolumno += yyleng;}
-{IF}                                                  			          {printl("IF\n"); yycolumno += yyleng;}
-{INT}                                                 			          {printl("INT\n"); yycolumno += yyleng;}
-{SHORT}                                               		 	          {printl("SHORT\n"); yycolumno += yyleng;}
-{DOUBLE}                                              			          {printl("DOUBLE\n"); yycolumno += yyleng;}
-{RETURN}                                              			          {printl("RETURN\n"); yycolumno += yyleng;}
-{VOID}                                                			          {printl("VOID\n"); yycolumno += yyleng;}
+{CHAR}                                                			          {printl("CHAR\n"); yycolumno += yyleng; SEND_TOKEN(CHAR);}
+{ELSE}                                                			          {printl("ELSE\n"); yycolumno += yyleng; SEND_TOKEN(ELSE);}
+{WHILE}                                               			          {printl("WHILE\n"); yycolumno += yyleng; SEND_TOKEN(WHILE);}
+{IF}                                                  			          {printl("IF\n"); yycolumno += yyleng; SEND_TOKEN(IF);}
+{INT}                                                 			          {printl("INT\n"); yycolumno += yyleng; SEND_TOKEN(INT);}
+{SHORT}                                               		 	          {printl("SHORT\n"); yycolumno += yyleng; SEND_TOKEN(SHORT);}
+{DOUBLE}                                              			          {printl("DOUBLE\n"); yycolumno += yyleng; SEND_TOKEN(DOUBLE);}
+{RETURN}                                              			          {printl("RETURN\n"); yycolumno += yyleng; SEND_TOKEN(RETURN);}
+{VOID}                                                			          {printl("VOID\n"); yycolumno += yyleng; SEND_TOKEN(VOID);}
 {RESERVED}                                            			          {printl("RESERVED(%s)\n", yytext); yycolumno += yyleng;}
     
-{ID}                                                  			          {printl("ID(%s)\n", yytext); yycolumno += yyleng;}
+{ID}                                                  			          {printl("ID(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(ID);}
     
-{BITWISEAND}                                          			          {printl("BITWISEAND\n"); yycolumno += yyleng;}
-{BITWISEOR}                                           			          {printl("BITWISEOR\n"); yycolumno += yyleng;}
-{BITWISEXOR}                                          			          {printl("BITWISEXOR\n"); yycolumno += yyleng;}
-{AND}                                                 			          {printl("AND\n"); yycolumno += yyleng;}
-{OR}                                                  			          {printl("OR\n"); yycolumno += yyleng;}
-{NOT}                                                 			          {printl("NOT\n"); yycolumno += yyleng;}
-{ASSIGN}                                              			          {printl("ASSIGN\n"); yycolumno += yyleng;}
-{MUL}                                                 			          {printl("MUL\n"); yycolumno += yyleng;}
-{DIV}                                                 			          {printl("DIV\n"); yycolumno += yyleng;}
-{PLUS}                                                		              {printl("PLUS\n"); yycolumno += yyleng;}
-{MINUS}                                               	 		          {printl("MINUS\n"); yycolumno += yyleng;}
-{MOD}                                                 			          {printl("MOD\n"); yycolumno += yyleng;} 
-{COMMA}                                               			          {printl("COMMA\n"); yycolumno += yyleng;}
-{SEMI}                                                	 		          {printl("SEMI\n"); yycolumno += yyleng;}
-{EQ}                                                   			          {printl("EQ\n"); yycolumno += yyleng;}
-{NE}                                                  			          {printl("NE\n"); yycolumno += yyleng;}
-{GE}                                                  			          {printl("GE\n"); yycolumno += yyleng;}
-{GT}                                                  			          {printl("GT\n"); yycolumno += yyleng;}
-{LE}                                                  		              {printl("LE\n"); yycolumno += yyleng;}
-{LT}                                                 			          {printl("LT\n"); yycolumno += yyleng;}
-{LBRACE}                                              			          {printl("LBRACE\n"); yycolumno += yyleng;}
-{RBRACE}                                              			          {printl("RBRACE\n"); yycolumno += yyleng;}
-{LPAR}                                                		 	          {printl("LPAR\n"); yycolumno += yyleng;}
-{RPAR}                                                 			          {printl("RPAR\n"); yycolumno += yyleng;}
+{BITWISEAND}                                          			          {printl("BITWISEAND\n"); yycolumno += yyleng; SEND_TOKEN(BITWISEAND);}
+{BITWISEOR}                                           			          {printl("BITWISEOR\n"); yycolumno += yyleng;SEND_TOKEN(BITWISEOR);}
+{BITWISEXOR}                                          			          {printl("BITWISEXOR\n"); yycolumno += yyleng; SEND_TOKEN(BITWISEXOR);}
+{AND}                                                 			          {printl("AND\n"); yycolumno += yyleng; SEND_TOKEN(AND);}
+{OR}                                                  			          {printl("OR\n"); yycolumno += yyleng; SEND_TOKEN(OR);}
+{NOT}                                                 			          {printl("NOT\n"); yycolumno += yyleng; SEND_TOKEN(NOT);}
+{ASSIGN}                                              			          {printl("ASSIGN\n"); yycolumno += yyleng; SEND_TOKEN(ASSIGN);}
+{MUL}                                                 			          {printl("MUL\n"); yycolumno += yyleng; SEND_TOKEN(MUL);}
+{DIV}                                                 			          {printl("DIV\n"); yycolumno += yyleng; SEND_TOKEN(DIV);}
+{PLUS}                                                		              {printl("PLUS\n"); yycolumno += yyleng; SEND_TOKEN(PLUS);}
+{MINUS}                                               	 		          {printl("MINUS\n"); yycolumno += yyleng; SEND_TOKEN(MINUS);}
+{MOD}                                                 			          {printl("MOD\n"); yycolumno += yyleng; SEND_TOKEN(MOD);} 
+{COMMA}                                               			          {printl("COMMA\n"); yycolumno += yyleng; SEND_TOKEN(COMMA);}
+{SEMI}                                                	 		          {printl("SEMI\n"); yycolumno += yyleng; SEND_TOKEN(SEMI);}
+{EQ}                                                   			          {printl("EQ\n"); yycolumno += yyleng; SEND_TOKEN(EQ);}
+{NE}                                                  			          {printl("NE\n"); yycolumno += yyleng; SEND_TOKEN(NE);}
+{GE}                                                  			          {printl("GE\n"); yycolumno += yyleng; SEND_TOKEN(GE);}
+{GT}                                                  			          {printl("GT\n"); yycolumno += yyleng; SEND_TOKEN(GT);}
+{LE}                                                  		              {printl("LE\n"); yycolumno += yyleng; SEND_TOKEN(LE);}
+{LT}                                                 			          {printl("LT\n"); yycolumno += yyleng; SEND_TOKEN(LT);}
+{LBRACE}                                              			          {printl("LBRACE\n"); yycolumno += yyleng; SEND_TOKEN(LBRACE);}
+{RBRACE}                                              			          {printl("RBRACE\n"); yycolumno += yyleng; SEND_TOKEN(RBRACE);}
+{LPAR}                                                		 	          {printl("LPAR\n"); yycolumno += yyleng; SEND_TOKEN(LPAR);}
+{RPAR}                                                 			          {printl("RPAR\n"); yycolumno += yyleng; SEND_TOKEN(RPAR);}
 
-{INTLIT}                                              			          {printl("INTLIT(%s)\n", yytext); yycolumno += yyleng;}
-{REALLIT}                                             			          {printl("REALLIT(%s)\n", yytext); yycolumno += yyleng;}
+{INTLIT}                                              			          {printl("INTLIT(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(INTLIT);}
+{REALLIT}                                             			          {printl("REALLIT(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(REALLIT);}
 
 {CHAR_LITERAL_DELIM}                                                      {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
-<CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                                {printl("CHRLIT('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
+<CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                                {printl("CHRLIT('%s)\n", yytext); BEGIN 0; yycolumno += yyleng; SEND_TOKEN(CHRLIT);}
 <CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*{CHAR_LITERAL_DELIM}              {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
 <CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*"\\"?{LINE_END}                   {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
 <CHAR_LITERAL><<EOF>>                                                     {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}

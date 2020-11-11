@@ -85,7 +85,9 @@ extern int yydebug;
     RBRACE = 291,
     RPAR = 292,
     SEMI = 293,
-    ID = 294
+    ID = 294,
+    IF_PREC = 295,
+    UNARY_OPERATOR = 296
   };
 #endif
 /* Tokens.  */
@@ -126,6 +128,8 @@ extern int yydebug;
 #define RPAR 292
 #define SEMI 293
 #define ID 294
+#define IF_PREC 295
+#define UNARY_OPERATOR 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -136,7 +140,7 @@ union YYSTYPE
     token_t token;
     ast_node_t *node;
 
-#line 140 "y.tab.h"
+#line 144 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -1,13 +1,16 @@
+#include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "ast.h"
 
-token_t token(char *value) {
-    // TODO
-    token_t t = {.value=NULL};
-    return t;
+token_t token(const char *value) {
+    token_t token = {.value = strdup(value)};
+    assert(token.value != NULL);
+    
+    return token;
 }
 ast_node_t *ast_node(char *id, token_t *token) {
     // TODO

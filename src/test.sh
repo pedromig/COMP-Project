@@ -43,7 +43,7 @@ function run_tests() {
             [[ $SHOW_DIFF == "true" ]] && echo && cat -n DIFFOUT && echo
         fi
         if [[ $VALGRIND_MEMCHECK == "true" ]]; then
-            valgrind $VALGRIND_FLAGS ./$UC_COMPILER < $file_path
+            valgrind $VALGRIND_FLAGS ./$UC_COMPILER <$file_path
         fi
     done
     rm DIFFOUT
@@ -55,9 +55,9 @@ function compile() {
 
 function recompile() {
     for f in $LEXER $GRAMMAR $(ls *.{c,h}); do
-         [[ f -nt $UC_COMPILER ]] && return 1;
+        [[ f -nt $UC_COMPILER ]] && return 1
     done
-    return 0;
+    return 0
 }
 
 if [ $# -eq 0 ]; then
@@ -163,7 +163,6 @@ else
     [[ ! -f $LEXER ]] && (echo -e "${RED}ERROR:${RESET} ${LEXER} file does not exist!" && exit 1)
     [[ ! -f $GRAMMAR ]] && (echo -e "${RED}ERROR:${RESET} ${GRAMMAR} file does not exist!" && exit 1)
 
-    
     if [[ ! -f $UC_COMPILER || recompile ]]; then
         echo -e "${BLUE} INFO:${RESET} Compiling... "
 

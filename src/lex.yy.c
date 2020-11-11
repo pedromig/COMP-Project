@@ -798,13 +798,12 @@ char *yytext;
     int yysavedlineno;
     int yysavedcolumno;  
     
- 
     // Compiler Flags
     extern bool e2_flag, t_flag; 
     extern bool l_flag, e1_flag; 
-#line 806 "lex.yy.c"
+#line 805 "lex.yy.c"
 
-#line 808 "lex.yy.c"
+#line 807 "lex.yy.c"
 
 #define INITIAL 0
 #define MULTI_LINE_COMMENT 1
@@ -1023,10 +1022,10 @@ YY_DECL
 		}
 
 	{
-#line 128 "uccompiler.l"
+#line 127 "uccompiler.l"
 
 
-#line 1030 "lex.yy.c"
+#line 1029 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1095,271 +1094,271 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 130 "uccompiler.l"
-{printl("CHAR\n"); yycolumno += yyleng;}
+#line 129 "uccompiler.l"
+{printl("CHAR\n"); yycolumno += yyleng; SEND_TOKEN(CHAR);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 131 "uccompiler.l"
-{printl("ELSE\n"); yycolumno += yyleng;}
+#line 130 "uccompiler.l"
+{printl("ELSE\n"); yycolumno += yyleng; SEND_TOKEN(ELSE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 132 "uccompiler.l"
-{printl("WHILE\n"); yycolumno += yyleng;}
+#line 131 "uccompiler.l"
+{printl("WHILE\n"); yycolumno += yyleng; SEND_TOKEN(WHILE);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 133 "uccompiler.l"
-{printl("IF\n"); yycolumno += yyleng;}
+#line 132 "uccompiler.l"
+{printl("IF\n"); yycolumno += yyleng; SEND_TOKEN(IF);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 134 "uccompiler.l"
-{printl("INT\n"); yycolumno += yyleng;}
+#line 133 "uccompiler.l"
+{printl("INT\n"); yycolumno += yyleng; SEND_TOKEN(INT);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 135 "uccompiler.l"
-{printl("SHORT\n"); yycolumno += yyleng;}
+#line 134 "uccompiler.l"
+{printl("SHORT\n"); yycolumno += yyleng; SEND_TOKEN(SHORT);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 136 "uccompiler.l"
-{printl("DOUBLE\n"); yycolumno += yyleng;}
+#line 135 "uccompiler.l"
+{printl("DOUBLE\n"); yycolumno += yyleng; SEND_TOKEN(DOUBLE);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 137 "uccompiler.l"
-{printl("RETURN\n"); yycolumno += yyleng;}
+#line 136 "uccompiler.l"
+{printl("RETURN\n"); yycolumno += yyleng; SEND_TOKEN(RETURN);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 138 "uccompiler.l"
-{printl("VOID\n"); yycolumno += yyleng;}
+#line 137 "uccompiler.l"
+{printl("VOID\n"); yycolumno += yyleng; SEND_TOKEN(VOID);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 139 "uccompiler.l"
+#line 138 "uccompiler.l"
 {printl("RESERVED(%s)\n", yytext); yycolumno += yyleng;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 141 "uccompiler.l"
-{printl("ID(%s)\n", yytext); yycolumno += yyleng;}
+#line 140 "uccompiler.l"
+{printl("ID(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(ID);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 143 "uccompiler.l"
-{printl("BITWISEAND\n"); yycolumno += yyleng;}
+#line 142 "uccompiler.l"
+{printl("BITWISEAND\n"); yycolumno += yyleng; SEND_TOKEN(BITWISEAND);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 144 "uccompiler.l"
-{printl("BITWISEOR\n"); yycolumno += yyleng;}
+#line 143 "uccompiler.l"
+{printl("BITWISEOR\n"); yycolumno += yyleng;SEND_TOKEN(BITWISEOR);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 145 "uccompiler.l"
-{printl("BITWISEXOR\n"); yycolumno += yyleng;}
+#line 144 "uccompiler.l"
+{printl("BITWISEXOR\n"); yycolumno += yyleng; SEND_TOKEN(BITWISEXOR);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 146 "uccompiler.l"
-{printl("AND\n"); yycolumno += yyleng;}
+#line 145 "uccompiler.l"
+{printl("AND\n"); yycolumno += yyleng; SEND_TOKEN(AND);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 147 "uccompiler.l"
-{printl("OR\n"); yycolumno += yyleng;}
+#line 146 "uccompiler.l"
+{printl("OR\n"); yycolumno += yyleng; SEND_TOKEN(OR);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 148 "uccompiler.l"
-{printl("NOT\n"); yycolumno += yyleng;}
+#line 147 "uccompiler.l"
+{printl("NOT\n"); yycolumno += yyleng; SEND_TOKEN(NOT);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 149 "uccompiler.l"
-{printl("ASSIGN\n"); yycolumno += yyleng;}
+#line 148 "uccompiler.l"
+{printl("ASSIGN\n"); yycolumno += yyleng; SEND_TOKEN(ASSIGN);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 150 "uccompiler.l"
-{printl("MUL\n"); yycolumno += yyleng;}
+#line 149 "uccompiler.l"
+{printl("MUL\n"); yycolumno += yyleng; SEND_TOKEN(MUL);}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 151 "uccompiler.l"
-{printl("DIV\n"); yycolumno += yyleng;}
+#line 150 "uccompiler.l"
+{printl("DIV\n"); yycolumno += yyleng; SEND_TOKEN(DIV);}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 152 "uccompiler.l"
-{printl("PLUS\n"); yycolumno += yyleng;}
+#line 151 "uccompiler.l"
+{printl("PLUS\n"); yycolumno += yyleng; SEND_TOKEN(PLUS);}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 153 "uccompiler.l"
-{printl("MINUS\n"); yycolumno += yyleng;}
+#line 152 "uccompiler.l"
+{printl("MINUS\n"); yycolumno += yyleng; SEND_TOKEN(MINUS);}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 154 "uccompiler.l"
-{printl("MOD\n"); yycolumno += yyleng;} 
+#line 153 "uccompiler.l"
+{printl("MOD\n"); yycolumno += yyleng; SEND_TOKEN(MOD);} 
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 155 "uccompiler.l"
-{printl("COMMA\n"); yycolumno += yyleng;}
+#line 154 "uccompiler.l"
+{printl("COMMA\n"); yycolumno += yyleng; SEND_TOKEN(COMMA);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 156 "uccompiler.l"
-{printl("SEMI\n"); yycolumno += yyleng;}
+#line 155 "uccompiler.l"
+{printl("SEMI\n"); yycolumno += yyleng; SEND_TOKEN(SEMI);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 157 "uccompiler.l"
-{printl("EQ\n"); yycolumno += yyleng;}
+#line 156 "uccompiler.l"
+{printl("EQ\n"); yycolumno += yyleng; SEND_TOKEN(EQ);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 158 "uccompiler.l"
-{printl("NE\n"); yycolumno += yyleng;}
+#line 157 "uccompiler.l"
+{printl("NE\n"); yycolumno += yyleng; SEND_TOKEN(NE);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 159 "uccompiler.l"
-{printl("GE\n"); yycolumno += yyleng;}
+#line 158 "uccompiler.l"
+{printl("GE\n"); yycolumno += yyleng; SEND_TOKEN(GE);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 160 "uccompiler.l"
-{printl("GT\n"); yycolumno += yyleng;}
+#line 159 "uccompiler.l"
+{printl("GT\n"); yycolumno += yyleng; SEND_TOKEN(GT);}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 161 "uccompiler.l"
-{printl("LE\n"); yycolumno += yyleng;}
+#line 160 "uccompiler.l"
+{printl("LE\n"); yycolumno += yyleng; SEND_TOKEN(LE);}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 162 "uccompiler.l"
-{printl("LT\n"); yycolumno += yyleng;}
+#line 161 "uccompiler.l"
+{printl("LT\n"); yycolumno += yyleng; SEND_TOKEN(LT);}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 163 "uccompiler.l"
-{printl("LBRACE\n"); yycolumno += yyleng;}
+#line 162 "uccompiler.l"
+{printl("LBRACE\n"); yycolumno += yyleng; SEND_TOKEN(LBRACE);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 164 "uccompiler.l"
-{printl("RBRACE\n"); yycolumno += yyleng;}
+#line 163 "uccompiler.l"
+{printl("RBRACE\n"); yycolumno += yyleng; SEND_TOKEN(RBRACE);}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 165 "uccompiler.l"
-{printl("LPAR\n"); yycolumno += yyleng;}
+#line 164 "uccompiler.l"
+{printl("LPAR\n"); yycolumno += yyleng; SEND_TOKEN(LPAR);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 166 "uccompiler.l"
-{printl("RPAR\n"); yycolumno += yyleng;}
+#line 165 "uccompiler.l"
+{printl("RPAR\n"); yycolumno += yyleng; SEND_TOKEN(RPAR);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 168 "uccompiler.l"
-{printl("INTLIT(%s)\n", yytext); yycolumno += yyleng;}
+#line 167 "uccompiler.l"
+{printl("INTLIT(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(INTLIT);}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 169 "uccompiler.l"
-{printl("REALLIT(%s)\n", yytext); yycolumno += yyleng;}
+#line 168 "uccompiler.l"
+{printl("REALLIT(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(REALLIT);}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 171 "uccompiler.l"
+#line 170 "uccompiler.l"
 {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 172 "uccompiler.l"
-{printl("CHRLIT('%s)\n", yytext); BEGIN 0; yycolumno += yyleng;}
+#line 171 "uccompiler.l"
+{printl("CHRLIT('%s)\n", yytext); BEGIN 0; yycolumno += yyleng; SEND_TOKEN(CHRLIT);}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 173 "uccompiler.l"
+#line 172 "uccompiler.l"
 {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 174 "uccompiler.l"
+#line 173 "uccompiler.l"
 {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
 	YY_BREAK
 case YY_STATE_EOF(CHAR_LITERAL):
-#line 175 "uccompiler.l"
+#line 174 "uccompiler.l"
 {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
 	YY_BREAK
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 178 "uccompiler.l"
+#line 177 "uccompiler.l"
 {;}                       
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 179 "uccompiler.l"
+#line 178 "uccompiler.l"
 {begin_multi_line_comment(yylineno, yycolumno); yycolumno += yyleng;}
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 181 "uccompiler.l"
+#line 180 "uccompiler.l"
 {yycolumno = 1;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 182 "uccompiler.l"
+#line 181 "uccompiler.l"
 {yycolumno += yyleng;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 183 "uccompiler.l"
+#line 182 "uccompiler.l"
 {BEGIN 0; yycolumno += yyleng;}
 	YY_BREAK
 case YY_STATE_EOF(MULTI_LINE_COMMENT):
-#line 184 "uccompiler.l"
+#line 183 "uccompiler.l"
 {unterm_comment_error(yysavedlineno, yysavedcolumno); BEGIN 0;}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 186 "uccompiler.l"
+#line 185 "uccompiler.l"
 {yycolumno = 1;}                                                 
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 187 "uccompiler.l"
+#line 186 "uccompiler.l"
 {yycolumno += yyleng;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 188 "uccompiler.l"
+#line 187 "uccompiler.l"
 {illegal_char_error(yylineno, yycolumno, yytext); yycolumno += yyleng;}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 189 "uccompiler.l"
+#line 188 "uccompiler.l"
 {return 0;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 191 "uccompiler.l"
+#line 190 "uccompiler.l"
 ECHO;
 	YY_BREAK
-#line 1363 "lex.yy.c"
+#line 1362 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2374,7 +2373,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 191 "uccompiler.l"
+#line 190 "uccompiler.l"
 
 
 int yywrap() {

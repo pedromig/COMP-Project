@@ -46,160 +46,149 @@
 %type  <node> Declaration Declarator DeclaratorList DeclarationsAndStatements
 %type  <node> ParameterList ParameterDeclaration ParameterDeclarationList
 %type  <node> Statement StatementList
-%type  <node> Expr ExprList OperatorList
-%type  <node> TypeSpec Operator BinaryOperator UnaryOperator 
-%type  <node> DeclarationError StatementError ExpressionError
+%type  <node> Expr 
+%type  <node> TypeSpec OperatorExpression
+
+%left COMMA
+%right ASSIGN 
+%left OR
+%left AND 
+%left BITWISEOR
+%left BITWISEXOR
+%left BITWISEAND
+%left EQ NE
+%left GT GE LT LE
+%left MINUS PLUS 
+%left MUL DIV MOD
+%right NOT
+
+%nonassoc IF_PREC
+%nonassoc ELSE
+%nonassoc UNARY_OPERATOR
 
 %% 
 
-Program:  FunctionsAndDeclarations
+Program:  FunctionsAndDeclarations                                                                  {;}
 
 
-FunctionsAndDeclarations: FunctionDefinition FunctionsAndDeclarationsList
-                        | FunctionDeclaration FunctionsAndDeclarationsList
-                        | Declaration FunctionsAndDeclarationsList
+FunctionsAndDeclarations: FunctionDefinition FunctionsAndDeclarationsList                           {;}
+                        | FunctionDeclaration FunctionsAndDeclarationsList                          {;}
+                        | Declaration FunctionsAndDeclarationsList                                  {;}
                         ;
 
 
-FunctionsAndDeclarationsList: FunctionsAndDeclarations
-                            | FunctionsAndDeclarationsList FunctionsAndDeclarationsList
-                            | /* epsilon */
+FunctionsAndDeclarationsList: FunctionDefinition FunctionsAndDeclarationsList                       {;}
+                            | FunctionDeclaration FunctionsAndDeclarationsList                      {;}
+                            | Declaration FunctionsAndDeclarationsList                              {;}
+                            | /* epsilon */                                                         {;}
                             ;
 
 
-FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody
+FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody                                        {;}
 
 
 
-FunctionBody: LBRACE DeclarationsAndStatements RBRACE
-            | LBRACE RBRACE
+FunctionBody: LBRACE DeclarationsAndStatements RBRACE                                               {;}
+            | LBRACE RBRACE                                                                         {;}
             ;
 
 
-DeclarationsAndStatements: Statement DeclarationsAndStatements
-                         | Declaration DeclarationsAndStatements
-                         | Statement
-                         | Declaration
+DeclarationsAndStatements: Statement DeclarationsAndStatements                                      {;}
+                         | Declaration DeclarationsAndStatements                                    {;}
+                         | Statement                                                                {;}
+                         | Declaration                                                              {;}
+                         | error SEMI                                                               {;}
                          ;
 
 
-FunctionDeclaration: TypeSpec FunctionDeclarator SEMI
+FunctionDeclaration: TypeSpec FunctionDeclarator SEMI                                               {;}
 
 
-FunctionDeclarator: ID LPAR ParameterList RPAR
+FunctionDeclarator: ID LPAR ParameterList RPAR                                                      {;}
 
 
-ParameterList: ParameterDeclaration ParameterDeclarationList
+ParameterList: ParameterDeclaration ParameterDeclarationList                                        {;}
 
 
-ParameterDeclarationList: ParameterDeclarationList ParameterDeclarationList
-                        | COMMA ParameterDeclaration
-                        | /* epsilon */
+ParameterDeclarationList: ParameterDeclarationList COMMA ParameterDeclaration                       {;}
+                        | /* epsilon */                                                             {;}
                         ;
 
 
-ParameterDeclaration: TypeSpec ID
-                    | TypeSpec
-                    ;
+ParameterDeclaration: TypeSpec ID                                                                   {;}  
+                    | TypeSpec                                                                      {;}
+                       
+
+Declaration: TypeSpec Declarator DeclaratorList SEMI                                                {;}
 
 
-Declaration: TypeSpec Declarator DeclaratorList SEMI
-           | DeclarationError
-           ;
-
-
-DeclaratorList: DeclaratorList DeclaratorList
-              | COMMA DeclaratorList
-              |  /* epsilon */
+DeclaratorList: DeclaratorList COMMA Declarator                                                     {;}
+              |  /* epsilon */                                                                      {;}
               ;
 
 
-TypeSpec: CHAR 
-        | INT 
-        | VOID 
-        | SHORT
-        | DOUBLE
+TypeSpec: CHAR                                                                                      {;}
+        | INT                                                                                       {;}
+        | VOID                                                                                      {;}
+        | SHORT                                                                                     {;}
+        | DOUBLE                                                                                    {;}
         ;
 
-Declarator: ID ASSIGN Expr
-          | ID
+Declarator: ID ASSIGN Expr                                                                          {;}
+          | ID                                                                                      {;}
           ;
 
-Statement: IF LPAR Expr RPAR StatementError ElseStatement
-         | WHILE LPAR Expr RPAR StatementError
-         | LBRACE StatementList RBRACE
-         | RETURN Expr SEMI 
-         | Expr SEMI
-         | RETURN SEMI
-         | SEMI
+Statement: IF LPAR Expr RPAR Statement %prec IF_PREC                                                {;}
+         | IF LPAR Expr RPAR Statement ELSE Statement                                               {;}
+         | WHILE LPAR Expr RPAR Statement                                                           {;}
+         | LBRACE StatementList RBRACE                                                              {;}
+         | LBRACE error RBRACE                                                                      {;}
+         | RETURN Expr SEMI                                                                         {;}
+         | Expr SEMI                                                                                {;}
+         | RETURN SEMI                                                                              {;}
+         | SEMI                                                                                     {;}
          ;
 
-StatementList: StatementList  StatementList 
-             | StatementList 
-             | /* epsilon */
-             ;
-
-ElseStatement: ELSE Statement
-             | /* epsilon */
+StatementList: StatementList  Statement                                                             {;}                                                                    {;}
+             | /* epsilon */                                                                        {;}
              ;
 
 
-Expr: Expr Operator Expr                   
-    | UnaryOperator Expr
-    | ID LPAR OperatorList RPAR
-    | ID | INTLIT | CHRLIT | REALLIT | LPAR Expr RPAR
+Expr: OperatorExpression                                                                            {;}                                                                 {;}
+    | ID LPAR Expr RPAR                                                                             {;}
+    | LPAR Expr RPAR                                                                                {;}
+    | ID LPAR RPAR                                                                                  {;}
+    | ID LPAR error RPAR                                                                            {;}
+    | LPAR error RPAR                                                                               {;}
+    | ID                                                                                            {;}
+    | INTLIT                                                                                        {;}
+    | CHRLIT                                                                                        {;}
+    | REALLIT                                                                                       {;}
     ;
 
+OperatorExpression: Expr COMMA Expr                                                                 {;}
+                  | Expr ASSIGN Expr                                                                {;}
+                  | Expr PLUS Expr                                                                  {;}
+                  | Expr MINUS Expr                                                                 {;}
+                  | Expr MUL Expr                                                                   {;}
+                  | Expr DIV Expr                                                                   {;}
+                  | Expr MOD Expr                                                                   {;}
+                  | Expr OR Expr                                                                    {;}
+                  | Expr AND Expr                                                                   {;}
+                  | Expr BITWISEAND Expr                                                            {;}
+                  | Expr BITWISEOR Expr                                                             {;}
+                  | Expr BITWISEXOR Expr                                                            {;}
+                  | Expr EQ Expr                                                                    {;}        
+                  | Expr NE Expr                                                                    {;}    
+                  | Expr LE Expr                                                                    {;}            
+                  | Expr GE Expr                                                                    {;}
+                  | Expr LT Expr                                                                    {;}
+                  | Expr GT Expr                                                                    {;}
+                  | PLUS Expr %prec UNARY_OPERATOR                                                  {;}
+                  | MINUS Expr %prec UNARY_OPERATOR                                                 {;}
+                  | NOT Expr                                                                        {;}
+                  ;
 
-Operator: UnaryOperator
-        | BinaryOperator
-        | COMMA 
-        ;
-
-UnaryOperator: PLUS 
-             | MINUS 
-             | NOT
-             ;
-
-BinaryOperator: ASSIGN 
-              | MUL 
-              | DIV 
-              | MOD 
-              | OR 
-              | AND 
-              | BITWISEAND 
-              | BITWISEOR 
-              | BITWISEXOR 
-              | EQ 
-              | NE 
-              | LE 
-              | GE 
-              | LT 
-              | GT
-              ;
-
-OperatorList: Expr ExprList
-            | /* epsilon */
-            ;
-
-ExprList: ExprList ExprList
-        | COMMA Expr
-        | /* epsilon */
-        ;
-
-
-DeclarationError: error SEMI
-
-
-StatementError: error SEMI
-             | LBRACE error RBRACE
-             | Statement
-             ;
-
-
-ExpressionError: ID LPAR error RPAR
-               | LPAR error RPAR
-               ;
 
 %%
 

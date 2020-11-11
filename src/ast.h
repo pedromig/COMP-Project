@@ -28,7 +28,7 @@ struct ASTList {
     ast_list_node_t *tail;
 };
 
-token_t token(char *value);
+token_t token(const char *value);
 ast_node_t *ast_node(char *id, token_t *token);
 void add_children(ast_node_t *parent, int argc, ...);
 void free_ast(ast_node_t *head);
