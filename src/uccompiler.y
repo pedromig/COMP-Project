@@ -9,22 +9,23 @@
      *   
     */
 
-   // C Standard library Includes
-   #include <stdio.h>
-   #include <stdlib.h>
-   #include <string.h>
-   #include <stdbool.h>
+    // C Standard library Includes
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <stdbool.h>
+    #include <assert.h>
    
-   // Yacc and other Includes...
-   #include "ast.h"
- 
-   // Functions
-   extern int yylex();
-   extern void yyerror(char *str);
+    // Yacc and other Includes...
+    #include "ast.h"
 
-   // Compiler Flags
-   bool l_flag = false, e1_flag = false;
-   bool e2_flag = true, t_flag = false;  // print -e2 flag by default
+    // Functions
+    extern int yylex();
+    extern void yyerror(char *str);
+
+    // Compiler Flags
+    bool l_flag = false, e1_flag = false;
+    bool e2_flag = true, t_flag = false;  // print -e2 flag by default
 
     // Root node of the abstract sintax tree of our program
     ast_node_t *program;
@@ -78,7 +79,7 @@ Program:  FunctionsAndDeclarations                                              
 
 FunctionsAndDeclarations: FunctionDefinition FunctionsAndDeclarationsList                   {$$ = $1; add_siblings($$, 1, $2);}
                         | FunctionDeclaration FunctionsAndDeclarationsList                  {$$ = $1; add_siblings($$, 1, $2);}
-                        | Declaration FunctionsAndDeclarationsList                          {$$ = $1; add_siblings($$, 1, $2);}
+                        | Declaration FunctionsAndDeclarationsList                          {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}
                         ;
 
 
@@ -93,7 +94,7 @@ FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody                    
 
 
 
-FunctionBody: LBRACE DeclarationsAndStatements RBRACE                                       {$$ = ast_node("FuncBody", NULL); add_children($$, 1, $1);}
+FunctionBody: LBRACE DeclarationsAndStatements RBRACE                                       {$$ = ast_node("FuncBody", NULL); add_children($$, 1, $2);}
             | LBRACE RBRACE                                                                 {$$ = ast_node("FuncBody", NULL);}
             ;
 
@@ -105,7 +106,7 @@ DeclarationsAndStatements: Statement DeclarationsAndStatements                  
                          ;
 
 
-FunctionDeclaration: TypeSpec FunctionDeclarator SEMI                                       {$$ = ast_node("FuncDefinition", NULL); add_children($$, 2, $1, $2);}
+FunctionDeclaration: TypeSpec FunctionDeclarator SEMI                                       {$$ = ast_node("FuncDeclaration", NULL); add_children($$, 2, $1, $2);}
 
 
 FunctionDeclarator: ID LPAR ParameterList RPAR                                              {$$ = ast_node("Id", $1 ); add_siblings($$, 1, $3);}
@@ -119,7 +120,7 @@ ParameterDeclarationList: COMMA ParameterDeclaration ParameterDeclarationList   
                         ;
 
 
-ParameterDeclaration: TypeSpec ID                                                           {$$ = ast_node("ParamDeclaration", NULL); add_children($$, 1, $1, ast_node("Id", $2));}  
+ParameterDeclaration: TypeSpec ID                                                           {$$ = ast_node("ParamDeclaration", NULL); add_children($$, 2, $1, ast_node("Id", $2));}  
                     | TypeSpec                                                              {$$ = $1;}
                        
 
@@ -131,23 +132,23 @@ DeclaratorList: COMMA Declarator DeclaratorList                                 
               ;
 
 
-TypeSpec: CHAR                                                                              {$$ = ast_node("Char", $1);}
-        | INT                                                                               {$$ = ast_node("Id", $1);}
-        | VOID                                                                              {$$ = ast_node("Void", $1);}
-        | SHORT                                                                             {$$ = ast_node("Short", $1);}
-        | DOUBLE                                                                            {$$ = ast_node("Double", $1);}
+TypeSpec: CHAR                                                                              {$$ = ast_node("Char", NULL);}
+        | INT                                                                               {$$ = ast_node("Int", $1);}
+        | VOID                                                                              {$$ = ast_node("Void", NULL);}
+        | SHORT                                                                             {$$ = ast_node("Short", NULL);}
+        | DOUBLE                                                                            {$$ = ast_node("Double", NULL);}
         ;
 
 Declarator: ID ASSIGN Expr                                                                  {$$ = ast_node("Id", $1); add_siblings($$, 1, $3);}
           | ID                                                                              {$$ = ast_node("Id", $1);}
           ;
 
-// Missing things in IF ELSE etc... pls check what i did (i dont trust myself)
+
 Statement: IF LPAR Expr RPAR StatementOrError %prec NO_ELSE                                 {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5);}
          | IF LPAR Expr RPAR StatementOrError ELSE StatementOrError                         {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5, $7);}
-         | WHILE LPAR Expr RPAR StatementOrError                                            {$$ = ast_node("TODO", NULL);}
+         | WHILE LPAR Expr RPAR StatementOrError                                            {$$ = ast_node("While", NULL); add_children($$, 2 , $3, $5);}
          | LBRACE StatementList RBRACE                                                      {$$ = ast_node("StatList", NULL); add_children($$, 1, $2);}
-         | RETURN Expr SEMI                                                                 {$$ = ast_node("TODO", NULL);}
+         | RETURN Expr SEMI                                                                 {$$ = ast_node("Return", NULL); add_children($$, 1, $2);}
          | RETURN SEMI                                                                      {$$ = ast_node("Return", NULL); add_children($$, 1, NULL);}
          | Expr SEMI                                                                        {$$ = $1;}
          | SEMI                                                                             {$$ = NULL;}
@@ -162,7 +163,7 @@ StatementList: StatementOrError StatementList                                   
 
 StatementOrError: Statement                                                                 {$$ = $1;}
                 | error SEMI                                                                {$$ = NULL;}
-
+                ;
 
 Expr: OperatorExpression                                                                    {$$ = $1;}     
     | LPAR Expr RPAR                                                                        {$$ = $2;}                                                           
@@ -225,7 +226,12 @@ int main(int argc, char *argv[]) {
     
     if (l_flag || e1_flag) 
         yylex();
-    else if (t_flag || e2_flag) 
+    else if (e2_flag) {
+        yyparse(); 
+    } else if (t_flag) {
         yyparse();
+        print_ast(program);
+    }
+      
     return 0;
 } 

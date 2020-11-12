@@ -25,7 +25,8 @@ LEX_FLAGS=""
 YACC_FLAGS="-d"
 CLANG_FLAGS=""
 UCCOMPILER_FLAGS=""
-VALGRIND_FLAGS="--leak-check=full"
+VALGRIND_FLAGS="--leak-check=full -s"
+DIFF_FLAGS=""   # Might be helpufl: "--suppress-common-lines"""
 
 function run_tests() {
     for file_path in $1/*.{uc,c}; do
@@ -34,7 +35,7 @@ function run_tests() {
 
         ./$UC_COMPILER $UCCOMPILER_FLAGS <$file_path >$2/$outfile
 
-        (diff -y --suppress-common-lines $1/$outfile $2/$outfile) &>DIFFOUT
+        (diff -y $DIFF_FLAGS $1/$outfile $2/$outfile) &>DIFFOUT
 
         if [ $? -eq 0 ]; then
             echo -e ✅ "${GREEN}TEST PASSED!!${RESET}" $ucfile
@@ -50,7 +51,7 @@ function run_tests() {
 }
 
 function compile() {
-    flex $1 $LEX_FLAGS && yacc $2 $YACC_FLAGS -d && clang-3.9 -Wall -Wno-unused-function *.c -o $3
+    flex $1 $LEX_FLAGS && yacc $2 $YACC_FLAGS -d && clang-3.9 -g -Wall -Wno-unused-function *.c -o $3
 }
 
 function need_recompile() {

@@ -19,26 +19,22 @@
     
     // Custom Error Print Messages
     #define inv_char_const_error(line, column, c)\
-        if (!(t_flag))\
             printf("Line %d, col %d: invalid char constant ('%s)\n", line, column, c)
 
     #define unterm_comment_error(line, column)\
-        if (!(t_flag))\
             printf("Line %d, col %d: unterminated comment\n",line, column)
 
     #define unterm_char_const_error(line, column)\
-        if (!(t_flag))\
             printf("Line %d, col %d: unterminated char constant\n",line, column)
 
     #define illegal_char_error(line, column, c)\
-        if (!(t_flag))\
             printf("Line %d, col %d: illegal character (%s)\n", line, column, c)
 
 
     // A helper define to send a token to yacc
     #define SEND_TOKEN(...)\
             if (e2_flag || t_flag) { \
-                yylval.token = token(yytext);\
+                yylval.token = token(yytext, __VA_ARGS__);\
                 return __VA_ARGS__;\
             }
     
@@ -66,7 +62,10 @@
     
     // Compiler Flags
     extern bool e2_flag, t_flag; 
-    extern bool l_flag, e1_flag; 
+    extern bool l_flag, e1_flag;
+    
+    // Error Flags
+    extern bool syntax_error; 
 %}
 
 
@@ -197,4 +196,5 @@ int yywrap() {
 
 void yyerror(char *str) {
     printf("Line %d, col %d: %s: %s\n", yylineno, yycolumno - yyleng, str, yytext);
+    syntax_error = true;
 }

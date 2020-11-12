@@ -1,9 +1,7 @@
+#include <stdbool.h>
 
 #ifndef __AST_H
 #define __AST_H
-
-#define print_ast(head) __print_ast(head, 0)
-#define token(value) strdup(value);
 
 typedef char *token_t;
 
@@ -15,9 +13,14 @@ struct ASTNode {
     ast_node_t *next_sibling;
 };
 
+// Error Flags
+extern bool syntax_error;
+
+token_t token(char *value, int type);
 ast_node_t *ast_node(char *id, token_t token);
 void add_children(ast_node_t *parent, int argc, ...);
 void add_siblings(ast_node_t *parent, int argc, ...);
 void free_ast(ast_node_t *head);
+void print_ast(ast_node_t *root);
 
 #endif // __AST_H
