@@ -777,7 +777,7 @@ char *yytext;
                 yylval.token = token(yytext);\
                 return __VA_ARGS__;\
             }
-
+    
 	// Helper state begin functions/definitions
     #define begin_multi_line_comment(line, column)\
         BEGIN MULTI_LINE_COMMENT;\

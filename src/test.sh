@@ -166,7 +166,7 @@ else
     [[ ! -f $LEXER ]] && (echo -e "${RED}ERROR:${RESET} ${LEXER} file does not exist!" && exit 1)
     [[ ! -f $GRAMMAR ]] && (echo -e "${RED}ERROR:${RESET} ${GRAMMAR} file does not exist!" && exit 1)
     
-    need_recompile
+    need_recompile # checks if there is a more recent version of the program dependencies
     if [[ $? -eq 1 ]]; then
         echo -e "${BLUE} INFO:${RESET} Compiling... "
 

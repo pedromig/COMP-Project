@@ -26,6 +26,8 @@
    bool l_flag = false, e1_flag = false;
    bool e2_flag = true, t_flag = false;  // print -e2 flag by default
 
+    // Root node of the abstract sintax tree of our program
+    ast_node_t *program;
 %}
 
 // YYSTYPE (yylval) possible values
@@ -44,7 +46,7 @@
 
 // Yacc Rule type declarations
 %type <node> Program 
-%type <node> FunctionsAndDeclarations FunctionsAndDeclarationsList FunctionDefinition FunctionBody FunctionDeclarator
+%type <node> FunctionsAndDeclarations FunctionsAndDeclarationsList FunctionDefinition FunctionBody FunctionDeclarator FunctionDeclaration
 %type <node> Declaration Declarator DeclaratorList DeclarationsAndStatements
 %type <node> ParameterList ParameterDeclaration ParameterDeclarationList
 %type <node> Statement StatementList StatementOrError
@@ -71,130 +73,131 @@
 
 %% 
 
-Program:  FunctionsAndDeclarations                                                                  {;}
+Program:  FunctionsAndDeclarations                                                          {program = ast_node("Program", NULL); add_children(program, 1, $1);}
 
 
-FunctionsAndDeclarations: FunctionDefinition FunctionsAndDeclarationsList                           {;}
-                        | FunctionDeclaration FunctionsAndDeclarationsList                          {;}
-                        | Declaration FunctionsAndDeclarationsList                                  {;}
+FunctionsAndDeclarations: FunctionDefinition FunctionsAndDeclarationsList                   {$$ = $1; add_siblings($$, 1, $2);}
+                        | FunctionDeclaration FunctionsAndDeclarationsList                  {$$ = $1; add_siblings($$, 1, $2);}
+                        | Declaration FunctionsAndDeclarationsList                          {$$ = $1; add_siblings($$, 1, $2);}
                         ;
 
 
-FunctionsAndDeclarationsList: FunctionDefinition FunctionsAndDeclarationsList                       {;}
-                            | FunctionDeclaration FunctionsAndDeclarationsList                      {;}
-                            | Declaration FunctionsAndDeclarationsList                              {;}
-                            | /* epsilon */                                                         {;}
+FunctionsAndDeclarationsList: FunctionDefinition FunctionsAndDeclarationsList               {$$ = $1; add_siblings($$, 1, $2);}
+                            | FunctionDeclaration FunctionsAndDeclarationsList              {$$ = $1; add_siblings($$, 1, $2);}
+                            | Declaration FunctionsAndDeclarationsList                      {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}
+                            | /* epsilon */                                                 {$$ = NULL;}
                             ;
 
 
-FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody                                        {;}
+FunctionDefinition: TypeSpec FunctionDeclarator FunctionBody                                {$$ = ast_node("FuncDefinition", NULL); add_children($$, 3, $1, $2, $3);}
 
 
 
-FunctionBody: LBRACE DeclarationsAndStatements RBRACE                                               {;}
-            | LBRACE RBRACE                                                                         {;}
+FunctionBody: LBRACE DeclarationsAndStatements RBRACE                                       {$$ = ast_node("FuncBody", NULL); add_children($$, 1, $1);}
+            | LBRACE RBRACE                                                                 {$$ = ast_node("FuncBody", NULL);}
             ;
 
 
-DeclarationsAndStatements: Statement DeclarationsAndStatements                                      {;}
-                         | Declaration DeclarationsAndStatements                                    {;}
-                         | Statement                                                                {;}
-                         | Declaration                                                              {;}
+DeclarationsAndStatements: Statement DeclarationsAndStatements                              {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}
+                         | Declaration DeclarationsAndStatements                            {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}
+                         | Statement                                                        {$$ = $1;}
+                         | Declaration                                                      {$$ = $1;}
                          ;
 
 
-FunctionDeclaration: TypeSpec FunctionDeclarator SEMI                                               {;}
+FunctionDeclaration: TypeSpec FunctionDeclarator SEMI                                       {$$ = ast_node("FuncDefinition", NULL); add_children($$, 2, $1, $2);}
 
 
-FunctionDeclarator: ID LPAR ParameterList RPAR                                                      {;}
+FunctionDeclarator: ID LPAR ParameterList RPAR                                              {$$ = ast_node("Id", $1 ); add_siblings($$, 1, $3);}
 
 
-ParameterList: ParameterDeclaration ParameterDeclarationList                                        {;}
+ParameterList: ParameterDeclaration ParameterDeclarationList                                {$$ = $1; add_siblings($$, 1, $2);}
 
 
-ParameterDeclarationList: ParameterDeclarationList COMMA ParameterDeclaration                       {;}
-                        | /* epsilon */                                                             {;}
+ParameterDeclarationList: COMMA ParameterDeclaration ParameterDeclarationList               {$$ = $2; add_siblings($$, 1, $3);}
+                        | /* epsilon */                                                     {$$ = NULL;}
                         ;
 
 
-ParameterDeclaration: TypeSpec ID                                                                   {;}  
-                    | TypeSpec                                                                      {;}
+ParameterDeclaration: TypeSpec ID                                                           {$$ = ast_node("ParamDeclaration", NULL); add_children($$, 1, $1, ast_node("Id", $2));}  
+                    | TypeSpec                                                              {$$ = $1;}
                        
 
-Declaration: TypeSpec Declarator DeclaratorList SEMI                                                {;}
-           | error SEMI                                                                             {;}
+Declaration: TypeSpec Declarator DeclaratorList SEMI                                        {$$ = ast_node("Declaration", NULL); add_children($$, 3, $1, $2, $3);}
+           | error SEMI                                                                     {$$ = NULL;}
 
-DeclaratorList: DeclaratorList COMMA Declarator                                                     {;}
-              |  /* epsilon */                                                                      {;}
+DeclaratorList: COMMA Declarator DeclaratorList                                             {$$ = $2; add_siblings($$, 1, $3);}
+              |  /* epsilon */                                                              {$$ = NULL;}
               ;
 
 
-TypeSpec: CHAR                                                                                      {;}
-        | INT                                                                                       {;}
-        | VOID                                                                                      {;}
-        | SHORT                                                                                     {;}
-        | DOUBLE                                                                                    {;}
+TypeSpec: CHAR                                                                              {$$ = ast_node("Char", $1);}
+        | INT                                                                               {$$ = ast_node("Id", $1);}
+        | VOID                                                                              {$$ = ast_node("Void", $1);}
+        | SHORT                                                                             {$$ = ast_node("Short", $1);}
+        | DOUBLE                                                                            {$$ = ast_node("Double", $1);}
         ;
 
-Declarator: ID ASSIGN Expr                                                                          {;}
-          | ID                                                                                      {;}
+Declarator: ID ASSIGN Expr                                                                  {$$ = ast_node("Id", $1); add_siblings($$, 1, $3);}
+          | ID                                                                              {$$ = ast_node("Id", $1);}
           ;
 
-Statement: IF LPAR Expr RPAR StatementOrError %prec NO_ELSE                                         {;}
-         | IF LPAR Expr RPAR StatementOrError ELSE StatementOrError                                 {;}
-         | WHILE LPAR Expr RPAR StatementOrError                                                    {;}
-         | LBRACE StatementList RBRACE                                                              {;}
-         | RETURN Expr SEMI                                                                         {;}
-         | Expr SEMI                                                                                {;}
-         | LBRACE error RBRACE                                                                      {;}
-         | LBRACE RBRACE                                                                            {;}
-         | RETURN SEMI                                                                              {;}
-         | SEMI                                                                                     {;}
+// Missing things in IF ELSE etc... pls check what i did (i dont trust myself)
+Statement: IF LPAR Expr RPAR StatementOrError %prec NO_ELSE                                 {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5);}
+         | IF LPAR Expr RPAR StatementOrError ELSE StatementOrError                         {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5, $7);}
+         | WHILE LPAR Expr RPAR StatementOrError                                            {$$ = ast_node("TODO", NULL);}
+         | LBRACE StatementList RBRACE                                                      {$$ = ast_node("StatList", NULL); add_children($$, 1, $2);}
+         | RETURN Expr SEMI                                                                 {$$ = ast_node("TODO", NULL);}
+         | RETURN SEMI                                                                      {$$ = ast_node("Return", NULL); add_children($$, 1, NULL);}
+         | Expr SEMI                                                                        {$$ = $1;}
+         | SEMI                                                                             {$$ = NULL;}
+         | LBRACE error RBRACE                                                              {$$ = NULL;}
+         | LBRACE RBRACE                                                                    {$$ = NULL;}
          ;
 
-StatementList: StatementList  StatementOrError                                                      {;}                                                                    {;}
-             | StatementOrError                                                                     {;}
+
+StatementList: StatementOrError StatementList                                               {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}                                                                    
+             | StatementOrError                                                             {$$ = $1;}
              ;
 
-StatementOrError: Statement                                                                         {;}
-                | error SEMI                                                                        {;}
+StatementOrError: Statement                                                                 {$$ = $1;}
+                | error SEMI                                                                {$$ = NULL;}
 
 
-Expr: OperatorExpression                                                                            {;}                                                                 {;}
-    | ID LPAR Expr RPAR                                                                             {;}
-    | LPAR Expr RPAR                                                                                {;}
-    | ID LPAR RPAR                                                                                  {;}
-    | ID LPAR error RPAR                                                                            {;}
-    | LPAR error RPAR                                                                               {;}
-    | ID                                                                                            {;}
-    | INTLIT                                                                                        {;}
-    | CHRLIT                                                                                        {;}
-    | REALLIT                                                                                       {;}
+Expr: OperatorExpression                                                                    {$$ = $1;}     
+    | LPAR Expr RPAR                                                                        {$$ = $2;}                                                           
+    | ID LPAR Expr RPAR                                                                     {$$ = ast_node("Call", NULL); add_children($$, 2, ast_node("Id", $1), $3);}
+    | ID LPAR RPAR                                                                          {$$ = ast_node("Call", NULL); add_children($$, 1, ast_node("Id", $1));}
+    | ID                                                                                    {$$ = ast_node("Id", $1);}
+    | INTLIT                                                                                {$$ = ast_node("IntLit", $1);}
+    | CHRLIT                                                                                {$$ = ast_node("ChrLit", $1);}
+    | REALLIT                                                                               {$$ = ast_node("RealLit", $1);}
+    | ID LPAR error RPAR                                                                    {$$ = NULL;}
+    | LPAR error RPAR                                                                       {$$ = NULL;}
     ;
 
-OperatorExpression: Expr COMMA Expr                                                                 {;}
-                  | Expr ASSIGN Expr                                                                {;}
-                  | Expr PLUS Expr                                                                  {;}
-                  | Expr MINUS Expr                                                                 {;}
-                  | Expr MUL Expr                                                                   {;}
-                  | Expr DIV Expr                                                                   {;}
-                  | Expr MOD Expr                                                                   {;}
-                  | Expr OR Expr                                                                    {;}
-                  | Expr AND Expr                                                                   {;}
-                  | Expr BITWISEAND Expr                                                            {;}
-                  | Expr BITWISEOR Expr                                                             {;}
-                  | Expr BITWISEXOR Expr                                                            {;}
-                  | Expr EQ Expr                                                                    {;}        
-                  | Expr NE Expr                                                                    {;}    
-                  | Expr LE Expr                                                                    {;}            
-                  | Expr GE Expr                                                                    {;}
-                  | Expr LT Expr                                                                    {;}
-                  | Expr GT Expr                                                                    {;}
-                  | PLUS Expr %prec UNARY_OPERATOR                                                  {;}
-                  | MINUS Expr %prec UNARY_OPERATOR                                                 {;}
-                  | NOT Expr                                                                        {;}
+OperatorExpression: Expr COMMA Expr                                                         {$$ = ast_node("Comma", NULL); add_children($$, 2, $1, $3);}
+                  | Expr ASSIGN Expr                                                        {$$ = ast_node("Store", NULL); add_children($$, 2, $1, $3);}
+                  | Expr PLUS Expr                                                          {$$ = ast_node("Add", NULL); add_children($$, 2, $1, $3);}
+                  | Expr MINUS Expr                                                         {$$ = ast_node("Sub", NULL); add_children($$, 2, $1, $3);}
+                  | Expr MUL Expr                                                           {$$ = ast_node("Mul", NULL); add_children($$, 2, $1, $3);}
+                  | Expr DIV Expr                                                           {$$ = ast_node("Div", NULL); add_children($$, 2, $1, $3);}
+                  | Expr MOD Expr                                                           {$$ = ast_node("Mod", NULL); add_children($$, 2, $1, $3);}
+                  | Expr OR Expr                                                            {$$ = ast_node("Or", NULL); add_children($$, 2, $1, $3);}
+                  | Expr AND Expr                                                           {$$ = ast_node("And", NULL); add_children($$, 2, $1, $3);}
+                  | Expr BITWISEAND Expr                                                    {$$ = ast_node("BitWiseAnd", NULL); add_children($$, 2, $1, $3);}
+                  | Expr BITWISEOR Expr                                                     {$$ = ast_node("BitWiseOr", NULL); add_children($$, 2, $1, $3);}
+                  | Expr BITWISEXOR Expr                                                    {$$ = ast_node("BitWiseXor", NULL); add_children($$, 2, $1, $3);}
+                  | Expr EQ Expr                                                            {$$ = ast_node("Eq", NULL); add_children($$, 2, $1, $3);}        
+                  | Expr NE Expr                                                            {$$ = ast_node("Ne", NULL); add_children($$, 2, $1, $3);}    
+                  | Expr LE Expr                                                            {$$ = ast_node("Le", NULL); add_children($$, 2, $1, $3);}            
+                  | Expr GE Expr                                                            {$$ = ast_node("Ge", NULL); add_children($$, 2, $1, $3);}
+                  | Expr LT Expr                                                            {$$ = ast_node("Lt", NULL); add_children($$, 2, $1, $3);}
+                  | Expr GT Expr                                                            {$$ = ast_node("Gt", NULL); add_children($$, 2, $1, $3);}
+                  | PLUS Expr  %prec UNARY_OPERATOR                                         {$$ = ast_node("Plus", NULL); add_children($$, 1, $2);}
+                  | MINUS Expr %prec UNARY_OPERATOR                                         {$$ = ast_node("Minus", NULL); add_children($$, 1, $2);}
+                  | NOT Expr                                                                {$$ = ast_node("Not", NULL); add_children($$, 1, $2);}
                   ;
-
 
 %%
 
