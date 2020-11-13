@@ -1635,7 +1635,7 @@ yyreduce:
 
   case 13:
 #line 102 "uccompiler.y"
-                                                                                            {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[-1].node); } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); }}
+                                                                                            {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[0].node); } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); }}
 #line 1640 "y.tab.c"
     break;
 
@@ -1767,25 +1767,25 @@ yyreduce:
 
   case 35:
 #line 149 "uccompiler.y"
-                                                                                            {(yyval.node) = ast_node("If", NULL); add_children((yyval.node), 1, (yyvsp[-2].node), (yyvsp[0].node));}
+                                                                                            {(yyval.node) = ast_node("If", NULL); add_children((yyval.node), 3, (yyvsp[-2].node), (yyvsp[0].node), null_check(NULL));}
 #line 1772 "y.tab.c"
     break;
 
   case 36:
 #line 150 "uccompiler.y"
-                                                                                            {(yyval.node) = ast_node("If", NULL); add_children((yyval.node), 1, (yyvsp[-4].node), (yyvsp[-2].node), (yyvsp[0].node));}
+                                                                                            {(yyval.node) = ast_node("If", NULL); add_children((yyval.node), 3, (yyvsp[-4].node), null_check((yyvsp[-2].node)), null_check((yyvsp[0].node)));}
 #line 1778 "y.tab.c"
     break;
 
   case 37:
 #line 151 "uccompiler.y"
-                                                                                            {(yyval.node) = ast_node("While", NULL); add_children((yyval.node), 2 , (yyvsp[-2].node), (yyvsp[0].node));}
+                                                                                            {(yyval.node) = ast_node("While", NULL); add_children((yyval.node), 2 , (yyvsp[-2].node), null_check((yyvsp[0].node)));}
 #line 1784 "y.tab.c"
     break;
 
   case 38:
 #line 152 "uccompiler.y"
-                                                                                            {(yyval.node) = ast_node("StatList", NULL); add_children((yyval.node), 1, (yyvsp[-1].node));}
+                                                                                            {(yyval.node) = statement_list((yyvsp[-1].node));}
 #line 1790 "y.tab.c"
     break;
 
@@ -1797,7 +1797,7 @@ yyreduce:
 
   case 40:
 #line 154 "uccompiler.y"
-                                                                                            {(yyval.node) = ast_node("Return", NULL); add_children((yyval.node), 1, NULL);}
+                                                                                            {(yyval.node) = ast_node("Return", NULL); add_children((yyval.node), 1, ast_node("Null", NULL));}
 #line 1802 "y.tab.c"
     break;
 
@@ -1827,7 +1827,7 @@ yyreduce:
 
   case 45:
 #line 162 "uccompiler.y"
-                                                                                            {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[0].node); } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); }}
+                                                                                            {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[0].node); } else if (!(yyvsp[-1].node) && !(yyvsp[0].node)) { (yyval.node) = NULL; } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); } }
 #line 1832 "y.tab.c"
     break;
 

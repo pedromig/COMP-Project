@@ -99,7 +99,7 @@ FunctionBody: LBRACE DeclarationsAndStatements RBRACE                           
             ;
 
 
-DeclarationsAndStatements: Statement DeclarationsAndStatements                              {if (!$1) { $$ = $1; } else { $$ = $1; add_siblings($$, 1, $2); }}
+DeclarationsAndStatements: Statement DeclarationsAndStatements                              {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}
                          | Declaration DeclarationsAndStatements                            {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}
                          | Statement                                                        {$$ = $1;}
                          | Declaration                                                      {$$ = $1;}
@@ -146,12 +146,12 @@ Declarator: ID ASSIGN ExprList                                                  
           ;
 
 
-Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                             {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5);}
-         | IF LPAR ExprList RPAR StatementOrError ELSE StatementOrError                     {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5, $7);}
-         | WHILE LPAR ExprList RPAR StatementOrError                                        {$$ = ast_node("While", NULL); add_children($$, 2 , $3, $5);}
-         | LBRACE StatementList RBRACE                                                      {$$ = ast_node("StatList", NULL); add_children($$, 1, $2);}
+Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                             {$$ = ast_node("If", NULL); add_children($$, 3, $3, $5, null_check(NULL));}
+         | IF LPAR ExprList RPAR StatementOrError ELSE StatementOrError                     {$$ = ast_node("If", NULL); add_children($$, 3, $3, null_check($5), null_check($7));}
+         | WHILE LPAR ExprList RPAR StatementOrError                                        {$$ = ast_node("While", NULL); add_children($$, 2 , $3, null_check($5));}
+         | LBRACE StatementList RBRACE                                                      {$$ = statement_list($2);}
          | RETURN ExprList SEMI                                                             {$$ = ast_node("Return", NULL); add_children($$, 1, $2);}
-         | RETURN SEMI                                                                      {$$ = ast_node("Return", NULL); add_children($$, 1, NULL);}
+         | RETURN SEMI                                                                      {$$ = ast_node("Return", NULL); add_children($$, 1, ast_node("Null", NULL));}
          | ExprList SEMI                                                                    {$$ = $1;}
          | SEMI                                                                             {$$ = NULL;}
          | LBRACE error RBRACE                                                              {$$ = NULL;}
@@ -159,7 +159,7 @@ Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                 
          ;
 
 
-StatementList: StatementOrError StatementList                                               {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}                                                                    
+StatementList: StatementOrError StatementList                                               {if (!$1) { $$ = $2; } else if (!$1 && !$2) { $$ = NULL; } else { $$ = $1; add_siblings($$, 1, $2); } }                                                                    
              | StatementOrError                                                             {$$ = $1;}
              ;
 

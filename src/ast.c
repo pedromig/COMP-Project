@@ -49,14 +49,13 @@ void add_children(ast_node_t *parent, int argc, ...) {
     assert(parent != NULL);
     child = va_arg(args, ast_node_t *);
 
-    parent->first_child = child != NULL ? child : ast_node("Null", NULL);
-
+    parent->first_child = child;
     ast_node_t *current = parent->first_child;
 
     for (int i = 0; i < argc - 1; ++i) {
         child = va_arg(args, ast_node_t *);
         for (ast_node_t *c = child; c; c = c->next_sibling) {
-            current->next_sibling = (c != NULL) ? (c) : (ast_node("Null", NULL));
+            current->next_sibling = c;
             current = current->next_sibling;
         }
     }
@@ -126,4 +125,18 @@ void add_typespec(ast_node_t *type, ast_node_t *give_me_type) {
         new_type_node->next_sibling = current->first_child;       //colocar o novo typespec no inicio da fila de irmaos (filhos de current)
         current->first_child = new_type_node;                     //associar a nova lista com o typespec em primeiro aos filhos do current
     }
+}
+
+ast_node_t *statement_list(ast_node_t *stat_list) {
+    ast_node_t *list = stat_list;
+
+    if (list && list->next_sibling) {
+        list = ast_node("StatList", NULL);
+        list->first_child = stat_list;
+    }
+    return list;
+}
+
+ast_node_t *null_check(ast_node_t *node) {
+    return node ? node : ast_node("Null", NULL);
 }

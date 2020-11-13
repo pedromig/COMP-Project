@@ -23,5 +23,7 @@ void add_siblings(ast_node_t *parent, int argc, ...);
 void free_ast(ast_node_t *head);
 void print_ast(ast_node_t *root);
 void add_typespec(ast_node_t *type, ast_node_t *give_me_type);
+ast_node_t *statement_list(ast_node_t *stat_list);
+ast_node_t *null_check();
 
 #endif // __AST_H
