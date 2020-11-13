@@ -56,38 +56,39 @@ extern int yydebug;
     ELSE = 262,
     WHILE = 263,
     RETURN = 264,
-    CHAR = 265,
-    INT = 266,
-    SHORT = 267,
-    DOUBLE = 268,
-    VOID = 269,
-    PLUS = 270,
-    MINUS = 271,
-    MUL = 272,
-    DIV = 273,
-    MOD = 274,
-    EQ = 275,
-    NE = 276,
-    GE = 277,
-    GT = 278,
-    LE = 279,
-    LT = 280,
-    AND = 281,
-    OR = 282,
-    NOT = 283,
-    BITWISEAND = 284,
-    BITWISEOR = 285,
-    BITWISEXOR = 286,
-    ASSIGN = 287,
-    COMMA = 288,
-    LBRACE = 289,
-    LPAR = 290,
-    RBRACE = 291,
-    RPAR = 292,
-    SEMI = 293,
-    ID = 294,
-    NO_ELSE = 295,
-    UNARY_OPERATOR = 296
+    RESERVED = 265,
+    CHAR = 266,
+    INT = 267,
+    SHORT = 268,
+    DOUBLE = 269,
+    VOID = 270,
+    PLUS = 271,
+    MINUS = 272,
+    MUL = 273,
+    DIV = 274,
+    MOD = 275,
+    EQ = 276,
+    NE = 277,
+    GE = 278,
+    GT = 279,
+    LE = 280,
+    LT = 281,
+    AND = 282,
+    OR = 283,
+    NOT = 284,
+    BITWISEAND = 285,
+    BITWISEOR = 286,
+    BITWISEXOR = 287,
+    ASSIGN = 288,
+    COMMA = 289,
+    LBRACE = 290,
+    LPAR = 291,
+    RBRACE = 292,
+    RPAR = 293,
+    SEMI = 294,
+    ID = 295,
+    NO_ELSE = 296,
+    UNARY_OPERATOR = 297
   };
 #endif
 /* Tokens.  */
@@ -98,38 +99,39 @@ extern int yydebug;
 #define ELSE 262
 #define WHILE 263
 #define RETURN 264
-#define CHAR 265
-#define INT 266
-#define SHORT 267
-#define DOUBLE 268
-#define VOID 269
-#define PLUS 270
-#define MINUS 271
-#define MUL 272
-#define DIV 273
-#define MOD 274
-#define EQ 275
-#define NE 276
-#define GE 277
-#define GT 278
-#define LE 279
-#define LT 280
-#define AND 281
-#define OR 282
-#define NOT 283
-#define BITWISEAND 284
-#define BITWISEOR 285
-#define BITWISEXOR 286
-#define ASSIGN 287
-#define COMMA 288
-#define LBRACE 289
-#define LPAR 290
-#define RBRACE 291
-#define RPAR 292
-#define SEMI 293
-#define ID 294
-#define NO_ELSE 295
-#define UNARY_OPERATOR 296
+#define RESERVED 265
+#define CHAR 266
+#define INT 267
+#define SHORT 268
+#define DOUBLE 269
+#define VOID 270
+#define PLUS 271
+#define MINUS 272
+#define MUL 273
+#define DIV 274
+#define MOD 275
+#define EQ 276
+#define NE 277
+#define GE 278
+#define GT 279
+#define LE 280
+#define LT 281
+#define AND 282
+#define OR 283
+#define NOT 284
+#define BITWISEAND 285
+#define BITWISEOR 286
+#define BITWISEXOR 287
+#define ASSIGN 288
+#define COMMA 289
+#define LBRACE 290
+#define LPAR 291
+#define RBRACE 292
+#define RPAR 293
+#define SEMI 294
+#define ID 295
+#define NO_ELSE 296
+#define UNARY_OPERATOR 297
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -140,7 +142,7 @@ union YYSTYPE
     token_t token;
     ast_node_t *node;
 
-#line 144 "y.tab.h"
+#line 146 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

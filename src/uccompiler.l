@@ -136,7 +136,7 @@ MULTI_LINE_COMMENT_END          "*/"
 {DOUBLE}                                              			          {printl("DOUBLE\n"); yycolumno += yyleng; SEND_TOKEN(DOUBLE);}
 {RETURN}                                              			          {printl("RETURN\n"); yycolumno += yyleng; SEND_TOKEN(RETURN);}
 {VOID}                                                			          {printl("VOID\n"); yycolumno += yyleng; SEND_TOKEN(VOID);}
-{RESERVED}                                            			          {printl("RESERVED(%s)\n", yytext); yycolumno += yyleng;}
+{RESERVED}                                            			          {printl("RESERVED(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(RESERVED);}
     
 {ID}                                                  			          {printl("ID(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(ID);}
     

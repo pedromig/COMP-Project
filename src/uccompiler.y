@@ -39,7 +39,7 @@
 
 // Yacc Token type declarations
 %token <token> INTLIT CHRLIT REALLIT
-%token <token> IF ELSE WHILE RETURN 
+%token <token> IF ELSE WHILE RETURN RESERVED
 %token <token> CHAR INT SHORT DOUBLE VOID
 %token <token> PLUS MINUS MUL DIV MOD 
 %token <token> EQ NE GE GT LE LT AND OR NOT BITWISEAND BITWISEOR BITWISEXOR 
@@ -125,7 +125,7 @@ ParameterDeclaration: TypeSpec ID                                               
                     ;       
 
                                                                                                
-Declaration: TypeSpec Declarator DeclaratorList SEMI                                        {$$ = $2; add_typespec($1, $$); add_typespec($1, $3); add_siblings($$, 1, $3);}
+Declaration: TypeSpec Declarator DeclaratorList SEMI                                        {$$ = $2; add_typespec($1, $$); add_typespec($1, $3); free($1); add_siblings($$, 1, $3);}
            | error SEMI                                                                     {$$ = NULL;}
            ;
 
@@ -146,9 +146,9 @@ Declarator: ID ASSIGN ExprList                                                  
           ;
 
 
-Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                             {$$ = ast_node("If", NULL); add_children($$, 3, $3, $5, null_check(NULL));}
-         | IF LPAR ExprList RPAR StatementOrError ELSE StatementOrError                     {$$ = ast_node("If", NULL); add_children($$, 3, $3, null_check($5), null_check($7));}
-         | WHILE LPAR ExprList RPAR StatementOrError                                        {$$ = ast_node("While", NULL); add_children($$, 2 , $3, null_check($5));}
+Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                             {$$ = ast_node("If", NULL); add_children($$, 3, null_check($3), null_check($5), null_check(NULL));}
+         | IF LPAR ExprList RPAR StatementOrError ELSE StatementOrError                     {$$ = ast_node("If", NULL); add_children($$, 3, null_check($3), null_check($5), null_check($7));}
+         | WHILE LPAR ExprList RPAR StatementOrError                                        {$$ = ast_node("While", NULL); add_children($$, 2 , null_check($3), null_check($5));}
          | LBRACE StatementList RBRACE                                                      {$$ = statement_list($2);}
          | RETURN ExprList SEMI                                                             {$$ = ast_node("Return", NULL); add_children($$, 1, $2);}
          | RETURN SEMI                                                                      {$$ = ast_node("Return", NULL); add_children($$, 1, ast_node("Null", NULL));}
@@ -234,14 +234,17 @@ void argparse(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
     argparse(argc, argv);
     
-    if (l_flag || e1_flag) 
-        yylex();
-    else if (e2_flag) {
+    if (l_flag || e1_flag) {
+        return yylex();
+    } 
+    
+    if (e2_flag) {
         yyparse(); 
     } else if (t_flag) {
         yyparse();
-        print_ast(program);
+        print_ast(program);  
     }
-      
+
+    free_ast(program);
     return 0;
 } 

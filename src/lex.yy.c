@@ -1141,7 +1141,7 @@ YY_RULE_SETUP
 case 10:
 YY_RULE_SETUP
 #line 139 "uccompiler.l"
-{printl("RESERVED(%s)\n", yytext); yycolumno += yyleng;}
+{printl("RESERVED(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(RESERVED);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
