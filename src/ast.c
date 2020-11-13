@@ -13,12 +13,11 @@ int alloc_types[] = {
     ID,
     INTLIT,
     REALLIT,
-    CHRLIT
-};
+    CHRLIT};
 
 token_t token(char *value, int type) {
     for (int i = 0; i < (sizeof(alloc_types) / sizeof(alloc_types[0])); ++i) {
-        if (type == alloc_types[i]) { 
+        if (type == alloc_types[i]) {
             if (type == CHRLIT) {
                 char aux[strlen(value) + 1];
                 sprintf(aux, "'%s", value);
@@ -53,11 +52,13 @@ void add_children(ast_node_t *parent, int argc, ...) {
     parent->first_child = child != NULL ? child : ast_node("Null", NULL);
 
     ast_node_t *current = parent->first_child;
+
     for (int i = 0; i < argc - 1; ++i) {
         child = va_arg(args, ast_node_t *);
-
-        current->next_sibling = child != NULL ? child : ast_node("Null", NULL);
-        current = current->next_sibling;
+        for (ast_node_t *c = child; c; c = c->next_sibling) {
+            current->next_sibling = (c != NULL) ? (c) : (ast_node("Null", NULL));
+            current = current->next_sibling;
+        }
     }
     va_end(args);
 }
@@ -83,7 +84,6 @@ void add_siblings(ast_node_t *node, int argc, ...) {
     va_end(args);
 }
 
-
 void free_node(ast_node_t *node) {
     free(node->id);
     if (node->value)
@@ -107,7 +107,6 @@ void print_node(char *id, char *value, int indent_level) {
     printf("\n");
 }
 
-
 void __print_ast(ast_node_t *node, int indent_level) {
     print_node(node->id, node->value, indent_level);
     for (ast_node_t *current = node->first_child; current; current = current->next_sibling) {
@@ -118,4 +117,13 @@ void __print_ast(ast_node_t *node, int indent_level) {
 void print_ast(ast_node_t *program) {
     if (!syntax_error)
         __print_ast(program, 0);
+}
+
+void add_typespec(ast_node_t *type, ast_node_t *give_me_type) {
+    ast_node_t *new_type_node;
+    for (ast_node_t *current = give_me_type; current; current = current->next_sibling) {
+        new_type_node = ast_node((char *)strdup(type->id), NULL); //criar o novo typespec
+        new_type_node->next_sibling = current->first_child;       //colocar o novo typespec no inicio da fila de irmaos (filhos de current)
+        current->first_child = new_type_node;                     //associar a nova lista com o typespec em primeiro aos filhos do current
+    }
 }

@@ -22,11 +22,11 @@ VALGRIND_MEMCHECK="false"
 
 # ProgramFlags
 LEX_FLAGS=""
-YACC_FLAGS="-d"
+YACC_FLAGS="-d -v"
 CLANG_FLAGS=""
 UCCOMPILER_FLAGS=""
 VALGRIND_FLAGS="--leak-check=full -s"
-DIFF_FLAGS=""   # Might be helpufl: "--suppress-common-lines"""
+DIFF_FLAGS="" # Might be helpufl: "--suppress-common-lines"""
 
 function run_tests() {
     for file_path in $1/*.{uc,c}; do
@@ -55,10 +55,10 @@ function compile() {
 }
 
 function need_recompile() {
-    for f in $LEXER $GRAMMAR *.{c,h}; do 
-        if [[ $f -nt $UC_COMPILER ]]; then 
+    for f in $LEXER $GRAMMAR *.{c,h}; do
+        if [[ $f -nt $UC_COMPILER ]]; then
             return 1
-           
+
         fi
     done
     return 0
@@ -166,7 +166,7 @@ else
 
     [[ ! -f $LEXER ]] && (echo -e "${RED}ERROR:${RESET} ${LEXER} file does not exist!" && exit 1)
     [[ ! -f $GRAMMAR ]] && (echo -e "${RED}ERROR:${RESET} ${GRAMMAR} file does not exist!" && exit 1)
-    
+
     need_recompile # checks if there is a more recent version of the program dependencies
     if [[ $? -eq 1 ]]; then
         echo -e "${BLUE} INFO:${RESET} Compiling... "

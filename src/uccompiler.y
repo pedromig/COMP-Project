@@ -51,7 +51,7 @@
 %type <node> Declaration Declarator DeclaratorList DeclarationsAndStatements
 %type <node> ParameterList ParameterDeclaration ParameterDeclarationList
 %type <node> Statement StatementList StatementOrError
-%type <node> Expr 
+%type <node> Expr ExprOptionalList ExprList
 %type <node> TypeSpec OperatorExpression
 
 // Operator Precedences acording to C99 standard
@@ -99,20 +99,20 @@ FunctionBody: LBRACE DeclarationsAndStatements RBRACE                           
             ;
 
 
-DeclarationsAndStatements: Statement DeclarationsAndStatements                              {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}
+DeclarationsAndStatements: Statement DeclarationsAndStatements                              {if (!$1) { $$ = $1; } else { $$ = $1; add_siblings($$, 1, $2); }}
                          | Declaration DeclarationsAndStatements                            {if (!$1) { $$ = $2; } else { $$ = $1; add_siblings($$, 1, $2); }}
                          | Statement                                                        {$$ = $1;}
                          | Declaration                                                      {$$ = $1;}
                          ;
 
 
-FunctionDeclaration: TypeSpec FunctionDeclarator SEMI                                       {$$ = ast_node("FuncDeclaration", NULL); add_children($$, 2, $1, $2);}
+FunctionDeclaration: TypeSpec FunctionDeclarator SEMI                                       {$$ = ast_node("FuncDeclaration", NULL);  add_children($$, 2, $1, $2); }
 
 
-FunctionDeclarator: ID LPAR ParameterList RPAR                                              {$$ = ast_node("Id", $1 ); add_siblings($$, 1, $3);}
+FunctionDeclarator: ID LPAR ParameterList RPAR                                              {$$ = ast_node("Id", $1); add_siblings($$, 1, $3);}
 
 
-ParameterList: ParameterDeclaration ParameterDeclarationList                                {$$ = $1; add_siblings($$, 1, $2);}
+ParameterList: ParameterDeclaration ParameterDeclarationList                                {$$ = ast_node("ParamList", NULL); add_children($$, 2, $1, $2);}
 
 
 ParameterDeclarationList: COMMA ParameterDeclaration ParameterDeclarationList               {$$ = $2; add_siblings($$, 1, $3);}
@@ -121,11 +121,13 @@ ParameterDeclarationList: COMMA ParameterDeclaration ParameterDeclarationList   
 
 
 ParameterDeclaration: TypeSpec ID                                                           {$$ = ast_node("ParamDeclaration", NULL); add_children($$, 2, $1, ast_node("Id", $2));}  
-                    | TypeSpec                                                              {$$ = $1;}
-                       
+                    | TypeSpec                                                              {$$ = ast_node("ParamDeclaration", NULL); add_children($$, 1, $1);}
+                    ;       
 
-Declaration: TypeSpec Declarator DeclaratorList SEMI                                        {$$ = ast_node("Declaration", NULL); add_children($$, 3, $1, $2, $3);}
+                                                                                               
+Declaration: TypeSpec Declarator DeclaratorList SEMI                                        {$$ = $2; add_typespec($1, $$); add_typespec($1, $3); add_siblings($$, 1, $3);}
            | error SEMI                                                                     {$$ = NULL;}
+           ;
 
 DeclaratorList: COMMA Declarator DeclaratorList                                             {$$ = $2; add_siblings($$, 1, $3);}
               |  /* epsilon */                                                              {$$ = NULL;}
@@ -133,24 +135,24 @@ DeclaratorList: COMMA Declarator DeclaratorList                                 
 
 
 TypeSpec: CHAR                                                                              {$$ = ast_node("Char", NULL);}
-        | INT                                                                               {$$ = ast_node("Int", $1);}
+        | INT                                                                               {$$ = ast_node("Int", NULL);}
         | VOID                                                                              {$$ = ast_node("Void", NULL);}
         | SHORT                                                                             {$$ = ast_node("Short", NULL);}
         | DOUBLE                                                                            {$$ = ast_node("Double", NULL);}
         ;
 
-Declarator: ID ASSIGN Expr                                                                  {$$ = ast_node("Id", $1); add_siblings($$, 1, $3);}
-          | ID                                                                              {$$ = ast_node("Id", $1);}
+Declarator: ID ASSIGN ExprList                                                              {$$ = ast_node("Declaration", NULL); add_children($$, 2, ast_node("Id", $1), $3);}
+          | ID                                                                              {$$ = ast_node("Declaration", NULL); add_children($$, 1, ast_node("Id", $1));}
           ;
 
 
-Statement: IF LPAR Expr RPAR StatementOrError %prec NO_ELSE                                 {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5);}
-         | IF LPAR Expr RPAR StatementOrError ELSE StatementOrError                         {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5, $7);}
-         | WHILE LPAR Expr RPAR StatementOrError                                            {$$ = ast_node("While", NULL); add_children($$, 2 , $3, $5);}
+Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                             {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5);}
+         | IF LPAR ExprList RPAR StatementOrError ELSE StatementOrError                     {$$ = ast_node("If", NULL); add_children($$, 1, $3, $5, $7);}
+         | WHILE LPAR ExprList RPAR StatementOrError                                        {$$ = ast_node("While", NULL); add_children($$, 2 , $3, $5);}
          | LBRACE StatementList RBRACE                                                      {$$ = ast_node("StatList", NULL); add_children($$, 1, $2);}
-         | RETURN Expr SEMI                                                                 {$$ = ast_node("Return", NULL); add_children($$, 1, $2);}
+         | RETURN ExprList SEMI                                                             {$$ = ast_node("Return", NULL); add_children($$, 1, $2);}
          | RETURN SEMI                                                                      {$$ = ast_node("Return", NULL); add_children($$, 1, NULL);}
-         | Expr SEMI                                                                        {$$ = $1;}
+         | ExprList SEMI                                                                    {$$ = $1;}
          | SEMI                                                                             {$$ = NULL;}
          | LBRACE error RBRACE                                                              {$$ = NULL;}
          | LBRACE RBRACE                                                                    {$$ = NULL;}
@@ -166,8 +168,8 @@ StatementOrError: Statement                                                     
                 ;
 
 Expr: OperatorExpression                                                                    {$$ = $1;}     
-    | LPAR Expr RPAR                                                                        {$$ = $2;}                                                           
-    | ID LPAR Expr RPAR                                                                     {$$ = ast_node("Call", NULL); add_children($$, 2, ast_node("Id", $1), $3);}
+    | LPAR ExprList RPAR                                                                    {$$ = $2;}                                                          
+    | ID LPAR Expr ExprOptionalList RPAR                                                    {$$ = ast_node("Call", NULL); add_children($$, 3, ast_node("Id", $1), $3, $4);}
     | ID LPAR RPAR                                                                          {$$ = ast_node("Call", NULL); add_children($$, 1, ast_node("Id", $1));}
     | ID                                                                                    {$$ = ast_node("Id", $1);}
     | INTLIT                                                                                {$$ = ast_node("IntLit", $1);}
@@ -177,8 +179,16 @@ Expr: OperatorExpression                                                        
     | LPAR error RPAR                                                                       {$$ = NULL;}
     ;
 
-OperatorExpression: Expr COMMA Expr                                                         {$$ = ast_node("Comma", NULL); add_children($$, 2, $1, $3);}
-                  | Expr ASSIGN Expr                                                        {$$ = ast_node("Store", NULL); add_children($$, 2, $1, $3);}
+ExprList: ExprList COMMA Expr                                                               {$$ = ast_node("Comma", NULL); add_children($$, 2, $1, $3);}
+        | Expr                                                                              {$$ = $1;}
+        ;
+
+ExprOptionalList: COMMA Expr ExprOptionalList                                               {$$ = $2; add_siblings($$, 1, $3);}
+                | /* epsilon */                                                             {$$ = NULL;}
+                ;
+        
+        
+OperatorExpression: Expr ASSIGN Expr                                                        {$$ = ast_node("Store", NULL); add_children($$, 2, $1, $3);}
                   | Expr PLUS Expr                                                          {$$ = ast_node("Add", NULL); add_children($$, 2, $1, $3);}
                   | Expr MINUS Expr                                                         {$$ = ast_node("Sub", NULL); add_children($$, 2, $1, $3);}
                   | Expr MUL Expr                                                           {$$ = ast_node("Mul", NULL); add_children($$, 2, $1, $3);}
