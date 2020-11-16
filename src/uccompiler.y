@@ -20,8 +20,9 @@
     #include "ast.h"
 
     // Functions
-    extern int yylex();
+    extern int yylex(void);
     extern void yyerror(char *str);
+    int yylex_destroy(void);              // free memory allocated by lex internal scanner
 
     // Compiler Flags
     bool l_flag = false, e1_flag = false;
@@ -124,10 +125,11 @@ ParameterDeclaration: TypeSpec ID                                               
                     | TypeSpec                                                              {$$ = ast_node("ParamDeclaration", NULL); add_children($$, 1, $1);}
                     ;       
 
-                                                                                               
+
 Declaration: TypeSpec Declarator DeclaratorList SEMI                                        {$$ = $2; add_typespec($1, $$); add_typespec($1, $3); free($1); add_siblings($$, 1, $3);}
            | error SEMI                                                                     {$$ = NULL;}
            ;
+
 
 DeclaratorList: COMMA Declarator DeclaratorList                                             {$$ = $2; add_siblings($$, 1, $3);}
               |  /* epsilon */                                                              {$$ = NULL;}
@@ -141,6 +143,7 @@ TypeSpec: CHAR                                                                  
         | DOUBLE                                                                            {$$ = ast_node("Double", NULL);}
         ;
 
+
 Declarator: ID ASSIGN ExprList                                                              {$$ = ast_node("Declaration", NULL); add_children($$, 2, ast_node("Id", $1), $3);}
           | ID                                                                              {$$ = ast_node("Declaration", NULL); add_children($$, 1, ast_node("Id", $1));}
           ;
@@ -152,9 +155,9 @@ Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                 
          | LBRACE StatementList RBRACE                                                      {$$ = statement_list($2);}
          | RETURN ExprList SEMI                                                             {$$ = ast_node("Return", NULL); add_children($$, 1, $2);}
          | RETURN SEMI                                                                      {$$ = ast_node("Return", NULL); add_children($$, 1, ast_node("Null", NULL));}
-         | ExprList SEMI                                                                    {$$ = $1;}
+         | ExprList SEMI                                                                    {$$ = $1;}   
          | SEMI                                                                             {$$ = NULL;}
-         | LBRACE error RBRACE                                                              {$$ = NULL;}
+         | LBRACE error RBRACE                                                              {$$ = NULL;}  
          | LBRACE RBRACE                                                                    {$$ = NULL;}
          ;
 
@@ -163,9 +166,11 @@ StatementList: StatementOrError StatementList                                   
              | StatementOrError                                                             {$$ = $1;}
              ;
 
+
 StatementOrError: Statement                                                                 {$$ = $1;}
                 | error SEMI                                                                {$$ = NULL;}
                 ;
+
 
 Expr: OperatorExpression                                                                    {$$ = $1;}     
     | LPAR ExprList RPAR                                                                    {$$ = $2;}                                                          
@@ -175,13 +180,15 @@ Expr: OperatorExpression                                                        
     | INTLIT                                                                                {$$ = ast_node("IntLit", $1);}
     | CHRLIT                                                                                {$$ = ast_node("ChrLit", $1);}
     | REALLIT                                                                               {$$ = ast_node("RealLit", $1);}
-    | ID LPAR error RPAR                                                                    {$$ = NULL;}
+    | ID LPAR error RPAR                                                                    {$$ = NULL; free($1);}
     | LPAR error RPAR                                                                       {$$ = NULL;}
     ;
+
 
 ExprList: ExprList COMMA Expr                                                               {$$ = ast_node("Comma", NULL); add_children($$, 2, $1, $3);}
         | Expr                                                                              {$$ = $1;}
         ;
+
 
 ExprOptionalList: COMMA Expr ExprOptionalList                                               {$$ = $2; add_siblings($$, 1, $3);}
                 | /* epsilon */                                                             {$$ = NULL;}
@@ -246,5 +253,6 @@ int main(int argc, char *argv[]) {
     }
 
     free_ast(program);
+    yylex_destroy();
     return 0;
 } 

@@ -366,7 +366,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	yyleng = (int) (yy_cp - yy_bp); \
+	(yytext_ptr) -= (yy_more_len); \
+	yyleng = (int) (yy_cp - (yytext_ptr)); \
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
@@ -729,8 +730,10 @@ int yy_flex_debug = 0;
  * any uses of REJECT which flex missed.
  */
 #define REJECT reject_used_but_not_detected
-#define yymore() yymore_used_but_not_detected
-#define YY_MORE_ADJ 0
+static int yy_more_flag = 0;
+static int yy_more_len = 0;
+#define yymore() ((yy_more_flag) = 1)
+#define YY_MORE_ADJ (yy_more_len)
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "uccompiler.l"
@@ -755,7 +758,7 @@ char *yytext;
     
     // Custom Error Print Messages
     #define inv_char_const_error(line, column, c)\
-            printf("Line %d, col %d: invalid char constant ('%s)\n", line, column, c)
+            printf("Line %d, col %d: invalid char constant (%s)\n", line, column, c)
 
     #define unterm_comment_error(line, column)\
             printf("Line %d, col %d: unterminated comment\n",line, column)
@@ -802,9 +805,9 @@ char *yytext;
     
     // Error Flags
     extern bool syntax_error; 
-#line 806 "lex.yy.c"
+#line 809 "lex.yy.c"
 
-#line 808 "lex.yy.c"
+#line 811 "lex.yy.c"
 
 #define INITIAL 0
 #define MULTI_LINE_COMMENT 1
@@ -1026,10 +1029,16 @@ YY_DECL
 #line 128 "uccompiler.l"
 
 
-#line 1030 "lex.yy.c"
+#line 1033 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
+		(yy_more_len) = 0;
+		if ( (yy_more_flag) )
+			{
+			(yy_more_len) = (int) ((yy_c_buf_p) - (yytext_ptr));
+			(yy_more_flag) = 0;
+			}
 		yy_cp = (yy_c_buf_p);
 
 		/* Support of yytext. */
@@ -1075,7 +1084,7 @@ yy_find_action:
 		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
 			{
 			int yyl;
-			for ( yyl = 0; yyl < yyleng; ++yyl )
+			for ( yyl = (yy_more_len); yyl < yyleng; ++yyl )
 				if ( yytext[yyl] == '\n' )
 					
     yylineno++;
@@ -1281,12 +1290,12 @@ YY_RULE_SETUP
 case 38:
 YY_RULE_SETUP
 #line 171 "uccompiler.l"
-{begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
+{yymore(); begin_charlit(yylineno, yycolumno);}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 172 "uccompiler.l"
-{printl("CHRLIT('%s)\n", yytext); BEGIN 0; yycolumno += yyleng; SEND_TOKEN(CHRLIT);}
+{printl("CHRLIT(%s)\n", yytext); BEGIN 0; yycolumno += yyleng; SEND_TOKEN(CHRLIT);}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
@@ -1301,7 +1310,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(CHAR_LITERAL):
 #line 175 "uccompiler.l"
-{unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
+{unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1; return 0;}
 	YY_BREAK
 case 42:
 /* rule 42 can match eol */
@@ -1359,7 +1368,7 @@ YY_RULE_SETUP
 #line 191 "uccompiler.l"
 ECHO;
 	YY_BREAK
-#line 1363 "lex.yy.c"
+#line 1372 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{

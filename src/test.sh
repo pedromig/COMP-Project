@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Compiler Tester!
-# @version 3.0
+# @version 3.2
 # @author Pedro Miguel Duque Rodrigues
+
+################################################################################################
 
 # Terminal Escape Colors
 RED="\x1B[31m"
@@ -20,13 +22,15 @@ GRAMMAR="uccompiler.y"
 SHOW_DIFF="false"
 VALGRIND_MEMCHECK="false"
 
-# ProgramFlags
+# Flags
 LEX_FLAGS=""
-YACC_FLAGS="-d -v"
-CLANG_FLAGS=""
+YACC_FLAGS="-d"                          # Might be useful: "-v" -> y.output
+CLANG_FLAGS="-Wall -Wno-unused-function -g" # Might be useful: "-g" -> GDB
 UCCOMPILER_FLAGS=""
-VALGRIND_FLAGS="--leak-check=full -s"
-DIFF_FLAGS="" # Might be helpufl: "--suppress-common-lines"""
+VALGRIND_FLAGS=" -s --leak-check=full --show-leak-kinds=all --track-origins=yes"
+DIFF_FLAGS="" # Might be useful: "--suppress-common-lines"
+
+################################################################################################
 
 function run_tests() {
     for file_path in $1/*.{uc,c}; do
@@ -44,21 +48,20 @@ function run_tests() {
             [[ $SHOW_DIFF == "true" ]] && echo && cat -n DIFFOUT && echo
         fi
         if [[ $VALGRIND_MEMCHECK == "true" ]]; then
-            valgrind $VALGRIND_FLAGS ./$UC_COMPILER <$file_path
+            valgrind $VALGRIND_FLAGS ./$UC_COMPILER $UCCOMPILER_FLAGS <$file_path >/dev/null
         fi
     done
     rm DIFFOUT
 }
 
 function compile() {
-    flex $1 $LEX_FLAGS && yacc $2 $YACC_FLAGS -d && clang-3.9 -g -Wall -Wno-unused-function *.c -o $3
+    flex $1 $LEX_FLAGS && yacc $2 $YACC_FLAGS -d && clang-3.9 $CLANG_FLAGS *.c -o $3
 }
 
 function need_recompile() {
     for f in $LEXER $GRAMMAR *.{c,h}; do
         if [[ $f -nt $UC_COMPILER ]]; then
             return 1
-
         fi
     done
     return 0
@@ -66,7 +69,12 @@ function need_recompile() {
 
 if [ $# -eq 0 ]; then
     echo "
-    Usage: ./test.sh [compiler] [-l|-e1|-e2|-t] [-diff] [-compile] [-lex="lex_file"] [-yacc="lex_file"] [-i="input_dir"] [-o="output_dir"]
+    Usage: ./test.sh [compiler] 
+                     [-l|-e1|-e2|-t] 
+                     [--diff|-d] [--memcheck|-m] 
+                     [--flex="lex_file.l"|-f="lex_file.l"] [--yacc="yacc_file.y"|-y="yacc_file.y"] 
+                     [-i="input_dir"] [-o="output_dir"]
+
     Description:
 
         [compiler] -> REQUIRED
@@ -120,20 +128,8 @@ else
     UC_COMPILER=$1
     for option in "$@"; do
         case $option in
-        -l)
-            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS -l"
-            shift
-            ;;
-        -e1)
-            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS -e1"
-            shift
-            ;;
-        -e2)
-            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS -e2"
-            shift
-            ;;
-        -t)
-            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS -t"
+        -l | -e1 | -e2 | -t)
+            UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS $option"
             shift
             ;;
         -i=* | --input-dir=*)
@@ -145,11 +141,11 @@ else
             OUTPUT_DIR="${option#*=}"
             shift
             ;;
-        -lex=* | --lexer=*)
+        -f=* | --flex=*)
             LEXER="${option#*=}"
             shift
             ;;
-        -yacc=*)
+        -y=* | --yacc=*)
             GRAMMAR="${option#*=}"
             shift
             ;;

@@ -19,7 +19,7 @@
     
     // Custom Error Print Messages
     #define inv_char_const_error(line, column, c)\
-            printf("Line %d, col %d: invalid char constant ('%s)\n", line, column, c)
+            printf("Line %d, col %d: invalid char constant (%s)\n", line, column, c)
 
     #define unterm_comment_error(line, column)\
             printf("Line %d, col %d: unterminated comment\n",line, column)
@@ -168,11 +168,11 @@ MULTI_LINE_COMMENT_END          "*/"
 {INTLIT}                                              			          {printl("INTLIT(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(INTLIT);}
 {REALLIT}                                             			          {printl("REALLIT(%s)\n", yytext); yycolumno += yyleng; SEND_TOKEN(REALLIT);}
 
-{CHAR_LITERAL_DELIM}                                                      {begin_charlit(yylineno, yycolumno); yycolumno += yyleng;}
-<CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                                {printl("CHRLIT('%s)\n", yytext); BEGIN 0; yycolumno += yyleng; SEND_TOKEN(CHRLIT);}
+{CHAR_LITERAL_DELIM}                                                      {yymore(); begin_charlit(yylineno, yycolumno);}
+<CHAR_LITERAL>{CHRLIT}{CHAR_LITERAL_DELIM}                                {printl("CHRLIT(%s)\n", yytext); BEGIN 0; yycolumno += yyleng; SEND_TOKEN(CHRLIT);}
 <CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*{CHAR_LITERAL_DELIM}              {inv_char_const_error(yysavedlineno, yysavedcolumno, yytext); BEGIN 0; yycolumno += yyleng;}
 <CHAR_LITERAL>({CHRLIT}|"\\"?[^\'\n\\])*"\\"?{LINE_END}                   {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
-<CHAR_LITERAL><<EOF>>                                                     {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1;}
+<CHAR_LITERAL><<EOF>>                                                     {unterm_char_const_error(yysavedlineno, yysavedcolumno); BEGIN 0; yycolumno = 1; return 0;}
 
 
 {SINGLE_LINE_COMMENT}                                 			          {;}                       

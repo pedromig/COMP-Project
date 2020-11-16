@@ -19,11 +19,6 @@ int alloc_types[] = {
 token_t token(char *value, int type) {
     for (int i = 0; i < (sizeof(alloc_types) / sizeof(alloc_types[0])); ++i) {
         if (type == alloc_types[i]) {
-            if (type == CHRLIT) {
-                char aux[strlen(value) + 1];
-                sprintf(aux, "'%s", value);
-                return (char *)strdup(aux);
-            }
             return (char *)strdup(value);
         }
     }
@@ -86,8 +81,8 @@ void add_siblings(ast_node_t *node, int argc, ...) {
 
 void free_ast(ast_node_t *node) {
     if (node) {
-        free(node->value);
-
+        if (node->value)
+            free(node->value);
         free_ast(node->first_child);
         free_ast(node->next_sibling);
 
@@ -119,9 +114,9 @@ void print_ast(ast_node_t *program) {
 void add_typespec(ast_node_t *type, ast_node_t *give_me_type) {
     ast_node_t *new_type_node = NULL;
     for (ast_node_t *current = give_me_type; current; current = current->next_sibling) {
-        new_type_node = ast_node(type->id, NULL);                 //criar o novo typespec
-        new_type_node->next_sibling = current->first_child;       //colocar o novo typespec no inicio da fila de irmaos (filhos de current)
-        current->first_child = new_type_node;                     //associar a nova lista com o typespec em primeiro aos filhos do current
+        new_type_node = ast_node(type->id, NULL);                
+        new_type_node->next_sibling = current->first_child;       
+        current->first_child = new_type_node;                     
     }
 }
 

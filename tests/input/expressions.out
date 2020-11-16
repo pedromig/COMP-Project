@@ -1,0 +1,4 @@
+Line 1, col 10: syntax error: )
+Line 6, col 5: syntax error: a
+Line 7, col 19: syntax error: 6
+Line 9, col 5: syntax error: float
