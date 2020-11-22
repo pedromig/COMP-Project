@@ -1,3 +1,12 @@
+/**
+ * Licenciatura em Engenharia Informática | Faculdade de Ciências e Tecnologia da Universidade de Coimbra
+ * Projeto de Compiladores 2020/2021
+ *
+ * 2018288117 Gabriel Mendes Fernandes
+ * 2018283166 Pedro Miguel Duque Rodrigues
+ *   
+*/
+
 #include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -114,9 +123,9 @@ void print_ast(ast_node_t *program) {
 void add_typespec(ast_node_t *type, ast_node_t *give_me_type) {
     ast_node_t *new_type_node = NULL;
     for (ast_node_t *current = give_me_type; current; current = current->next_sibling) {
-        new_type_node = ast_node(type->id, NULL);                
-        new_type_node->next_sibling = current->first_child;       
-        current->first_child = new_type_node;                     
+        new_type_node = ast_node(type->id, NULL);
+        new_type_node->next_sibling = current->first_child;
+        current->first_child = new_type_node;
     }
 }
 

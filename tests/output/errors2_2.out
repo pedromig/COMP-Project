@@ -1,0 +1,4 @@
+Line 3, col 8: illegal character ($)
+Line 3, col 9: syntax error: )
+Line 5, col 9: syntax error: int
+Line 7, col 8: syntax error: ;
