@@ -88,6 +88,7 @@
     // Yacc and other Includes...
     #include "ast.h"
     #include "symbol_table.h"
+    #include "semantic_analysis.h"
 
     // Functions
     extern int yylex(void);
@@ -107,9 +108,9 @@
     ast_node_t *program = NULL;
 
     // Root Node of the list of symbol tables of our program
-    symtab_list_t *program_symtabs = NULL;
+    symtab_list_t *symtab_list = NULL;
 
-#line 113 "y.tab.c"
+#line 114 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -245,12 +246,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 45 "uccompiler.y"
+#line 46 "uccompiler.y"
 
     token_t token;
     ast_node_t *node;
 
-#line 254 "y.tab.c"
+#line 255 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -629,15 +630,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    87,    87,    90,    91,    92,    96,    97,    98,    99,
-     103,   107,   108,   112,   113,   114,   115,   119,   122,   125,
-     128,   129,   133,   134,   138,   139,   143,   144,   148,   149,
-     150,   151,   152,   156,   157,   161,   162,   163,   164,   165,
-     166,   167,   168,   169,   170,   174,   175,   179,   180,   184,
-     185,   186,   187,   188,   189,   190,   191,   192,   193,   197,
-     198,   202,   203,   207,   208,   209,   210,   211,   212,   213,
-     214,   215,   216,   217,   218,   219,   220,   221,   222,   223,
-     224,   225,   226
+       0,    88,    88,    91,    92,    93,    97,    98,    99,   100,
+     104,   108,   109,   113,   114,   115,   116,   120,   123,   126,
+     129,   130,   134,   135,   139,   140,   144,   145,   149,   150,
+     151,   152,   153,   157,   158,   162,   163,   164,   165,   166,
+     167,   168,   169,   170,   171,   175,   176,   180,   181,   185,
+     186,   187,   188,   189,   190,   191,   192,   193,   194,   198,
+     199,   203,   204,   208,   209,   210,   211,   212,   213,   214,
+     215,   216,   217,   218,   219,   220,   221,   222,   223,   224,
+     225,   226,   227
 };
 #endif
 
@@ -1583,493 +1584,493 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 87 "uccompiler.y"
+#line 88 "uccompiler.y"
                                                                                             {program = ast_node("Program", NULL_TOKEN); add_children(program, 1, (yyvsp[0].node));}
-#line 1589 "y.tab.c"
+#line 1590 "y.tab.c"
     break;
 
   case 3:
-#line 90 "uccompiler.y"
+#line 91 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node));}
-#line 1595 "y.tab.c"
+#line 1596 "y.tab.c"
     break;
 
   case 4:
-#line 91 "uccompiler.y"
+#line 92 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node));}
-#line 1601 "y.tab.c"
+#line 1602 "y.tab.c"
     break;
 
   case 5:
-#line 92 "uccompiler.y"
+#line 93 "uccompiler.y"
                                                                                             {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[0].node); } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); }}
-#line 1607 "y.tab.c"
+#line 1608 "y.tab.c"
     break;
 
   case 6:
-#line 96 "uccompiler.y"
+#line 97 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node));}
-#line 1613 "y.tab.c"
+#line 1614 "y.tab.c"
     break;
 
   case 7:
-#line 97 "uccompiler.y"
+#line 98 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node));}
-#line 1619 "y.tab.c"
+#line 1620 "y.tab.c"
     break;
 
   case 8:
-#line 98 "uccompiler.y"
+#line 99 "uccompiler.y"
                                                                                             {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[0].node); } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); }}
-#line 1625 "y.tab.c"
+#line 1626 "y.tab.c"
     break;
 
   case 9:
-#line 99 "uccompiler.y"
+#line 100 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1631 "y.tab.c"
+#line 1632 "y.tab.c"
     break;
 
   case 10:
-#line 103 "uccompiler.y"
+#line 104 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("FuncDefinition", NULL_TOKEN); add_children((yyval.node), 3, (yyvsp[-2].node), (yyvsp[-1].node), (yyvsp[0].node));}
-#line 1637 "y.tab.c"
+#line 1638 "y.tab.c"
     break;
 
   case 11:
-#line 107 "uccompiler.y"
+#line 108 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("FuncBody", NULL_TOKEN); add_children((yyval.node), 1, (yyvsp[-1].node));}
-#line 1643 "y.tab.c"
+#line 1644 "y.tab.c"
     break;
 
   case 12:
-#line 108 "uccompiler.y"
+#line 109 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("FuncBody", NULL_TOKEN);}
-#line 1649 "y.tab.c"
+#line 1650 "y.tab.c"
     break;
 
   case 13:
-#line 112 "uccompiler.y"
+#line 113 "uccompiler.y"
                                                                                             {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[0].node); } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); }}
-#line 1655 "y.tab.c"
+#line 1656 "y.tab.c"
     break;
 
   case 14:
-#line 113 "uccompiler.y"
+#line 114 "uccompiler.y"
                                                                                             {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[0].node); } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); }}
-#line 1661 "y.tab.c"
+#line 1662 "y.tab.c"
     break;
 
   case 15:
-#line 114 "uccompiler.y"
+#line 115 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[0].node);}
-#line 1667 "y.tab.c"
+#line 1668 "y.tab.c"
     break;
 
   case 16:
-#line 115 "uccompiler.y"
+#line 116 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[0].node);}
-#line 1673 "y.tab.c"
+#line 1674 "y.tab.c"
     break;
 
   case 17:
-#line 119 "uccompiler.y"
+#line 120 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("FuncDeclaration",NULL_TOKEN);  add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[-1].node)); }
-#line 1679 "y.tab.c"
+#line 1680 "y.tab.c"
     break;
 
   case 18:
-#line 122 "uccompiler.y"
+#line 123 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Id", (yyvsp[-3].token)); add_siblings((yyval.node), 1, (yyvsp[-1].node));}
-#line 1685 "y.tab.c"
+#line 1686 "y.tab.c"
     break;
 
   case 19:
-#line 125 "uccompiler.y"
+#line 126 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("ParamList", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-1].node), (yyvsp[0].node));}
-#line 1691 "y.tab.c"
+#line 1692 "y.tab.c"
     break;
 
   case 20:
-#line 128 "uccompiler.y"
+#line 129 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node));}
-#line 1697 "y.tab.c"
+#line 1698 "y.tab.c"
     break;
 
   case 21:
-#line 129 "uccompiler.y"
+#line 130 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1703 "y.tab.c"
+#line 1704 "y.tab.c"
     break;
 
   case 22:
-#line 133 "uccompiler.y"
+#line 134 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("ParamDeclaration", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-1].node), ast_node("Id", (yyvsp[0].token)));}
-#line 1709 "y.tab.c"
+#line 1710 "y.tab.c"
     break;
 
   case 23:
-#line 134 "uccompiler.y"
+#line 135 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("ParamDeclaration", NULL_TOKEN); add_children((yyval.node), 1, (yyvsp[0].node));}
-#line 1715 "y.tab.c"
+#line 1716 "y.tab.c"
     break;
 
   case 24:
-#line 138 "uccompiler.y"
+#line 139 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-2].node); add_typespec((yyvsp[-3].node), (yyval.node)); add_typespec((yyvsp[-3].node), (yyvsp[-1].node)); free((yyvsp[-3].node)); add_siblings((yyval.node), 1, (yyvsp[-1].node));}
-#line 1721 "y.tab.c"
+#line 1722 "y.tab.c"
     break;
 
   case 25:
-#line 139 "uccompiler.y"
+#line 140 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1727 "y.tab.c"
+#line 1728 "y.tab.c"
     break;
 
   case 26:
-#line 143 "uccompiler.y"
+#line 144 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node));}
-#line 1733 "y.tab.c"
+#line 1734 "y.tab.c"
     break;
 
   case 27:
-#line 144 "uccompiler.y"
+#line 145 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1739 "y.tab.c"
+#line 1740 "y.tab.c"
     break;
 
   case 28:
-#line 148 "uccompiler.y"
+#line 149 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Char", NULL_TOKEN);}
-#line 1745 "y.tab.c"
+#line 1746 "y.tab.c"
     break;
 
   case 29:
-#line 149 "uccompiler.y"
+#line 150 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Int", NULL_TOKEN);}
-#line 1751 "y.tab.c"
+#line 1752 "y.tab.c"
     break;
 
   case 30:
-#line 150 "uccompiler.y"
+#line 151 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Void", NULL_TOKEN);}
-#line 1757 "y.tab.c"
+#line 1758 "y.tab.c"
     break;
 
   case 31:
-#line 151 "uccompiler.y"
+#line 152 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Short", NULL_TOKEN);}
-#line 1763 "y.tab.c"
+#line 1764 "y.tab.c"
     break;
 
   case 32:
-#line 152 "uccompiler.y"
+#line 153 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Double", NULL_TOKEN);}
-#line 1769 "y.tab.c"
+#line 1770 "y.tab.c"
     break;
 
   case 33:
-#line 156 "uccompiler.y"
+#line 157 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Declaration", NULL_TOKEN); add_children((yyval.node), 2, ast_node("Id", (yyvsp[-2].token)), (yyvsp[0].node));}
-#line 1775 "y.tab.c"
+#line 1776 "y.tab.c"
     break;
 
   case 34:
-#line 157 "uccompiler.y"
+#line 158 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Declaration", NULL_TOKEN); add_children((yyval.node), 1, ast_node("Id", (yyvsp[0].token)));}
-#line 1781 "y.tab.c"
+#line 1782 "y.tab.c"
     break;
 
   case 35:
-#line 161 "uccompiler.y"
+#line 162 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("If", NULL_TOKEN); add_children((yyval.node), 3, null_check((yyvsp[-2].node)), null_check((yyvsp[0].node)), null_check(NULL));}
-#line 1787 "y.tab.c"
+#line 1788 "y.tab.c"
     break;
 
   case 36:
-#line 162 "uccompiler.y"
+#line 163 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("If", NULL_TOKEN); add_children((yyval.node), 3, null_check((yyvsp[-4].node)), null_check((yyvsp[-2].node)), null_check((yyvsp[0].node)));}
-#line 1793 "y.tab.c"
+#line 1794 "y.tab.c"
     break;
 
   case 37:
-#line 163 "uccompiler.y"
+#line 164 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("While", NULL_TOKEN); add_children((yyval.node), 2 , null_check((yyvsp[-2].node)), null_check((yyvsp[0].node)));}
-#line 1799 "y.tab.c"
+#line 1800 "y.tab.c"
     break;
 
   case 38:
-#line 164 "uccompiler.y"
+#line 165 "uccompiler.y"
                                                                                             {(yyval.node) = statement_list((yyvsp[-1].node));}
-#line 1805 "y.tab.c"
+#line 1806 "y.tab.c"
     break;
 
   case 39:
-#line 165 "uccompiler.y"
+#line 166 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Return", NULL_TOKEN); add_children((yyval.node), 1, (yyvsp[-1].node));}
-#line 1811 "y.tab.c"
+#line 1812 "y.tab.c"
     break;
 
   case 40:
-#line 166 "uccompiler.y"
+#line 167 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Return", NULL_TOKEN); add_children((yyval.node), 1, ast_node("Null", NULL_TOKEN));}
-#line 1817 "y.tab.c"
+#line 1818 "y.tab.c"
     break;
 
   case 41:
-#line 167 "uccompiler.y"
+#line 168 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node);}
-#line 1823 "y.tab.c"
+#line 1824 "y.tab.c"
     break;
 
   case 42:
-#line 168 "uccompiler.y"
+#line 169 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1829 "y.tab.c"
+#line 1830 "y.tab.c"
     break;
 
   case 43:
-#line 169 "uccompiler.y"
+#line 170 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1835 "y.tab.c"
+#line 1836 "y.tab.c"
     break;
 
   case 44:
-#line 170 "uccompiler.y"
+#line 171 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1841 "y.tab.c"
+#line 1842 "y.tab.c"
     break;
 
   case 45:
-#line 174 "uccompiler.y"
+#line 175 "uccompiler.y"
                                                                                             {if (!(yyvsp[-1].node)) { (yyval.node) = (yyvsp[0].node); } else if (!(yyvsp[-1].node) && !(yyvsp[0].node)) { (yyval.node) = NULL; } else { (yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node)); } }
-#line 1847 "y.tab.c"
+#line 1848 "y.tab.c"
     break;
 
   case 46:
-#line 175 "uccompiler.y"
+#line 176 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[0].node);}
-#line 1853 "y.tab.c"
+#line 1854 "y.tab.c"
     break;
 
   case 47:
-#line 179 "uccompiler.y"
+#line 180 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[0].node);}
-#line 1859 "y.tab.c"
+#line 1860 "y.tab.c"
     break;
 
   case 48:
-#line 180 "uccompiler.y"
+#line 181 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1865 "y.tab.c"
+#line 1866 "y.tab.c"
     break;
 
   case 49:
-#line 184 "uccompiler.y"
+#line 185 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[0].node);}
-#line 1871 "y.tab.c"
+#line 1872 "y.tab.c"
     break;
 
   case 50:
-#line 185 "uccompiler.y"
+#line 186 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node);}
-#line 1877 "y.tab.c"
+#line 1878 "y.tab.c"
     break;
 
   case 51:
-#line 186 "uccompiler.y"
+#line 187 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Call", NULL_TOKEN); add_children((yyval.node), 3, ast_node("Id", (yyvsp[-4].token)), (yyvsp[-2].node), (yyvsp[-1].node));}
-#line 1883 "y.tab.c"
+#line 1884 "y.tab.c"
     break;
 
   case 52:
-#line 187 "uccompiler.y"
+#line 188 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Call", NULL_TOKEN); add_children((yyval.node), 1, ast_node("Id", (yyvsp[-2].token)));}
-#line 1889 "y.tab.c"
+#line 1890 "y.tab.c"
     break;
 
   case 53:
-#line 188 "uccompiler.y"
+#line 189 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Id", (yyvsp[0].token));}
-#line 1895 "y.tab.c"
+#line 1896 "y.tab.c"
     break;
 
   case 54:
-#line 189 "uccompiler.y"
+#line 190 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("IntLit", (yyvsp[0].token));}
-#line 1901 "y.tab.c"
+#line 1902 "y.tab.c"
     break;
 
   case 55:
-#line 190 "uccompiler.y"
+#line 191 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("ChrLit", (yyvsp[0].token));}
-#line 1907 "y.tab.c"
+#line 1908 "y.tab.c"
     break;
 
   case 56:
-#line 191 "uccompiler.y"
+#line 192 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("RealLit", (yyvsp[0].token));}
-#line 1913 "y.tab.c"
+#line 1914 "y.tab.c"
     break;
 
   case 57:
-#line 192 "uccompiler.y"
+#line 193 "uccompiler.y"
                                                                                             {(yyval.node) = NULL; free((yyvsp[-3].token).value);}
-#line 1919 "y.tab.c"
+#line 1920 "y.tab.c"
     break;
 
   case 58:
-#line 193 "uccompiler.y"
+#line 194 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1925 "y.tab.c"
+#line 1926 "y.tab.c"
     break;
 
   case 59:
-#line 197 "uccompiler.y"
+#line 198 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Comma", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1931 "y.tab.c"
+#line 1932 "y.tab.c"
     break;
 
   case 60:
-#line 198 "uccompiler.y"
+#line 199 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[0].node);}
-#line 1937 "y.tab.c"
+#line 1938 "y.tab.c"
     break;
 
   case 61:
-#line 202 "uccompiler.y"
+#line 203 "uccompiler.y"
                                                                                             {(yyval.node) = (yyvsp[-1].node); add_siblings((yyval.node), 1, (yyvsp[0].node));}
-#line 1943 "y.tab.c"
+#line 1944 "y.tab.c"
     break;
 
   case 62:
-#line 203 "uccompiler.y"
+#line 204 "uccompiler.y"
                                                                                             {(yyval.node) = NULL;}
-#line 1949 "y.tab.c"
+#line 1950 "y.tab.c"
     break;
 
   case 63:
-#line 207 "uccompiler.y"
+#line 208 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Store", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1955 "y.tab.c"
+#line 1956 "y.tab.c"
     break;
 
   case 64:
-#line 208 "uccompiler.y"
+#line 209 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Add", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1961 "y.tab.c"
+#line 1962 "y.tab.c"
     break;
 
   case 65:
-#line 209 "uccompiler.y"
+#line 210 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Sub", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1967 "y.tab.c"
+#line 1968 "y.tab.c"
     break;
 
   case 66:
-#line 210 "uccompiler.y"
+#line 211 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Mul", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1973 "y.tab.c"
+#line 1974 "y.tab.c"
     break;
 
   case 67:
-#line 211 "uccompiler.y"
+#line 212 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Div", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1979 "y.tab.c"
+#line 1980 "y.tab.c"
     break;
 
   case 68:
-#line 212 "uccompiler.y"
+#line 213 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Mod", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1985 "y.tab.c"
+#line 1986 "y.tab.c"
     break;
 
   case 69:
-#line 213 "uccompiler.y"
+#line 214 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Or", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1991 "y.tab.c"
+#line 1992 "y.tab.c"
     break;
 
   case 70:
-#line 214 "uccompiler.y"
+#line 215 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("And", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 1997 "y.tab.c"
+#line 1998 "y.tab.c"
     break;
 
   case 71:
-#line 215 "uccompiler.y"
+#line 216 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("BitWiseAnd", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2003 "y.tab.c"
+#line 2004 "y.tab.c"
     break;
 
   case 72:
-#line 216 "uccompiler.y"
+#line 217 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("BitWiseOr", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2009 "y.tab.c"
+#line 2010 "y.tab.c"
     break;
 
   case 73:
-#line 217 "uccompiler.y"
+#line 218 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("BitWiseXor", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2015 "y.tab.c"
+#line 2016 "y.tab.c"
     break;
 
   case 74:
-#line 218 "uccompiler.y"
+#line 219 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Eq", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2021 "y.tab.c"
+#line 2022 "y.tab.c"
     break;
 
   case 75:
-#line 219 "uccompiler.y"
+#line 220 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Ne", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2027 "y.tab.c"
+#line 2028 "y.tab.c"
     break;
 
   case 76:
-#line 220 "uccompiler.y"
+#line 221 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Le", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2033 "y.tab.c"
+#line 2034 "y.tab.c"
     break;
 
   case 77:
-#line 221 "uccompiler.y"
+#line 222 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Ge", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2039 "y.tab.c"
+#line 2040 "y.tab.c"
     break;
 
   case 78:
-#line 222 "uccompiler.y"
+#line 223 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Lt", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2045 "y.tab.c"
+#line 2046 "y.tab.c"
     break;
 
   case 79:
-#line 223 "uccompiler.y"
+#line 224 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Gt", NULL_TOKEN); add_children((yyval.node), 2, (yyvsp[-2].node), (yyvsp[0].node));}
-#line 2051 "y.tab.c"
+#line 2052 "y.tab.c"
     break;
 
   case 80:
-#line 224 "uccompiler.y"
+#line 225 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Plus",NULL_TOKEN); add_children((yyval.node), 1, (yyvsp[0].node));}
-#line 2057 "y.tab.c"
+#line 2058 "y.tab.c"
     break;
 
   case 81:
-#line 225 "uccompiler.y"
+#line 226 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Minus", NULL_TOKEN); add_children((yyval.node), 1, (yyvsp[0].node));}
-#line 2063 "y.tab.c"
+#line 2064 "y.tab.c"
     break;
 
   case 82:
-#line 226 "uccompiler.y"
+#line 227 "uccompiler.y"
                                                                                             {(yyval.node) = ast_node("Not", NULL_TOKEN); add_children((yyval.node), 1, (yyvsp[0].node));}
-#line 2069 "y.tab.c"
+#line 2070 "y.tab.c"
     break;
 
 
-#line 2073 "y.tab.c"
+#line 2074 "y.tab.c"
 
       default: break;
     }
@@ -2301,7 +2302,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 229 "uccompiler.y"
+#line 230 "uccompiler.y"
 
 
 
@@ -2336,16 +2337,13 @@ int main(int argc, char *argv[]) {
     } else if (t_flag) {
         yyparse();
         print_ast(program);  
-    } else if (s_flag) {
-        yyparse();
     } else {
         yyparse();
-        if (!syntax_error && !lexical_error){
-            
+        if (!syntax_error && !lexical_error) {
+            semantic_analysis(program);
+            print_table_list(symtab_list);
         }
-
-    }
-
+    } 
     free_ast(program);
     yylex_destroy();
     return 0;

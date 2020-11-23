@@ -19,6 +19,7 @@
     // Yacc and other Includes...
     #include "ast.h"
     #include "symbol_table.h"
+    #include "semantic_analysis.h"
 
     // Functions
     extern int yylex(void);
@@ -38,7 +39,7 @@
     ast_node_t *program = NULL;
 
     // Root Node of the list of symbol tables of our program
-    symtab_list_t *program_symtabs = NULL;
+    symtab_list_t *symtab_list = NULL;
 %}
 
 // YYSTYPE (yylval) possible values
@@ -260,16 +261,13 @@ int main(int argc, char *argv[]) {
     } else if (t_flag) {
         yyparse();
         print_ast(program);  
-    } else if (s_flag) {
-        yyparse();
     } else {
         yyparse();
-        if (!syntax_error && !lexical_error){
-            
+        if (!syntax_error && !lexical_error) {
+            semantic_analysis(program);
+            print_table_list(symtab_list);
         }
-
-    }
-
+    } 
     free_ast(program);
     yylex_destroy();
     return 0;

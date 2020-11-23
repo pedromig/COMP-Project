@@ -20,6 +20,13 @@
 
 #include "structures.h"
 
-extern symtab_list_t *program_symtab;
+sym_t *symbol(const char *id, type_t type, param_t *parameters);
+param_t *parameter(type_t type);
+param_t *parameter_list(ast_node_t *param_list);
+symtab_t *add_table(symtab_list_t *list, const char *id);
+symtab_t *find_table(symtab_list_t *list, const char *id);
+void add_symbol(sym_list_t *list, sym_t *symbol);
+sym_t *find_symbol(sym_list_t *list, const char *id);
+void print_table_list(symtab_list_t *list);
 
 #endif // __SYMBOL_TABLE

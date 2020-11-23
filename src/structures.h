@@ -10,6 +10,8 @@
 #ifndef __STRUCTURES_H
 #define __STRUCTURES_H
 
+#include <stdbool.h>
+
 typedef const char *type_t;
 
 typedef struct Token {
@@ -37,6 +39,7 @@ struct Symbol {
     const char *id;
     type_t type;
     param_t *parameters;
+    bool is_param;
     sym_t *next;
 };
 
