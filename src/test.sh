@@ -28,7 +28,7 @@ YACC_FLAGS="-d"                             # Might be useful: "-v" -> y.output
 CLANG_FLAGS="-Wall -Wno-unused-function -g" # Might be useful: "-g" -> GDB
 UCCOMPILER_FLAGS=""
 VALGRIND_FLAGS=" -s --leak-check=full --show-leak-kinds=all --track-origins=yes"
-DIFF_FLAGS="" # Might be useful: "--suppress-common-lines"
+DIFF_FLAGS=""                               # Might be useful: "--suppress-common-lines"
 
 ################################################################################################
 
@@ -70,7 +70,7 @@ function need_recompile() {
 if [ $# -eq 0 ]; then
     echo "
     Usage: ./test.sh [compiler] 
-                     [-l|-e1|-e2|-t] 
+                     [-l|-e1|-e2|-t|-s] 
                      [--diff|-d] [--memcheck|-m] 
                      [--flex="lex_file.l"|-f="lex_file.l"] [--yacc="yacc_file.y"|-y="yacc_file.y"] 
                      [-i="input_dir"] [-o="output_dir"]
@@ -78,9 +78,9 @@ if [ $# -eq 0 ]; then
     Description:
 
         [compiler] -> REQUIRED
-            The nam e / path of the compiler executable. 
+            The name / path of the compiler executable. 
             If the name suplied for the executable does not correspond to a existing executable
-            the script will atempt to generate one for you using the default .l file (uccompiler.l)
+            the script will attempt to generate one for you using the default .l file (uccompiler.l)
             or the one that you specify using the -lex flag.
 
             NOTE: Everytime that the changes are made to the .l file the script will attempt to recompile
@@ -128,7 +128,7 @@ else
     UC_COMPILER=$1
     for option in "$@"; do
         case $option in
-        -l | -e1 | -e2 | -t)
+        -l | -e1 | -e2 | -t | -s)
             UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS $option"
             shift
             ;;
