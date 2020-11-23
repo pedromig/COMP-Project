@@ -24,9 +24,6 @@
 
 #define IS_NULL_TOKEN(TOKEN) (TOKEN.value == NULL) && (TOKEN.line == -1) && (TOKEN.column == -1)
 
-// Error Flags
-extern bool syntax_error;
-
 token_t token(char *value, int line, int column, int type);
 ast_node_t *ast_node(const char *id, token_t token);
 void add_children(ast_node_t *parent, int argc, ...);

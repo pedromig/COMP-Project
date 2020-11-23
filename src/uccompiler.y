@@ -30,11 +30,15 @@
     bool e2_flag = true, t_flag = false;  // print -e2 flag by default
     bool s_flag = false;
 
+    // Error flags
+    bool syntax_error = false;
+    extern bool lexical_error; 
+
     // Root node of the abstract sintax tree of our program
     ast_node_t *program = NULL;
 
     // Root Node of the list of symbol tables of our program
-    symtab_t *symtab = NULL;
+    symtab_list_t *program_symtabs = NULL;
 %}
 
 // YYSTYPE (yylval) possible values
@@ -251,15 +255,19 @@ int main(int argc, char *argv[]) {
     
     if (l_flag || e1_flag) {
         return yylex();
-    } 
-    
-    if (e2_flag) {
+    } else if (e2_flag) {
         yyparse(); 
     } else if (t_flag) {
         yyparse();
         print_ast(program);  
     } else if (s_flag) {
         yyparse();
+    } else {
+        yyparse();
+        if (!syntax_error && !lexical_error){
+            
+        }
+
     }
 
     free_ast(program);

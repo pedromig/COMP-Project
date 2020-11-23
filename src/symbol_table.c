@@ -9,53 +9,105 @@
 
 #include "symbol_table.h"
 
+symtab_list_t *symbol_table_list() {
+    symtab_list_t *list = (symtab_list_t *)malloc(sizeof(symtab_list_t));
+    assert(list != NULL);
+
+    list->head = NULL;
+    list->tail = NULL;
+    return list;
+}
+
+sym_list_t *symbol_list() {
+    sym_list_t *list = (sym_list_t *)malloc(sizeof(sym_list_t));
+    assert(list != NULL);
+
+    list->head = NULL;
+    list->tail = NULL;
+    return list;
+}
+
 symtab_t *symbol_table(const char *id) {
     symtab_t *table = (symtab_t *)malloc(sizeof(symtab_t));
     assert(table != NULL);
 
     table->id = id;
-    table->first_symbol = NULL;
+    table->symlist = symbol_list();
     table->next = NULL;
 
     return table;
 }
 
-sym_t *symbol(const char *id, type_t return_type, param_t *parameter_list) {
+sym_t *symbol(const char *id, type_t type, param_t *parameter_list) {
     sym_t *symbol = (sym_t *)malloc(sizeof(sym_t));
     assert(symbol != NULL);
 
     symbol->id = id;
-    symbol->return_type = return_type;
+    symbol->type = type;
     symbol->parameters = parameter_list;
 
     return symbol;
 }
 
-param_t *parameter_list(int argc, ...) {
-    va_list args;
-    va_start(args, argc);
+param_t *parameter_list(ast_node_t *param_list) {
+    param_t *list = NULL;
+    ast_node_t *current_node = param_list;
 
-    param_t *head = (param_t *)malloc(sizeof(param_t));
-    assert(head != NULL);
-    head->type = va_arg(args, type_t);
-    head->next = NULL;
+    list = (param_t *)malloc(sizeof(param_t *));
+    assert(list != NULL);
 
-    param_t *current = head;
-    for (int i = 0; i < argc - 1; ++i) {
-        current->next = (param_t *)malloc(sizeof(param_t));
+    list->type = current_node->first_child->id;
+    list->next = NULL;
+
+    param_t *current = list;
+    current_node = current_node->next_sibling;
+
+    for (ast_node_t *param_decl = current_node; param_decl; param_decl = param_decl->next_sibling) {
+        current->next = (param_t *)malloc(sizeof(param_t *));
         assert(current->next != NULL);
 
-        current->next->type = va_arg(args, type_t);
-        current->next->next = NULL;
+        char *aux = (char *) param_decl->first_child->id;
+        *aux = tolower(*aux);
+        current->next->type = aux;
+        current->next = NULL;
+
         current = current->next;
     }
-    va_end(args);
-
-    return head;
+    return list;
 }
 
-symtab_t *add_table(symtab_t *head, symtab_t *table) {
+void add_table(symtab_list_t *list, const char *id) {
+    if (!list->head) {
+        list->head = list->tail = symbol_table(id);
+    } else {
+        list->tail->next = symbol_table(id);
+        list->tail = list->tail->next;
+    }
 }
 
-void add_symbol(symtab_t *table, sym_t *symbol) {
+symtab_t *find_table(symtab_list_t *list, const char *id) {
+    for (symtab_t *current = list->head; current; current = current->next) {
+        if (!strcmp(current->id, id)) {
+            return current;
+        }
+    }
+    return NULL;
+}
+
+void add_symbol(sym_list_t *list, sym_t *symbol) {
+    if (!list->head) {
+        list->head = list->tail = symbol;
+    } else {
+        list->tail->next = symbol;
+        list->tail = list->tail->next;
+    }
+}
+
+sym_t *find_symbol(sym_list_t *list, const char *id) {
+    for (sym_t *current = list->head; current; current = current->next) {
+        if (!strcmp(current->id, id)) {
+            return current;
+        }
+    }
+    return NULL;
 }

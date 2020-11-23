@@ -12,11 +12,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <ctype.h>
+#include <stdbool.h>
 
 #ifndef __SYMBOL_TABLE
 #define __SYMBOL_TABLE
 
 #include "structures.h"
 
+extern symtab_list_t *program_symtab;
 
 #endif // __SYMBOL_TABLE

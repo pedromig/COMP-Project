@@ -10,7 +10,7 @@
 #include "ast.h"
 #include "y.tab.h"
 
-bool syntax_error = false;
+extern bool syntax_error;
 
 int alloc_types[] = {
     ID,

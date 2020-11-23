@@ -19,15 +19,19 @@
     
     // Custom Error Print Messages
     #define inv_char_const_error(line, column, c)\
+            lexical_error = true;\
             printf("Line %d, col %d: invalid char constant (%s)\n", line, column, c)
 
     #define unterm_comment_error(line, column)\
+            lexical_error = true;\
             printf("Line %d, col %d: unterminated comment\n",line, column)
 
     #define unterm_char_const_error(line, column)\
+            lexical_error = true;\
             printf("Line %d, col %d: unterminated char constant\n",line, column)
 
     #define illegal_char_error(line, column, c)\
+            lexical_error = true;\
             printf("Line %d, col %d: illegal character (%s)\n", line, column, c)
 
 
@@ -65,6 +69,7 @@
     extern bool l_flag, e1_flag;
     
     // Error Flags
+    bool lexical_error = false;
     extern bool syntax_error; 
 %}
 
