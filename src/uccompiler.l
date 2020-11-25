@@ -37,7 +37,7 @@
 
     // A helper define to send a token to yacc
     #define SEND_TOKEN(...)\
-            if (e2_flag || t_flag) { \
+            if (!l_flag && !e1_flag) { \
                 yylval.token = token(yytext, yylineno, yycolumno,__VA_ARGS__);\
                 return __VA_ARGS__;\
             }
@@ -65,9 +65,8 @@
     int yysavedcolumno;  
     
     // Compiler Flags
-    extern bool e2_flag, t_flag; 
     extern bool l_flag, e1_flag;
-    
+
     // Error Flags
     bool lexical_error = false;
     extern bool syntax_error; 

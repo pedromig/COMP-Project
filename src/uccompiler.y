@@ -28,7 +28,7 @@
 
     // Compiler Flags
     bool l_flag = false, e1_flag = false;
-    bool e2_flag = true, t_flag = false;  // print -e2 flag by default
+    bool e2_flag = false, t_flag = false; 
     bool s_flag = false;
 
     // Error flags
@@ -39,7 +39,7 @@
     ast_node_t *program = NULL;
 
     // Root Node of the list of symbol tables of our program
-    symtab_list_t *symtab_list = NULL;
+    symtab_t *symtab_list = NULL;
 %}
 
 // YYSTYPE (yylval) possible values
@@ -131,8 +131,8 @@ ParameterDeclarationList: COMMA ParameterDeclaration ParameterDeclarationList   
                         ;
 
 
-ParameterDeclaration: TypeSpec ID                                                           {$$ = ast_node("ParamDeclaration", NULL_TOKEN); add_children($$, 2, $1, ast_node("Id", $2));}  
-                    | TypeSpec                                                              {$$ = ast_node("ParamDeclaration", NULL_TOKEN); add_children($$, 1, $1);}
+ParameterDeclaration: TypeSpec ID                                                           {$$ = ast_node("ParamDeclaration", NULL_TOKEN); ASSIGN_TOKEN_LC($$, $2); add_children($$, 2, $1, ast_node("Id", $2));}  
+                    | TypeSpec                                                              {$$ = ast_node("ParamDeclaration", NULL_TOKEN); ASSIGN_NODE_LC($$, $1); add_children($$, 1, $1);}
                     ;       
 
 
@@ -146,25 +146,25 @@ DeclaratorList: COMMA Declarator DeclaratorList                                 
               ;
 
 
-TypeSpec: CHAR                                                                              {$$ = ast_node("Char", NULL_TOKEN);}
-        | INT                                                                               {$$ = ast_node("Int", NULL_TOKEN);}
-        | VOID                                                                              {$$ = ast_node("Void", NULL_TOKEN);}
-        | SHORT                                                                             {$$ = ast_node("Short", NULL_TOKEN);}
-        | DOUBLE                                                                            {$$ = ast_node("Double", NULL_TOKEN);}
+TypeSpec: CHAR                                                                              {$$ = ast_node("Char", $1);}
+        | INT                                                                               {$$ = ast_node("Int", $1);}
+        | VOID                                                                              {$$ = ast_node("Void", $1);}
+        | SHORT                                                                             {$$ = ast_node("Short", $1);}
+        | DOUBLE                                                                            {$$ = ast_node("Double", $1);}
         ;
 
 
-Declarator: ID ASSIGN ExprList                                                              {$$ = ast_node("Declaration", NULL_TOKEN); add_children($$, 2, ast_node("Id", $1), $3);}
-          | ID                                                                              {$$ = ast_node("Declaration", NULL_TOKEN); add_children($$, 1, ast_node("Id", $1));}
+Declarator: ID ASSIGN ExprList                                                              {$$ = ast_node("Declaration", NULL_TOKEN); ASSIGN_TOKEN_LC($$, $1); add_children($$, 2, ast_node("Id", $1), $3);}
+          | ID                                                                              {$$ = ast_node("Declaration", NULL_TOKEN); ASSIGN_TOKEN_LC($$, $1); add_children($$, 1, ast_node("Id", $1));}
           ;
 
 
-Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                             {$$ = ast_node("If", NULL_TOKEN); add_children($$, 3, null_check($3), null_check($5), null_check(NULL));}
-         | IF LPAR ExprList RPAR StatementOrError ELSE StatementOrError                     {$$ = ast_node("If", NULL_TOKEN); add_children($$, 3, null_check($3), null_check($5), null_check($7));}
-         | WHILE LPAR ExprList RPAR StatementOrError                                        {$$ = ast_node("While", NULL_TOKEN); add_children($$, 2 , null_check($3), null_check($5));}
+Statement: IF LPAR ExprList RPAR StatementOrError %prec NO_ELSE                             {$$ = ast_node("If", $1); add_children($$, 3, null_check($3), null_check($5), null_check(NULL));}
+         | IF LPAR ExprList RPAR StatementOrError ELSE StatementOrError                     {$$ = ast_node("If", $1); add_children($$, 3, null_check($3), null_check($5), null_check($7));}
+         | WHILE LPAR ExprList RPAR StatementOrError                                        {$$ = ast_node("While", $1); add_children($$, 2 , null_check($3), null_check($5));}
          | LBRACE StatementList RBRACE                                                      {$$ = statement_list($2);}
-         | RETURN ExprList SEMI                                                             {$$ = ast_node("Return", NULL_TOKEN); add_children($$, 1, $2);}
-         | RETURN SEMI                                                                      {$$ = ast_node("Return", NULL_TOKEN); add_children($$, 1, ast_node("Null", NULL_TOKEN));}
+         | RETURN ExprList SEMI                                                             {$$ = ast_node("Return", NULL_TOKEN); ASSIGN_NODE_LC($$, $2); add_children($$, 1, $2);}
+         | RETURN SEMI                                                                      {$$ = ast_node("Return", $1); add_children($$, 1, ast_node("Null", NULL_TOKEN));}
          | ExprList SEMI                                                                    {$$ = $1;}   
          | SEMI                                                                             {$$ = NULL;}
          | LBRACE error RBRACE                                                              {$$ = NULL;}  
@@ -184,8 +184,8 @@ StatementOrError: Statement                                                     
 
 Expr: OperatorExpression                                                                    {$$ = $1;}     
     | LPAR ExprList RPAR                                                                    {$$ = $2;}                                                          
-    | ID LPAR Expr ExprOptionalList RPAR                                                    {$$ = ast_node("Call", NULL_TOKEN); add_children($$, 3, ast_node("Id", $1), $3, $4);}
-    | ID LPAR RPAR                                                                          {$$ = ast_node("Call", NULL_TOKEN); add_children($$, 1, ast_node("Id", $1));}
+    | ID LPAR Expr ExprOptionalList RPAR                                                    {$$ = ast_node("Call", NULL_TOKEN); ASSIGN_TOKEN_LC($$, $1); add_children($$, 3, ast_node("Id", $1), $3, $4);}
+    | ID LPAR RPAR                                                                          {$$ = ast_node("Call", NULL_TOKEN); ASSIGN_TOKEN_LC($$, $1); add_children($$, 1, ast_node("Id", $1));}
     | ID                                                                                    {$$ = ast_node("Id", $1);}
     | INTLIT                                                                                {$$ = ast_node("IntLit", $1);}
     | CHRLIT                                                                                {$$ = ast_node("ChrLit", $1);}
@@ -195,7 +195,7 @@ Expr: OperatorExpression                                                        
     ;
 
 
-ExprList: ExprList COMMA Expr                                                               {$$ = ast_node("Comma", NULL_TOKEN); add_children($$, 2, $1, $3);}
+ExprList: ExprList COMMA Expr                                                               {$$ = ast_node("Comma", $2); add_children($$, 2, $1, $3);}
         | Expr                                                                              {$$ = $1;}
         ;
 
@@ -205,26 +205,26 @@ ExprOptionalList: COMMA Expr ExprOptionalList                                   
                 ;
         
         
-OperatorExpression: Expr ASSIGN Expr                                                        {$$ = ast_node("Store", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr PLUS Expr                                                          {$$ = ast_node("Add", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr MINUS Expr                                                         {$$ = ast_node("Sub", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr MUL Expr                                                           {$$ = ast_node("Mul", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr DIV Expr                                                           {$$ = ast_node("Div", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr MOD Expr                                                           {$$ = ast_node("Mod", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr OR Expr                                                            {$$ = ast_node("Or", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr AND Expr                                                           {$$ = ast_node("And", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr BITWISEAND Expr                                                    {$$ = ast_node("BitWiseAnd", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr BITWISEOR Expr                                                     {$$ = ast_node("BitWiseOr", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr BITWISEXOR Expr                                                    {$$ = ast_node("BitWiseXor", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr EQ Expr                                                            {$$ = ast_node("Eq", NULL_TOKEN); add_children($$, 2, $1, $3);}        
-                  | Expr NE Expr                                                            {$$ = ast_node("Ne", NULL_TOKEN); add_children($$, 2, $1, $3);}    
-                  | Expr LE Expr                                                            {$$ = ast_node("Le", NULL_TOKEN); add_children($$, 2, $1, $3);}            
-                  | Expr GE Expr                                                            {$$ = ast_node("Ge", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr LT Expr                                                            {$$ = ast_node("Lt", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | Expr GT Expr                                                            {$$ = ast_node("Gt", NULL_TOKEN); add_children($$, 2, $1, $3);}
-                  | PLUS Expr  %prec UNARY_OPERATOR                                         {$$ = ast_node("Plus",NULL_TOKEN); add_children($$, 1, $2);}
-                  | MINUS Expr %prec UNARY_OPERATOR                                         {$$ = ast_node("Minus", NULL_TOKEN); add_children($$, 1, $2);}
-                  | NOT Expr                                                                {$$ = ast_node("Not", NULL_TOKEN); add_children($$, 1, $2);}
+OperatorExpression: Expr ASSIGN Expr                                                        {$$ = ast_node("Store", $2); add_children($$, 2, $1, $3);}
+                  | Expr PLUS Expr                                                          {$$ = ast_node("Add",$2); add_children($$, 2, $1, $3);}
+                  | Expr MINUS Expr                                                         {$$ = ast_node("Sub", $2); add_children($$, 2, $1, $3);}
+                  | Expr MUL Expr                                                           {$$ = ast_node("Mul", $2); add_children($$, 2, $1, $3);}
+                  | Expr DIV Expr                                                           {$$ = ast_node("Div", $2); add_children($$, 2, $1, $3);}
+                  | Expr MOD Expr                                                           {$$ = ast_node("Mod", $2); add_children($$, 2, $1, $3);}
+                  | Expr OR Expr                                                            {$$ = ast_node("Or", $2); add_children($$, 2, $1, $3);}
+                  | Expr AND Expr                                                           {$$ = ast_node("And", $2); add_children($$, 2, $1, $3);}
+                  | Expr BITWISEAND Expr                                                    {$$ = ast_node("BitWiseAnd", $2); add_children($$, 2, $1, $3);}
+                  | Expr BITWISEOR Expr                                                     {$$ = ast_node("BitWiseOr", $2); add_children($$, 2, $1, $3);}
+                  | Expr BITWISEXOR Expr                                                    {$$ = ast_node("BitWiseXor", $2); add_children($$, 2, $1, $3);}
+                  | Expr EQ Expr                                                            {$$ = ast_node("Eq", $2); add_children($$, 2, $1, $3);}        
+                  | Expr NE Expr                                                            {$$ = ast_node("Ne", $2); add_children($$, 2, $1, $3);}    
+                  | Expr LE Expr                                                            {$$ = ast_node("Le", $2); add_children($$, 2, $1, $3);}            
+                  | Expr GE Expr                                                            {$$ = ast_node("Ge", $2); add_children($$, 2, $1, $3);}
+                  | Expr LT Expr                                                            {$$ = ast_node("Lt", $2); add_children($$, 2, $1, $3);}
+                  | Expr GT Expr                                                            {$$ = ast_node("Gt", $2); add_children($$, 2, $1, $3);}
+                  | PLUS Expr  %prec UNARY_OPERATOR                                         {$$ = ast_node("Plus", $1); add_children($$, 1, $2);}
+                  | MINUS Expr %prec UNARY_OPERATOR                                         {$$ = ast_node("Minus", $1); add_children($$, 1, $2);}
+                  | NOT Expr                                                                {$$ = ast_node("Not", $1); add_children($$, 1, $2);}
                   ;
 
 %%
@@ -233,8 +233,8 @@ OperatorExpression: Expr ASSIGN Expr                                            
 void argparse(int argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "-l")) {
-             e1_flag = t_flag = e2_flag = s_flag = false;
-             l_flag = true;  
+            e1_flag = t_flag = e2_flag = s_flag = false;
+            l_flag = true;  
         } else if (!strcmp(argv[i], "-e1")){
             t_flag = l_flag = e2_flag = s_flag = false;
             e1_flag = true;
@@ -247,13 +247,13 @@ void argparse(int argc, char *argv[]) {
         } else if (!strcmp(argv[i], "-s")) {
             l_flag = e2_flag = e1_flag = t_flag = false;
             s_flag = true;
-        }
+        } 
     }
 }
 
 int main(int argc, char *argv[]) {
     argparse(argc, argv);
-    
+
     if (l_flag || e1_flag) {
         return yylex();
     } else if (e2_flag) {
@@ -262,11 +262,11 @@ int main(int argc, char *argv[]) {
         yyparse();
         print_ast(program);  
     } else {
-        yyparse();
+        yyparse(); 
         if (!syntax_error && !lexical_error) {
             semantic_analysis(program);
             print_table_list(symtab_list);
-        }
+        }  
     } 
     free_ast(program);
     yylex_destroy();

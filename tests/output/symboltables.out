@@ -1,0 +1,8 @@
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+df	double(double,double)
+
+===== Function df Symbol Table =====
+return	double
+

@@ -37,27 +37,18 @@ struct Parameter {
 typedef struct Symbol sym_t;
 struct Symbol {
     const char *id;
+    bool is_param;
     type_t type;
     param_t *parameters;
-    bool is_param;
     sym_t *next;
 };
-
-typedef struct SymbolList {
-    sym_t *head;
-    sym_t *tail;
-} sym_list_t;
 
 typedef struct SymbolTable symtab_t;
 struct SymbolTable {
     const char *id;
-    sym_list_t *symlist;
+    sym_t *symlist;
     symtab_t *next;
 };
 
-typedef struct SymbolTableList {
-    symtab_t *head;
-    symtab_t *tail;
-} symtab_list_t;
 
 #endif // __STRUCTURES_H

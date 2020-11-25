@@ -19,6 +19,17 @@
 
 #include "structures.h"
 
+// Helper define to assist in line/column assigns of nodes that should
+// have a null token value making impossible to use ast_node() without
+// unwanted side effects in the AST
+#define ASSIGN_TOKEN_LC(NODE, TOKEN) \
+    NODE->token.line = TOKEN.line;   \
+    NODE->token.column = TOKEN.column
+
+#define ASSIGN_NODE_LC(NODE1, NODE2)       \
+    NODE1->token.line = NODE2->token.line; \
+    NODE1->token.column = NODE2->token.column
+
 #define NULL_TOKEN \
     (token_t) { .value = NULL, .line = -1, .column = -1 }
 

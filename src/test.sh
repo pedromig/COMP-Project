@@ -28,7 +28,7 @@ YACC_FLAGS="-d"                             # Might be useful: "-v" -> y.output
 CLANG_FLAGS="-Wall -Wno-unused-function -g" # Might be useful: "-g" -> GDB
 UCCOMPILER_FLAGS=""
 VALGRIND_FLAGS=" -s --leak-check=full --show-leak-kinds=all --track-origins=yes"
-DIFF_FLAGS=""                               # Might be useful: "--suppress-common-lines"
+DIFF_FLAGS="" # Might be useful: "--suppress-common-lines"
 
 ################################################################################################
 

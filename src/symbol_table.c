@@ -9,30 +9,15 @@
 
 #include "symbol_table.h"
 
-symtab_list_t *symbol_table_list() {
-    symtab_list_t *list = (symtab_list_t *)malloc(sizeof(symtab_list_t));
-    assert(list != NULL);
+#define free_parameter(parameter) free(parameter);
 
-    list->head = NULL;
-    list->tail = NULL;
-    return list;
-}
-
-sym_list_t *symbol_list() {
-    sym_list_t *list = (sym_list_t *)malloc(sizeof(sym_list_t));
-    assert(list != NULL);
-
-    list->head = NULL;
-    list->tail = NULL;
-    return list;
-}
 
 symtab_t *symbol_table(const char *id) {
     symtab_t *table = (symtab_t *)malloc(sizeof(symtab_t));
     assert(table != NULL);
 
     table->id = id;
-    table->symlist = symbol_list();
+    table->symlist = NULL;
     table->next = NULL;
 
     return table;
@@ -60,69 +45,76 @@ param_t *parameter(type_t type) {
     return parameter;
 }
 
-param_t *parameter_list(ast_node_t *param_list) {
-    param_t *list = NULL;
-    ast_node_t *current_node = param_list;
-
-    list = (param_t *)malloc(sizeof(param_t *));
+symtab_t *add_table(symtab_t *list, const char *id) {
     assert(list != NULL);
-
-    list->type = current_node->first_child->id;
-    list->next = NULL;
-
-    param_t *current = list;
-    current_node = current_node->next_sibling;
-
-    for (ast_node_t *param_decl = current_node; param_decl; param_decl = param_decl->next_sibling) {
-        current->next = (param_t *)malloc(sizeof(param_t *));
-        assert(current->next != NULL);
-
-        char *aux = (char *)param_decl->first_child->id;
-        *aux = tolower(*aux);
-        current->next->type = aux;
-        current->next = NULL;
-
+    symtab_t *current = list;
+    while (current->next) {
         current = current->next;
     }
-    return list;
-}
-
-symtab_t *add_table(symtab_list_t *list, const char *id) {
     symtab_t *table = symbol_table(id);
-    if (!list->head) {
-        list->head = list->tail = table;
-    } else {
-        list->tail->next = symbol_table(id);
-        list->tail = list->tail->next;
-    }
+    current->next = table;
     return table;
 }
 
-symtab_t *find_table(symtab_list_t *list, const char *id) {
-    for (symtab_t *current = list->head; current; current = current->next) {
-        if (!strcmp(current->id, id)) {
-            return current;
-        }
-    }
-    return NULL;
-}
+void add_symbol(symtab_t *table, sym_t *sym) {
+    assert(table != NULL);
 
-void add_symbol(sym_list_t *list, sym_t *symbol) {
-    if (!list->head) {
-        list->head = list->tail = symbol;
+    if (!table->symlist) {
+        table->symlist = sym;
     } else {
-        list->tail->next = symbol;
-        list->tail = list->tail->next;
+        sym_t *current = table->symlist;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = sym;
     }
 }
 
-sym_t *find_symbol(sym_list_t *list, const char *id) {
-    for (sym_t *current = list->head; current; current = current->next) {
+symtab_t *find_table(symtab_t *list, const char *id) {
+    for (symtab_t *current = list; current; current = current->next) {
         if (!strcmp(current->id, id)) {
             return current;
         }
     }
     return NULL;
+}
+
+sym_t *find_symbol(sym_t *list, const char *id) {
+    for (sym_t *current = list; current; current = current->next) {
+        if (!strcmp(current->id, id)) {
+            return current;
+        }
+    }
+    return NULL;
+}
+
+void free_symbol(sym_t *symbol) {
+    assert(symbol != NULL);
+
+    param_t *aux_param = NULL, *param = symbol->parameters;
+    while (param != NULL) {
+        aux_param = param;
+        param = param->next;
+        free_parameter(param);
+    }
+    free(symbol);
+}
+
+void free_symbol_table_list(symtab_t *head) {
+    assert(head != NULL);
+
+    symtab_t *tab_aux = NULL, *tab = head;
+    while (tab != NULL) {
+        sym_t *sym_aux = NULL, *sym = tab->symlist;
+        while (sym != NULL) {
+            sym_aux = sym;
+            sym = sym->next;
+            free_symbol(sym);
+        }
+        tab_aux = tab;
+        tab = tab->next;
+        free(tab);
+    }
 }
 
 void print_parameter_list(param_t *head) {
@@ -135,18 +127,26 @@ void print_parameter_list(param_t *head) {
         printf(")");
     }
 }
-
-void print_symbol_list(sym_list_t *list) {
-    for (sym_t *current = list->head; current; current = current->next) {
-        printf("%s\t%s", current->id, current->type);
-        print_parameter_list(current->parameters);
+void print_symbol_list(sym_t *list) {
+    for (sym_t *current = list; current; current = current->next) {
+        printf("%s\t", current->id);
+        print_symbol_type(current);
         printf("%s\n", current->is_param ? "\tparam" : "");
     }
 }
 
-void print_table_list(symtab_list_t *list) {
-    for (symtab_t *current = list->head; current; current = current->next) {
-        printf("===== %s Symbol Table =====\n", current->id);
+void print_symbol_type(sym_t *symbol) {
+    printf("%s",  symbol->type);
+    print_parameter_list(symbol->parameters);
+}
+
+void print_table_list(symtab_t *list) {
+    printf("===== %s Symbol Table =====\n", list->id);
+    print_symbol_list(list->symlist);
+    printf("\n");
+
+    for (symtab_t *current = list->next; current; current = current->next) {
+        printf("===== Function %s Symbol Table =====\n", current->id);
         print_symbol_list(current->symlist);
         printf("\n");
     }

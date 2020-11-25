@@ -12,5 +12,10 @@
 
 #include "structures.h"
 #include "symbol_table.h"
+#include "utils.h"
+
+extern symtab_t *symtab_list;
+
+void semantic_analysis(ast_node_t *program);
 
 #endif //__SEMANTIC_ANALYSIS_H

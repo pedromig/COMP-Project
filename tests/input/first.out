@@ -1,3 +1,12 @@
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+main	int(void)
+
+===== Function main Symbol Table =====
+return	int
+i	char
+
 Program
 ..FuncDefinition
 ....Int
@@ -9,19 +18,19 @@ Program
 ......Declaration
 ........Char
 ........Id(i)
-........ChrLit('A')
+........ChrLit('A') - int
 ......While
-........Le
-..........Id(i)
-..........ChrLit('Z')
+........Le - int
+..........Id(i) - char
+..........ChrLit('Z') - int
 ........StatList
-..........Call
-............Id(putchar)
-............Id(i)
-..........Store
-............Id(i)
-............Add
-..............Id(i)
-..............IntLit(1)
+..........Call - int
+............Id(putchar) - int(int)
+............Id(i) - char
+..........Store - char
+............Id(i) - char
+............Add - int
+..............Id(i) - char
+..............IntLit(1) - int
 ......Return
-........IntLit(0)
+........IntLit(0) - int

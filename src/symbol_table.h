@@ -20,13 +20,16 @@
 
 #include "structures.h"
 
+symtab_t *symbol_table(const char *id);
 sym_t *symbol(const char *id, type_t type, param_t *parameters);
 param_t *parameter(type_t type);
-param_t *parameter_list(ast_node_t *param_list);
-symtab_t *add_table(symtab_list_t *list, const char *id);
-symtab_t *find_table(symtab_list_t *list, const char *id);
-void add_symbol(sym_list_t *list, sym_t *symbol);
-sym_t *find_symbol(sym_list_t *list, const char *id);
-void print_table_list(symtab_list_t *list);
+symtab_t *add_table(symtab_t *list, const char *id);
+symtab_t *find_table(symtab_t *list, const char *id);
+void add_symbol(symtab_t *table, sym_t *symbol);
+sym_t *find_symbol(sym_t *list, const char *id);
+void print_table_list(symtab_t *list);
+void print_symbol_type(sym_t *symbol);
+void free_symbol(sym_t *symbol);
+void free_symbol_table_list(symtab_t *head);
 
 #endif // __SYMBOL_TABLE
