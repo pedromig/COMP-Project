@@ -1,0 +1,24 @@
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+blah	char(int)
+localvars	char(int,char,short,double,int,char)
+zf23	int(int)
+f	void(void)
+
+===== Function blah Symbol Table =====
+return	char
+q	int	param
+
+===== Function localvars Symbol Table =====
+return	char
+A0	int	param
+A1	char	param
+A2	short	param
+A3	double	param
+A4	int	param
+C0	char	param
+
+===== Function f Symbol Table =====
+return	void
+

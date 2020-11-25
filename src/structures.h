@@ -46,6 +46,7 @@ struct Symbol {
 typedef struct SymbolTable symtab_t;
 struct SymbolTable {
     const char *id;
+    bool is_defined;
     sym_t *symlist;
     symtab_t *next;
 };

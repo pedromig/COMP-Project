@@ -31,5 +31,7 @@ void print_table_list(symtab_t *list);
 void print_symbol_type(sym_t *symbol);
 void free_symbol(sym_t *symbol);
 void free_symbol_table_list(symtab_t *head);
+bool compare_symbol_types(sym_t *s1, sym_t *s2);
+void delete_undefined_tables(symtab_t *list);
 
 #endif // __SYMBOL_TABLE

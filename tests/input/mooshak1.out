@@ -1,0 +1,319 @@
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+a	int
+A1	int
+A5	int
+A4	int
+blah	char(int)
+c1	char
+localvars	char(int,char,short,double,int,char)
+C1	char
+C2	char
+C3	char
+C4	char
+zf23	int(int)
+f	void(void)
+
+===== Function blah Symbol Table =====
+return	char
+q	int	param
+blah	int
+localvars	int
+f	int
+p	char
+b	char
+i	int
+j	int
+k	int
+v	short
+
+===== Function localvars Symbol Table =====
+return	char
+A0	int	param
+A1	char	param
+A2	short	param
+A3	double	param
+A4	int	param
+C0	char	param
+c0	char
+c1	char
+c2	char
+c3	char
+c4	char
+a0	int
+a1	int
+a2	int
+a3	int
+a4	int
+b1	double
+b2	double
+b3	double
+b4	double
+blah	int
+localvars	int
+
+===== Function f Symbol Table =====
+return	void
+c0	char
+c1	char
+c2	char
+c3	char
+c4	char
+a0	int
+a1	int
+a2	int
+a3	int
+a4	int
+b1	double
+b2	double
+b3	double
+b4	double
+d1	short
+d2	short
+d3	short
+d4	short
+
+Program
+..Declaration
+....Int
+....Id(a)
+..Declaration
+....Int
+....Id(A1)
+..Declaration
+....Int
+....Id(A5)
+..Declaration
+....Int
+....Id(A4)
+..FuncDeclaration
+....Char
+....Id(blah)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(r)
+..Declaration
+....Char
+....Id(c1)
+..FuncDefinition
+....Char
+....Id(localvars)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(A0)
+......ParamDeclaration
+........Char
+........Id(A1)
+......ParamDeclaration
+........Short
+........Id(A2)
+......ParamDeclaration
+........Double
+........Id(A3)
+......ParamDeclaration
+........Int
+........Id(A4)
+......ParamDeclaration
+........Char
+........Id(C0)
+....FuncBody
+......Declaration
+........Char
+........Id(c0)
+......Declaration
+........Char
+........Id(c1)
+......Declaration
+........Char
+........Id(c2)
+......Declaration
+........Char
+........Id(c3)
+......Declaration
+........Char
+........Id(c4)
+......Declaration
+........Int
+........Id(a0)
+......Declaration
+........Int
+........Id(a1)
+......Declaration
+........Int
+........Id(a2)
+......Declaration
+........Int
+........Id(a3)
+......Declaration
+........Int
+........Id(a4)
+......Declaration
+........Double
+........Id(b1)
+......Declaration
+........Double
+........Id(b2)
+......Declaration
+........Double
+........Id(b3)
+......Declaration
+........Double
+........Id(b4)
+......Declaration
+........Int
+........Id(blah)
+......Declaration
+........Int
+........Id(localvars)
+..Declaration
+....Char
+....Id(C1)
+..Declaration
+....Char
+....Id(C2)
+..Declaration
+....Char
+....Id(C3)
+..Declaration
+....Char
+....Id(C4)
+..FuncDeclaration
+....Char
+....Id(localvars)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(A0)
+......ParamDeclaration
+........Char
+........Id(A1)
+......ParamDeclaration
+........Short
+........Id(A2)
+......ParamDeclaration
+........Double
+........Id(A3)
+......ParamDeclaration
+........Int
+........Id(A4)
+......ParamDeclaration
+........Char
+........Id(C0)
+..FuncDefinition
+....Char
+....Id(blah)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(q)
+....FuncBody
+......Declaration
+........Int
+........Id(blah)
+......Declaration
+........Int
+........Id(localvars)
+......Declaration
+........Int
+........Id(f)
+......Declaration
+........Char
+........Id(p)
+......Declaration
+........Char
+........Id(b)
+......Declaration
+........Int
+........Id(i)
+......Declaration
+........Int
+........Id(j)
+......Declaration
+........Int
+........Id(k)
+......Declaration
+........Short
+........Id(v)
+..Declaration
+....Char
+....Id(C1)
+..Declaration
+....Char
+....Id(C2)
+..Declaration
+....Char
+....Id(C3)
+..Declaration
+....Char
+....Id(C4)
+..FuncDeclaration
+....Int
+....Id(zf23)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(x)
+..FuncDefinition
+....Void
+....Id(f)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+......Declaration
+........Char
+........Id(c0)
+......Declaration
+........Char
+........Id(c1)
+......Declaration
+........Char
+........Id(c2)
+......Declaration
+........Char
+........Id(c3)
+......Declaration
+........Char
+........Id(c4)
+......Declaration
+........Int
+........Id(a0)
+......Declaration
+........Int
+........Id(a1)
+......Declaration
+........Int
+........Id(a2)
+......Declaration
+........Int
+........Id(a3)
+......Declaration
+........Int
+........Id(a4)
+......Declaration
+........Double
+........Id(b1)
+......Declaration
+........Double
+........Id(b2)
+......Declaration
+........Double
+........Id(b3)
+......Declaration
+........Double
+........Id(b4)
+......Declaration
+........Short
+........Id(d1)
+......Declaration
+........Short
+........Id(d2)
+......Declaration
+........Short
+........Id(d3)
+......Declaration
+........Short
+........Id(d4)

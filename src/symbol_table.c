@@ -11,12 +11,12 @@
 
 #define free_parameter(parameter) free(parameter);
 
-
 symtab_t *symbol_table(const char *id) {
     symtab_t *table = (symtab_t *)malloc(sizeof(symtab_t));
     assert(table != NULL);
 
     table->id = id;
+    table->is_defined = false;
     table->symlist = NULL;
     table->next = NULL;
 
@@ -70,6 +70,21 @@ void add_symbol(symtab_t *table, sym_t *sym) {
     }
 }
 
+bool compare_symbol_types(sym_t *s1, sym_t *s2) {
+    if (!strcmp(s1->type, s2->type)) {
+        param_t *param_s1 = s1->parameters,
+                *param_s2 = s2->parameters;
+        while (param_s1 && param_s2) {
+            if (strcmp(param_s1->type, param_s2->type))
+                return false;
+            param_s1 = param_s1->next;
+            param_s2 = param_s2->next;
+        }
+        return true;
+    }
+    return false;
+}
+
 symtab_t *find_table(symtab_t *list, const char *id) {
     for (symtab_t *current = list; current; current = current->next) {
         if (!strcmp(current->id, id)) {
@@ -95,7 +110,7 @@ void free_symbol(sym_t *symbol) {
     while (param != NULL) {
         aux_param = param;
         param = param->next;
-        free_parameter(param);
+        free_parameter(aux_param);
     }
     free(symbol);
 }
@@ -114,6 +129,16 @@ void free_symbol_table_list(symtab_t *head) {
         tab_aux = tab;
         tab = tab->next;
         free(tab);
+    }
+}
+
+void delete_undefined_tables(symtab_t *list) {
+    for (symtab_t *current = list; current; current = current->next) {
+        if (current->next && !current->next->is_defined) {
+            symtab_t *aux = current->next;
+            current->next = current->next->next;
+            free(aux);
+        }
     }
 }
 
@@ -136,7 +161,7 @@ void print_symbol_list(sym_t *list) {
 }
 
 void print_symbol_type(sym_t *symbol) {
-    printf("%s",  symbol->type);
+    printf("%s", symbol->type);
     print_parameter_list(symbol->parameters);
 }
 
