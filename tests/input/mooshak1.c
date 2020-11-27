@@ -24,7 +24,7 @@ char localvars(
 char blah(int q) {
     int blah, localvars, f;
     char p, b;
-    int i,j,k;
+    int i, j, k;
     short v;
 }
 char C1, C2, C3, C4;

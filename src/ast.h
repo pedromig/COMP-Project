@@ -18,6 +18,7 @@
 #define __AST_H
 
 #include "structures.h"
+#include "symbol_table.h"
 
 // Helper define to assist in line/column assigns of nodes that should
 // have a null token value making impossible to use ast_node() without

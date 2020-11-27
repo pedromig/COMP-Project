@@ -35,6 +35,8 @@ ast_node_t *ast_node(const char *id, token_t token) {
 
     node->id = id;
     node->token = token;
+    node->annotation.type = NULL;
+    node->annotation.parameters = NULL;
     node->first_child = NULL;
     node->next_sibling = NULL;
 
@@ -95,16 +97,22 @@ void free_ast(ast_node_t *node) {
     }
 }
 
-void print_node(const char *id, token_t token, int indent_level) {
+void print_node(const char *id, token_t token, annotation_t annotation, int indent_level) {
     for (int i = 0; i < indent_level; ++i)
         printf("..");
     printf("%s", id);
     if (token.value) printf("(%s)", token.value);
+    if (annotation.type) {
+        printf(" - %s", annotation.type);
+        if (annotation.parameters) {
+            print_parameter_list(annotation.parameters);
+        }
+    }
     printf("\n");
 }
 
 void __print_ast(ast_node_t *node, int indent_level) {
-    print_node(node->id, node->token, indent_level);
+    print_node(node->id, node->token, node->annotation, indent_level);
     if (node->first_child != NULL)
         __print_ast(node->first_child, indent_level + 1);
     if (node->next_sibling != NULL)

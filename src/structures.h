@@ -14,6 +14,18 @@
 
 typedef const char *type_t;
 
+typedef struct Parameter param_t;
+struct Parameter {
+    type_t type;
+    param_t *next;
+};
+
+typedef struct Annotation annotation_t;
+struct Annotation {
+    type_t type;
+    param_t *parameters;
+};
+
 typedef struct Token {
     char *value;
     int line;
@@ -24,14 +36,9 @@ typedef struct ASTNode ast_node_t;
 struct ASTNode {
     const char *id;
     token_t token;
+    annotation_t annotation;
     ast_node_t *first_child;
     ast_node_t *next_sibling;
-};
-
-typedef struct Parameter param_t;
-struct Parameter {
-    type_t type;
-    param_t *next;
 };
 
 typedef struct Symbol sym_t;
@@ -50,6 +57,5 @@ struct SymbolTable {
     sym_t *symlist;
     symtab_t *next;
 };
-
 
 #endif // __STRUCTURES_H

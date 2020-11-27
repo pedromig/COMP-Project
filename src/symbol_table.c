@@ -80,7 +80,7 @@ bool compare_symbol_types(sym_t *s1, sym_t *s2) {
             param_s1 = param_s1->next;
             param_s2 = param_s2->next;
         }
-        return true;
+        return !(param_s1 || param_s2);
     }
     return false;
 }
@@ -163,6 +163,11 @@ void print_symbol_list(sym_t *list) {
 void print_symbol_type(sym_t *symbol) {
     printf("%s", symbol->type);
     print_parameter_list(symbol->parameters);
+}
+
+void print_annotation(annotation_t annotation) {
+    printf("%s", annotation.type);
+    print_parameter_list(annotation.parameters);
 }
 
 void print_table_list(symtab_t *list) {

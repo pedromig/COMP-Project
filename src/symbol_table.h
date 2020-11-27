@@ -7,13 +7,13 @@
  *   
 */
 
+#include <assert.h>
+#include <ctype.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include <ctype.h>
-#include <stdbool.h>
 
 #ifndef __SYMBOL_TABLE
 #define __SYMBOL_TABLE
@@ -33,5 +33,7 @@ void free_symbol(sym_t *symbol);
 void free_symbol_table_list(symtab_t *head);
 bool compare_symbol_types(sym_t *s1, sym_t *s2);
 void delete_undefined_tables(symtab_t *list);
+void print_annotation(annotation_t annotation);
+void print_parameter_list(param_t *head);
 
 #endif // __SYMBOL_TABLE
