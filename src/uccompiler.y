@@ -264,8 +264,7 @@ int main(int argc, char *argv[]) {
     } else {
         yyparse(); 
         if (!syntax_error && !lexical_error) {
-            semantic_analysis(program);
-            
+            semantic_analysis(program); 
             if (s_flag) {
                 print_table_list(symtab_list);
                 print_ast(program);
