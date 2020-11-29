@@ -48,6 +48,13 @@
     ast_node_t *node;
 }
 
+// Free Yacc Stack properly when recovering from errors
+// Warning: Not POSIX Yacc compliant works well with bison 
+// Throws warning -Wyacc on compilation to disable run yacc with -Wno-yacc flag.
+%destructor {} Program
+%destructor { if($$) {free_ast($$);}} <node>
+%destructor { free($$.value); } ID INTLIT CHRLIT REALLIT
+
 // Yacc Token type declarations
 %token <token> INTLIT CHRLIT REALLIT
 %token <token> IF ELSE WHILE RETURN RESERVED
@@ -85,7 +92,7 @@
 
 %% 
 
-Program:  FunctionsAndDeclarations                                                          {program = ast_node("Program", NULL_TOKEN); add_children(program, 1, $1);}
+Program:  FunctionsAndDeclarations                                                          {$$ = program = ast_node("Program", NULL_TOKEN); add_children(program, 1, $1);}
 
 
 FunctionsAndDeclarations: FunctionDefinition FunctionsAndDeclarationsList                   {$$ = $1; add_siblings($$, 1, $2);}
@@ -255,7 +262,9 @@ int main(int argc, char *argv[]) {
     argparse(argc, argv);
 
     if (l_flag || e1_flag) {
-        return yylex();
+        yylex();
+        yylex_destroy();
+        return 0;
     } else if (e2_flag) {
         yyparse(); 
     } else if (t_flag) {

@@ -134,13 +134,25 @@ void free_symbol_table_list(symtab_t *head) {
     }
 }
 
+void free_table(symtab_t *head) {
+    if (head) {
+        sym_t *sym_aux = NULL, *sym = head->symlist;
+        while (sym != NULL) {
+            sym_aux = sym;
+            sym = sym->next;
+            free_symbol(sym_aux);
+        }
+        free(head);
+    }
+}
+
 void delete_undefined_tables(symtab_t *list) {
     symtab_t *before = list, *current = list->next;
 
     while (current != NULL) {
         if (!current->is_defined) {
             before->next = current->next;
-            free(current);
+            free_table(current);
             current = before->next;
         } else {
             before = current;

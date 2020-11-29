@@ -1,3 +1,12 @@
+/**
+ * Licenciatura em Engenharia Informática | Faculdade de Ciências e Tecnologia da Universidade de Coimbra
+ * Projeto de Compiladores 2020/2021
+ *
+ * 2018288117 Gabriel Mendes Fernandes
+ * 2018283166 Pedro Miguel Duque Rodrigues
+ *   
+*/
+
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -8,7 +17,6 @@
 
 // Error not specified in the project document but that is useful
 // Description: int f(int,int) { return 1; } according to gcc -> error: parameter name omitted
-
 #define parameter_name_omitted(line, column) \
     printf("Line %d, col %d: Parameter name omitted\n", line, column);
 
