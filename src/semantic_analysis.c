@@ -147,8 +147,8 @@ void analyse_function_definition(ast_node_t *func_def) {
 
     } else {
         //verificar se não existe nenhum símbolo com este id
-        sym_t* existing = find_symbol(symtab_list->symlist, declarator->token.value);
-        if(existing){
+        sym_t *existing = find_symbol(symtab_list->symlist, declarator->token.value);
+        if (existing) {
             confliting_types_error(new_func_dec, existing, declarator->token.line, declarator->token.column);
             free_symbol(new_func_dec);
             return;
@@ -187,10 +187,9 @@ void analyse_function_declaration(ast_node_t *func_dec) {
         }
         free_symbol(new_dec);
         return;
-    }
-    else{
-        sym_t* existing = find_symbol(symtab_list->symlist, declarator->token.value);
-        if(existing){
+    } else {
+        sym_t *existing = find_symbol(symtab_list->symlist, declarator->token.value);
+        if (existing) {
             confliting_types_error(new_dec, existing, declarator->token.line, declarator->token.column);
             free_symbol(new_dec);
             return;
@@ -246,7 +245,9 @@ void annotate_store(ast_node_t *node) {
     }
 
     if (lhs->annotation.parameters) {
-        lvalue_required(lhs->token.line, lhs->token.column);
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                                lhs->annotation, rhs->annotation,
+                                                node->token.line, node->token.column);
         node->annotation.type = "undef";
         return;
     }
