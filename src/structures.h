@@ -45,6 +45,7 @@ typedef struct Symbol sym_t;
 struct Symbol {
     const char *id;
     bool is_param;
+    bool is_defined;
     type_t type;
     param_t *parameters;
     sym_t *next;

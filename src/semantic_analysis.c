@@ -213,6 +213,22 @@ void analyse_declaration(ast_node_t *node) {
     }
 
     sym_t *existing = find_symbol(current_table->symlist, declarator->token.value);
+    if (existing != NULL && current_table == symtab_list) {
+
+        if (existing->is_defined && declarator->next_sibling != NULL) {
+            symbol_already_defined(declarator->token.value, declarator->token.line, declarator->token.column);
+
+        } else if (declarator->next_sibling != NULL) {
+            semantic_analysis(declarator->next_sibling);
+            if (declarator->next_sibling->annotation.parameters || invalid_assign(type, declarator->next_sibling->annotation.type)) {
+                sym_t aux = (sym_t){.id = NULL, .type = declarator->next_sibling->annotation.type, .parameters = NULL};
+                confliting_types_error(&aux, existing, declarator->token.line, declarator->token.column);
+            }
+            existing->is_defined = true;
+        }
+        return;
+    }
+
     if (existing != NULL) {
         symbol_already_defined(declarator->token.value, declarator->token.line, declarator->token.column);
         return;
@@ -227,7 +243,9 @@ void analyse_declaration(ast_node_t *node) {
         if (declarator->next_sibling->annotation.parameters || invalid_assign(type, declarator->next_sibling->annotation.type)) {
             sym_t aux = (sym_t){.id = NULL, .type = declarator->next_sibling->annotation.type, .parameters = NULL};
             confliting_types_error(&aux, new_dec, declarator->token.line, declarator->token.column);
+            return;
         }
+        new_dec->is_defined = true;
     }
 }
 
@@ -246,8 +264,8 @@ void annotate_store(ast_node_t *node) {
 
     if (lhs->annotation.parameters) {
         operator_cannot_be_applied_to_types(select_operator(node->id),
-                                                lhs->annotation, rhs->annotation,
-                                                node->token.line, node->token.column);
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
         node->annotation.type = "undef";
         return;
     }
@@ -335,8 +353,8 @@ void annotate_statement_id(ast_node_t *node) {
 
 void annotate_return(ast_node_t *node) {
 
-    ast_node_t *expr_list = node->first_child;       // baixo
-    sym_t *function_return = current_table->symlist; // cima
+    ast_node_t *expr_list = node->first_child;
+    sym_t *function_return = current_table->symlist;
 
     if (!strcmp(function_return->type, "void")) {
         //verificar se é algo que está na tabela global

@@ -31,6 +31,7 @@ sym_t *symbol(const char *id, type_t type, param_t *parameters) {
     symbol->type = type;
     symbol->parameters = parameters;
     symbol->is_param = false;
+    symbol->is_defined = false;
     symbol->next = NULL;
 
     return symbol;
