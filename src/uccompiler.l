@@ -38,7 +38,7 @@
     // A helper define to send a token to yacc
     #define SEND_TOKEN(...)\
             if (!l_flag && !e1_flag) { \
-                yylval.token = token(yytext, yylineno, yycolumno,__VA_ARGS__);\
+                yylval.token = token(yytext, yylineno, yycolumno - yyleng, __VA_ARGS__);\
                 return __VA_ARGS__;\
             }
     

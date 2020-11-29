@@ -1,0 +1,224 @@
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+A0	int
+A1	int
+A2	int
+A3	int
+A4	int
+B1	short
+B2	short
+B3	short
+B4	short
+C0	char
+C1	char
+C2	char
+C3	char
+C4	char
+D1	double
+D2	double
+D3	double
+D4	double
+argc	char
+argv	int
+main	int(void)
+
+===== Function main Symbol Table =====
+return	int
+
+Program
+..Declaration
+....Int
+....Id(A0)
+..Declaration
+....Int
+....Id(A1)
+..Declaration
+....Int
+....Id(A2)
+..Declaration
+....Int
+....Id(A3)
+..Declaration
+....Int
+....Id(A4)
+..Declaration
+....Short
+....Id(B1)
+..Declaration
+....Short
+....Id(B2)
+..Declaration
+....Short
+....Id(B3)
+..Declaration
+....Short
+....Id(B4)
+..Declaration
+....Char
+....Id(C0)
+..Declaration
+....Char
+....Id(C1)
+..Declaration
+....Char
+....Id(C2)
+..Declaration
+....Char
+....Id(C3)
+..Declaration
+....Char
+....Id(C4)
+..Declaration
+....Double
+....Id(D1)
+..Declaration
+....Double
+....Id(D2)
+..Declaration
+....Double
+....Id(D3)
+..Declaration
+....Double
+....Id(D4)
+..Declaration
+....Char
+....Id(argc)
+..Declaration
+....Int
+....Id(argv)
+..FuncDefinition
+....Int
+....Id(main)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+......Add - char
+........Add - char
+..........Id(C0) - char
+..........Id(C0) - char
+........Id(C0) - char
+......Add - int
+........Add - int
+..........Add - int
+............Id(C0) - char
+............Id(A0) - int
+..........Id(C0) - char
+........Id(A0) - int
+......Add - int
+........Add - int
+..........Add - int
+............Id(C0) - char
+............Id(A0) - int
+..........ChrLit('a') - int
+........IntLit(2) - int
+......Add - short
+........Id(B1) - short
+........Id(B2) - short
+......Add - int
+........Add - int
+..........Id(B1) - short
+..........Id(A1) - int
+........Id(A0) - int
+......Add - short
+........Add - short
+..........Id(B1) - short
+..........Id(B2) - short
+........Id(B3) - short
+......Add - int
+........Add - short
+..........Add - short
+............Id(B1) - short
+............Id(B2) - short
+..........Id(B3) - short
+........IntLit(1) - int
+......Add - int
+........Add - int
+..........Id(A0) - int
+..........Id(B1) - short
+........Id(A0) - int
+......Add - int
+........Add - int
+..........Id(A0) - int
+..........Id(B2) - short
+........Id(A0) - int
+......Add - int
+........Add - int
+..........Id(A0) - int
+..........Id(B3) - short
+........Id(A0) - int
+......Add - int
+........Add - int
+..........Id(A0) - int
+..........Id(B4) - short
+........Id(A0) - int
+......Add - int
+........Add - int
+..........Id(A0) - int
+..........Id(C1) - char
+........Id(A0) - int
+......Add - int
+........Add - int
+..........Id(A0) - int
+..........Id(C2) - char
+........Id(A0) - int
+......Add - int
+........Add - int
+..........Id(A0) - int
+..........Id(C3) - char
+........Id(A0) - int
+......Add - int
+........Add - int
+..........Id(A0) - int
+..........Id(C4) - char
+........Id(A0) - int
+......Add - short
+........Id(B1) - short
+........Id(B2) - short
+......Add - short
+........Id(B1) - short
+........Id(C0) - char
+......Add - int
+........Add - short
+..........Id(B1) - short
+..........Id(C0) - char
+........Id(A0) - int
+......Add - int
+........Add - short
+..........Id(B1) - short
+..........Id(C0) - char
+........IntLit(1) - int
+......Add - int
+........Add - int
+..........Id(B1) - short
+..........ChrLit('a') - int
+........IntLit(1) - int
+......Add - double
+........Add - double
+..........Id(D1) - double
+..........Id(D2) - double
+........Id(D3) - double
+......Add - double
+........Add - double
+..........Id(D1) - double
+..........Id(A0) - int
+........Id(A1) - int
+......Add - double
+........Add - double
+..........Id(D1) - double
+..........Id(B1) - short
+........Id(A0) - int
+......Add - double
+........Add - double
+..........Id(D1) - double
+..........ChrLit('a') - int
+........Id(B1) - short
+......Add - double
+........Id(D1) - double
+........RealLit(1.0e-10) - double
+......Add - double
+........Add - double
+..........Id(D1) - double
+..........IntLit(1) - int
+........RealLit(.1e-10) - double

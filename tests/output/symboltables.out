@@ -79,7 +79,7 @@ Program
 ........Double
 ........Id(d)
 ......Return
-........Id(c1)
+........Id(c1) - char
 ..FuncDeclaration
 ....Double
 ....Id(df)
@@ -100,10 +100,10 @@ Program
 ........Id(dd)
 ....FuncBody
 ......Return
-........Call
-..........Id(df)
-..........Id(d)
-..........Id(e)
+........Call - double
+..........Id(df) - double(double,double)
+..........Id(d) - double
+..........Id(e) - double
 ..FuncDefinition
 ....Int
 ....Id(ii)
@@ -122,9 +122,9 @@ Program
 ........Id(s)
 ....FuncBody
 ......Return
-........Add
-..........Id(i)
-..........Id(j)
+........Add - int
+..........Id(i) - int
+..........Id(j) - int
 ..Declaration
 ....Double
 ....Id(dd)
@@ -137,4 +137,4 @@ Program
 ........Id(s)
 ....FuncBody
 ......Return
-........Id(t)
+........Id(t) - short

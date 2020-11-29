@@ -1,7 +1,7 @@
-Line 30, col 8: Symbol C1 already defined
-Line 30, col 12: Symbol C2 already defined
-Line 30, col 16: Symbol C3 already defined
-Line 30, col 20: Symbol C4 already defined
+Line 30, col 6: Symbol C1 already defined
+Line 30, col 10: Symbol C2 already defined
+Line 30, col 14: Symbol C3 already defined
+Line 30, col 18: Symbol C4 already defined
 ===== Global Symbol Table =====
 putchar	int(int)
 getchar	int(void)

@@ -31,6 +31,7 @@ sym_t *symbol(const char *id, type_t type, param_t *parameters) {
     symbol->type = type;
     symbol->parameters = parameters;
     symbol->is_param = false;
+    symbol->next = NULL;
 
     return symbol;
 }
@@ -116,28 +117,33 @@ void free_symbol(sym_t *symbol) {
 }
 
 void free_symbol_table_list(symtab_t *head) {
-    assert(head != NULL);
-
-    symtab_t *tab_aux = NULL, *tab = head;
-    while (tab != NULL) {
-        sym_t *sym_aux = NULL, *sym = tab->symlist;
-        while (sym != NULL) {
-            sym_aux = sym;
-            sym = sym->next;
-            free_symbol(sym);
+    if (head) {
+        symtab_t *tab_aux = NULL, *tab = head;
+        while (tab != NULL) {
+            sym_t *sym_aux = NULL, *sym = tab->symlist;
+            while (sym != NULL) {
+                sym_aux = sym;
+                sym = sym->next;
+                free_symbol(sym_aux);
+            }
+            tab_aux = tab;
+            tab = tab->next;
+            free(tab_aux);
         }
-        tab_aux = tab;
-        tab = tab->next;
-        free(tab);
     }
 }
 
 void delete_undefined_tables(symtab_t *list) {
-    for (symtab_t *current = list; current; current = current->next) {
-        if (current->next && !current->next->is_defined) {
-            symtab_t *aux = current->next;
-            current->next = current->next->next;
-            free(aux);
+    symtab_t *before = list, *current = list->next;
+
+    while (current != NULL) {
+        if (!current->is_defined) {
+            before->next = current->next;
+            free(current);
+            current = before->next;
+        } else {
+            before = current;
+            current = current->next;
         }
     }
 }

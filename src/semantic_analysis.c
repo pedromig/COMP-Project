@@ -24,9 +24,9 @@ symtab_t *current_table = NULL;
 #define lvalue_required(line, column) \
     printf("Line %d, col %d: Lvalue required\n", line, column);
 
-#define operator_cannot_be_applied_to_type(token, sym, line, column)                        \
+#define operator_cannot_be_applied_to_type(token, opp, line, column)                        \
     printf("Line %d, col %d: Operator %s cannot be applied to type ", line, column, token); \
-    print_symbol_type(sym);                                                                 \
+    print_annotation(opp);                                                                  \
     printf("\n");
 
 #define operator_cannot_be_applied_to_types(token, lhs, rhs, line, column)                   \
@@ -40,27 +40,30 @@ symtab_t *current_table = NULL;
     printf("Line %d, col %d: Symbol %s already defined\n", line, column, token);
 
 #define symbol_is_not_a_function(token, line, column) \
-    printf("Line %d, col %d: Symbol %s is not a function\n", token, line, column);
+    printf("Line %d, col %d: Symbol %s is not a function\n", line, column, token);
 
 #define unknown_symbol(token, line, column) \
     printf("Line %d, col %d: Unknown symbol %s\n", line, column, token);
 
-#define wrong_number_of_arguments(token, expected, required) \
-    printf("Line %d, col %d: Wrong number of arguments to function %s (got %d, required %d)\n", token, expected, required);
+#define wrong_number_of_arguments(token, expected, required, line, column) \
+    printf("Line %d, col %d: Wrong number of arguments to function %s (got %d, required %d)\n", line, column, token, expected, required);
 
 bool has_invalid_void(ast_node_t *param_list) {
     ast_node_t *current = param_list->first_child;
 
     if (!strcmp(current->first_child->id, "Void")) {
-        if (current->first_child->token.value) {
+        if (current->first_child->next_sibling) {
             invalid_use_of_void_type_in_declaration(current->first_child->token.line,
                                                     current->first_child->token.column);
             return true;
         }
-        current = current->next_sibling;
-        if (current) return true;
+        ast_node_t *last = current;
+        if ((current = current->next_sibling)) {
+            invalid_use_of_void_type_in_declaration(last->first_child->token.line,
+                                                    last->first_child->token.column);
+            return true;
+        }
     }
-
     for (ast_node_t *aux = current; aux; aux = aux->next_sibling) {
         if (!strcmp(aux->first_child->id, "Void")) {
             invalid_use_of_void_type_in_declaration(aux->first_child->token.line,
@@ -191,7 +194,7 @@ void analyse_declaration(ast_node_t *node) {
 
     const char *type = decapitalize(typespec->id);
     if (!strcmp(type, "void")) {
-        invalid_use_of_void_type_in_declaration(typespec->first_child->token.line, typespec->first_child->token.column);
+        invalid_use_of_void_type_in_declaration(declarator->token.line, declarator->token.column);
         return;
     }
 
@@ -207,17 +210,25 @@ void analyse_declaration(ast_node_t *node) {
     if (declarator->next_sibling != NULL) {
         semantic_analysis(declarator->next_sibling);
 
-        if (invalid_assign(type, declarator->next_sibling->annotation.type)) {
-            sym_t *aux = symbol(NULL, declarator->next_sibling->annotation.type, NULL);
-            confliting_types_error(aux, new_dec, declarator->token.line, declarator->token.column);
-            free_symbol(aux);
+        if (declarator->next_sibling->annotation.parameters || invalid_assign(type, declarator->next_sibling->annotation.type)) {
+            sym_t aux = (sym_t){.id = NULL, .type = declarator->next_sibling->annotation.type, .parameters = NULL};
+            confliting_types_error(&aux, new_dec, declarator->token.line, declarator->token.column);
         }
     }
 }
 
 void annotate_store(ast_node_t *node) {
+
     ast_node_t *lhs = node->first_child;
     ast_node_t *rhs = lhs->next_sibling;
+
+    if (rhs->annotation.parameters) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
 
     if (lhs->annotation.parameters) {
         lvalue_required(lhs->token.line, lhs->token.column);
@@ -226,8 +237,8 @@ void annotate_store(ast_node_t *node) {
     }
 
     if (!strcmp(lhs->id, "Id")) {
-        if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef")) {
-            operator_cannot_be_applied_to_types(node->token.value,
+        if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "void")) {
+            operator_cannot_be_applied_to_types(select_operator(node->id),
                                                 lhs->annotation, rhs->annotation,
                                                 node->token.line, node->token.column);
             node->annotation.type = "undef";
@@ -235,17 +246,135 @@ void annotate_store(ast_node_t *node) {
         }
 
         if (invalid_assign(lhs->annotation.type, rhs->annotation.type)) {
-            // ! Which error are we to emit on this case
-            fprintf(stderr, "ERROR\n");
-            node->annotation.type = "undef";
+            operator_cannot_be_applied_to_types(select_operator(node->id),
+                                                lhs->annotation, rhs->annotation,
+                                                node->token.line, node->token.column);
         }
-
         node->annotation.type = lhs->annotation.type;
 
     } else {
         lvalue_required(lhs->token.line, lhs->token.column);
-        node->annotation.type = "undef";
+        node->annotation.type = lhs->annotation.type;
     }
+}
+
+void annotate_call(ast_node_t *node) {
+    ast_node_t *func_id = node->first_child;
+
+    sym_t *existing = find_symbol(current_table->symlist, func_id->token.value);
+    if (!existing) {
+        existing = (current_table != symtab_list) ? find_symbol(symtab_list->symlist, func_id->token.value)
+                                                  : NULL;
+        if (!existing) {
+            unknown_symbol(func_id->token.value, func_id->token.line, func_id->token.column);
+            node->annotation.type = "undef";
+            return;
+        }
+    }
+
+    if (!existing->parameters) {
+        symbol_is_not_a_function(func_id->token.value, func_id->token.line, func_id->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+
+    int func_params = 0;
+    param_t *aux_1 = existing->parameters;
+    while (aux_1 != NULL) {
+        if (!strcmp(aux_1->type, "void"))
+            break;
+        ++func_params;
+        aux_1 = aux_1->next;
+    }
+
+    int call_params = 0;
+    ast_node_t *aux_2 = func_id->next_sibling;
+    while (aux_2 != NULL) {
+        ++call_params;
+        aux_2 = aux_2->next_sibling;
+    }
+
+    if (func_params != call_params || (!strcmp(existing->parameters->type, "void") && call_params != 0)) {
+        wrong_number_of_arguments(func_id->token.value,
+                                  call_params, func_params,
+                                  func_id->token.line, func_id->token.column);
+    }
+
+    node->annotation.type = existing->type;
+}
+
+void annotate_statement_id(ast_node_t *node) {
+    ast_node_t *expr = node->first_child;
+
+    if (expr->annotation.parameters || !strcmp(expr->annotation.type, "undef") ||
+        !strcmp(expr->annotation.type, "void") || !strcmp(expr->annotation.type, "double")) {
+        sym_t aux1 = (sym_t){.id = NULL, .type = expr->annotation.type, .parameters = expr->annotation.parameters};
+        sym_t aux2 = (sym_t){.id = NULL, .type = "int", .parameters = NULL};
+        confliting_types_error(&aux1, &aux2, expr->token.line, expr->token.column);
+    }
+}
+
+// sym_t aux = (sym_t){.id = NULL, .type = "void", .parameters = NULL};
+// confliting_types_error(&aux, function_return, node->token.line, node->token.column);
+
+void annotate_return(ast_node_t *node) {
+
+    ast_node_t *expr_list = node->first_child;       // baixo
+    sym_t *function_return = current_table->symlist; // cima
+
+    if (!strcmp(function_return->type, "void")) {
+        //verificar se é algo que está na tabela global
+
+        if (expr_list->annotation.parameters) { // é function   -> return f;
+            sym_t aux = (sym_t){.id = NULL, .type = expr_list->annotation.type, .parameters = NULL};
+            confliting_types_error(&aux, function_return, node->token.line, node->token.column);
+            return;
+        }
+
+        if (expr_list->annotation.type && !strcmp(expr_list->annotation.type, "void")) { //espera void e recebe void
+            return;
+        }
+
+        if (strcmp(expr_list->id, "Null")) { //espera void recebe != void
+            sym_t aux = (sym_t){.id = NULL, .type = expr_list->annotation.type, .parameters = NULL};
+            confliting_types_error(&aux, function_return, node->token.line, node->token.column);
+            return;
+        }
+
+    } else {                                  // não é void
+        if (!strcmp(expr_list->id, "Null")) { //não é void mas não tem return
+            sym_t aux = (sym_t){.id = NULL, .type = "void", .parameters = NULL};
+            confliting_types_error(&aux, function_return, node->token.line, node->token.column); //got void, expected != void
+            return;
+        }
+
+        if (invalid_assign(current_table->symlist->type, expr_list->annotation.type)) { //verificar se o return type da função é menos geral que o recebido
+            sym_t aux1 = (sym_t){.id = NULL, .type = expr_list->annotation.type, .parameters = NULL};
+            confliting_types_error(&aux1, current_table->symlist, node->token.line, node->token.column);
+        }
+    }
+}
+
+void annotate_comma(ast_node_t *node) {
+    ast_node_t *lhs = node->first_child;
+    ast_node_t *rhs = lhs->next_sibling;
+
+    if (lhs->annotation.parameters || rhs->annotation.parameters) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+
+    if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef")) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+    node->annotation.type = rhs->annotation.type;
 }
 
 void annotate_id(ast_node_t *node) {
@@ -260,6 +389,135 @@ void annotate_id(ast_node_t *node) {
         }
     }
     node->annotation.type = existing->type;
+    node->annotation.parameters = existing->parameters;
+}
+
+void annotate_arithmetic_operators(ast_node_t *node) {
+    ast_node_t *lhs = node->first_child;
+    ast_node_t *rhs = lhs->next_sibling;
+    bool is_mod_operator = false;
+
+    if (lhs->annotation.parameters || rhs->annotation.parameters) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+
+    if (!strcmp(node->id, "Mod")) {
+        is_mod_operator = true;
+
+        if (!strcmp(lhs->annotation.type, "double") || !strcmp(rhs->annotation.type, "double")) {
+            operator_cannot_be_applied_to_types(select_operator(node->id),
+                                                lhs->annotation, rhs->annotation,
+                                                node->token.line, node->token.column);
+        }
+    }
+
+    if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") ||
+        !strcmp(lhs->annotation.type, "void") || !strcmp(rhs->annotation.type, "void")) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+    node->annotation.type = !is_mod_operator ? implicit_conversion(lhs->annotation.type, rhs->annotation.type) : "int";
+}
+
+void annotate_unary_operators(ast_node_t *node) {
+    ast_node_t *operand = node->first_child;
+    bool is_not_operator = false;
+
+    if (operand->annotation.parameters) {
+        operator_cannot_be_applied_to_type(select_operator(node->id),
+                                           operand->annotation,
+                                           node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+
+    if (!strcmp(node->id, "Not")) {
+        is_not_operator = true;
+    }
+
+    if (!strcmp(operand->annotation.type, "undef") || !strcmp(operand->annotation.type, "void")) {
+        operator_cannot_be_applied_to_type(select_operator(node->id),
+                                           operand->annotation,
+                                           node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+
+    node->annotation.type = !is_not_operator ? operand->annotation.type : "int";
+}
+
+void annotate_bitwise_operators(ast_node_t *node) {
+    ast_node_t *lhs = node->first_child;
+    ast_node_t *rhs = lhs->next_sibling;
+
+    if (lhs->annotation.parameters || rhs->annotation.parameters) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+
+    if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") ||
+        !strcmp(lhs->annotation.type, "void") || !strcmp(rhs->annotation.type, "void") ||
+        !strcmp(lhs->annotation.type, "double") || !strcmp(rhs->annotation.type, "double")) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+    }
+    node->annotation.type = "int";
+}
+
+void annotate_relational_operators(ast_node_t *node) {
+
+    ast_node_t *lhs = node->first_child;
+    ast_node_t *rhs = lhs->next_sibling;
+
+    if (lhs->annotation.parameters || rhs->annotation.parameters) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+
+    if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") ||
+        !strcmp(lhs->annotation.type, "void") || !strcmp(rhs->annotation.type, "void")) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+    }
+    node->annotation.type = "int";
+}
+
+void annotate_logical_operators(ast_node_t *node) {
+    ast_node_t *lhs = node->first_child;
+    ast_node_t *rhs = lhs->next_sibling;
+
+    if (lhs->annotation.parameters || rhs->annotation.parameters) {
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+        node->annotation.type = "undef";
+        return;
+    }
+
+    if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") ||
+        !strcmp(lhs->annotation.type, "void") || !strcmp(rhs->annotation.type, "void") ||
+        !strcmp(lhs->annotation.type, "double") || !strcmp(rhs->annotation.type, "double")) {
+
+        operator_cannot_be_applied_to_types(select_operator(node->id),
+                                            lhs->annotation, rhs->annotation,
+                                            node->token.line, node->token.column);
+    }
+    node->annotation.type = "int";
 }
 
 void semantic_analysis(ast_node_t *node) {
@@ -292,6 +550,59 @@ void semantic_analysis(ast_node_t *node) {
 
     // Symbol/AST Annotations and Error Checking Section
 
+    if (is_arithmetic_operator(node->id)) {
+        semantic_analysis(node->first_child);
+        annotate_arithmetic_operators(node);
+    }
+
+    if (is_unary_operator(node->id)) {
+        semantic_analysis(node->first_child);
+        annotate_unary_operators(node);
+    }
+
+    if (is_relational_operator(node->id)) {
+        semantic_analysis(node->first_child);
+        annotate_relational_operators(node);
+    }
+
+    if (is_bitwise_operator(node->id)) {
+        semantic_analysis(node->first_child);
+        annotate_bitwise_operators(node);
+    }
+
+    if (is_logical_operator(node->id)) {
+        semantic_analysis(node->first_child);
+        annotate_logical_operators(node);
+    }
+
+    if (is_statement_id(node->id)) {
+        semantic_analysis(node->first_child);
+        annotate_statement_id(node);
+    }
+
+    if (!strcmp(node->id, "Call")) {
+        semantic_analysis(node->first_child);
+        annotate_call(node);
+    }
+
+    if (!strcmp(node->id, "Store")) {
+        semantic_analysis(node->first_child);
+        annotate_store(node);
+    }
+    if (!strcmp(node->id, "Return")) {
+        semantic_analysis(node->first_child);
+        annotate_return(node);
+    }
+
+    if (!strcmp(node->id, "Comma")) {
+        semantic_analysis(node->first_child);
+        annotate_comma(node);
+    }
+
+    if (!strcmp(node->id, "StatList")) {
+        semantic_analysis(node->first_child);
+    }
+
     if (!strcmp(node->id, "IntLit")) {
         node->annotation.type = "int";
     }
@@ -306,11 +617,6 @@ void semantic_analysis(ast_node_t *node) {
 
     if (!strcmp(node->id, "Id")) {
         annotate_id(node);
-    }
-
-    if (!strcmp(node->id, "Store")) {
-        semantic_analysis(node->first_child);
-        annotate_store(node);
     }
 
     if (node->next_sibling != NULL) {

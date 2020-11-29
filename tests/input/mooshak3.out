@@ -1,0 +1,137 @@
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+A0	int
+A1	int
+A2	int
+A3	int
+A4	int
+B1	short
+B2	short
+B3	short
+B4	short
+C0	char
+C1	char
+C2	char
+C3	char
+C4	char
+D1	double
+D2	double
+D3	double
+D4	double
+argc	char
+argv	int
+main	int(void)
+
+===== Function main Symbol Table =====
+return	int
+
+Program
+..Declaration
+....Int
+....Id(A0)
+..Declaration
+....Int
+....Id(A1)
+..Declaration
+....Int
+....Id(A2)
+..Declaration
+....Int
+....Id(A3)
+..Declaration
+....Int
+....Id(A4)
+..Declaration
+....Short
+....Id(B1)
+..Declaration
+....Short
+....Id(B2)
+..Declaration
+....Short
+....Id(B3)
+..Declaration
+....Short
+....Id(B4)
+..Declaration
+....Char
+....Id(C0)
+..Declaration
+....Char
+....Id(C1)
+..Declaration
+....Char
+....Id(C2)
+..Declaration
+....Char
+....Id(C3)
+..Declaration
+....Char
+....Id(C4)
+..Declaration
+....Double
+....Id(D1)
+..Declaration
+....Double
+....Id(D2)
+..Declaration
+....Double
+....Id(D3)
+..Declaration
+....Double
+....Id(D4)
+..Declaration
+....Char
+....Id(argc)
+..Declaration
+....Int
+....Id(argv)
+..FuncDefinition
+....Int
+....Id(main)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+......Comma - int
+........Comma - char
+..........Comma - short
+............Comma - short
+..............Comma - char
+................Comma - double
+..................Comma - double
+....................Comma - double
+......................Comma - int
+........................Comma - int
+..........................Id(A0) - int
+..........................Id(A1) - int
+........................Comma - int
+..........................Comma - int
+............................Id(A2) - int
+............................Id(A3) - int
+..........................Id(A4) - int
+......................Id(D4) - double
+....................Comma - double
+......................Comma - double
+........................Id(D1) - double
+........................Id(D2) - double
+......................Id(D3) - double
+..................Id(D4) - double
+................Id(C0) - char
+..............Comma - short
+................Comma - short
+..................Id(C1) - char
+..................Comma - short
+....................Comma - short
+......................Comma - char
+........................Comma - char
+..........................Id(C2) - char
+..........................Id(C3) - char
+........................Id(C4) - char
+......................Id(B1) - short
+....................Id(B2) - short
+................Id(B3) - short
+............Id(B4) - short
+..........Id(argc) - char
+........Id(argv) - int
