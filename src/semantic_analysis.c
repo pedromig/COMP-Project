@@ -503,8 +503,8 @@ void annotate_unary_operators(ast_node_t *node) {
     ast_node_t *operand = node->first_child;
 
     if (!strcmp(node->id, "Not")) {
-        if (!strcmp(operand->annotation.type, "double") || !strcmp(operand->annotation.type, "undef") ||
-            !strcmp(operand->annotation.type, "void")) {
+        if (operand->annotation.parameters || !strcmp(operand->annotation.type, "double") ||
+            !strcmp(operand->annotation.type, "undef") || !strcmp(operand->annotation.type, "void")) {
             operator_cannot_be_applied_to_type(select_operator(node->id),
                                                operand->annotation,
                                                node->token.line, node->token.column);
@@ -536,15 +536,8 @@ void annotate_bitwise_operators(ast_node_t *node) {
     ast_node_t *lhs = node->first_child;
     ast_node_t *rhs = lhs->next_sibling;
 
-    if (lhs->annotation.parameters || rhs->annotation.parameters) {
-        operator_cannot_be_applied_to_types(select_operator(node->id),
-                                            lhs->annotation, rhs->annotation,
-                                            node->token.line, node->token.column);
-        node->annotation.type = "undef";
-        return;
-    }
-
-    if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") ||
+    if (lhs->annotation.parameters || rhs->annotation.parameters ||
+        !strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") ||
         !strcmp(lhs->annotation.type, "void") || !strcmp(rhs->annotation.type, "void") ||
         !strcmp(lhs->annotation.type, "double") || !strcmp(rhs->annotation.type, "double")) {
         operator_cannot_be_applied_to_types(select_operator(node->id),
