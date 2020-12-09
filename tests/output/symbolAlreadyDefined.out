@@ -1,0 +1,39 @@
+Line 7, col 6: Symbol x already defined
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+a	int
+b	int
+main	int(void)
+
+===== Function main Symbol Table =====
+return	int
+x	int
+a	int
+
+Program
+..Declaration
+....Int
+....Id(a)
+..Declaration
+....Int
+....Id(b)
+..Declaration
+....Int
+....Id(b)
+..FuncDefinition
+....Int
+....Id(main)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+......Declaration
+........Int
+........Id(x)
+......Declaration
+........Int
+........Id(x)
+......Declaration
+........Int
+........Id(a)

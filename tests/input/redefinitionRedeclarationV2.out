@@ -1,0 +1,113 @@
+Line 7, col 5: Symbol A already defined
+Line 15, col 5: Conflicting types (got int(double), expected int(int))
+Line 17, col 5: Symbol B already defined
+Line 29, col 5: Conflicting types (got int(double), expected int(int))
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+A	int(int)
+B	int(int)
+C	int(int)
+D	int(int)
+
+===== Function A Symbol Table =====
+return	int
+a	int	param
+
+===== Function B Symbol Table =====
+return	int
+a	int	param
+
+===== Function C Symbol Table =====
+return	int
+a	int	param
+
+===== Function D Symbol Table =====
+return	int
+a	int	param
+
+Program
+..FuncDeclaration
+....Int
+....Id(A)
+....ParamList
+......ParamDeclaration
+........Int
+..FuncDefinition
+....Int
+....Id(A)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDeclaration
+....Int
+....Id(A)
+....ParamList
+......ParamDeclaration
+........Int
+..FuncDefinition
+....Int
+....Id(A)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDeclaration
+....Int
+....Id(B)
+....ParamList
+......ParamDeclaration
+........Int
+..FuncDefinition
+....Int
+....Id(B)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDeclaration
+....Int
+....Id(B)
+....ParamList
+......ParamDeclaration
+........Double
+..FuncDefinition
+....Int
+....Id(B)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(C)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDeclaration
+....Int
+....Id(C)
+....ParamList
+......ParamDeclaration
+........Int
+..FuncDefinition
+....Int
+....Id(D)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDeclaration
+....Int
+....Id(D)
+....ParamList
+......ParamDeclaration
+........Double

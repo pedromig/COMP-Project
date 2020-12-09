@@ -1,0 +1,704 @@
+Line 9, col 34: Symbol b already defined
+Line 11, col 6: Conflicting types (got char(void), expected void(void))
+Line 12, col 8: Conflicting types (got double(double), expected int(double))
+Line 13, col 6: Conflicting types (got void(char), expected int(char))
+Line 14, col 5: Conflicting types (got int(int,short,double), expected void(int,short,double))
+Line 15, col 8: Conflicting types (got double(char,int,int), expected int(char,int,int))
+Line 16, col 6: Conflicting types (got void(short,double,int), expected double(short,double,int))
+Line 18, col 5: Conflicting types (got int(int,int), expected int(double))
+Line 19, col 6: Conflicting types (got void(char,char), expected int(char))
+Line 20, col 5: Conflicting types (got int(int,int), expected int(double))
+Line 21, col 6: Conflicting types (got void(char,char), expected int(char))
+Line 22, col 6: Conflicting types (got void(int,short,double,char), expected void(int,short,double))
+Line 23, col 5: Conflicting types (got int(char,int,int,double), expected int(char,int,int))
+Line 24, col 8: Conflicting types (got double(short,double,int,char), expected double(short,double,int))
+Line 25, col 6: Conflicting types (got void(int,short,double,char,double), expected void(int,short,double))
+Line 26, col 5: Conflicting types (got int(char,int,int,double,char), expected int(char,int,int))
+Line 27, col 8: Conflicting types (got double(short,double,int,char,short), expected double(short,double,int))
+Line 29, col 6: Conflicting types (got char(void), expected int(double))
+Line 30, col 5: Conflicting types (got int(void), expected int(char))
+Line 31, col 6: Conflicting types (got void(int,short), expected void(int,short,double))
+Line 32, col 5: Conflicting types (got int(char,int), expected int(char,int,int))
+Line 33, col 8: Conflicting types (got double(short,double), expected double(short,double,int))
+Line 34, col 6: Conflicting types (got void(int), expected void(int,short,double))
+Line 35, col 5: Conflicting types (got int(char), expected int(char,int,int))
+Line 36, col 8: Conflicting types (got double(short), expected double(short,double,int))
+Line 38, col 6: Conflicting types (got void(int), expected void(void))
+Line 39, col 5: Conflicting types (got int(int), expected int(double))
+Line 40, col 5: Conflicting types (got int(void), expected int(char))
+Line 41, col 6: Conflicting types (got void(int,double,double), expected void(int,short,double))
+Line 42, col 5: Conflicting types (got int(char,int,double), expected int(char,int,int))
+Line 52, col 6: Symbol f1 already defined
+Line 53, col 5: Symbol f2 already defined
+Line 54, col 6: Symbol f3 already defined
+Line 55, col 5: Symbol f4 already defined
+Line 56, col 8: Symbol f5 already defined
+Line 57, col 6: Symbol f6 already defined
+Line 59, col 22: Symbol a already defined
+Line 60, col 29: Symbol y already defined
+Line 61, col 28: Symbol x already defined
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+f1	void(void)
+f2	int(double)
+f3	int(char)
+f4	void(int,short,double)
+f5	int(char,int,int)
+f6	double(short,double,int)
+f7	double(short,double,int)
+F4	void(int,short,double)
+G5	int(char,char,char)
+H6	char(int,char,int)
+
+===== Function f1 Symbol Table =====
+return	void
+
+===== Function f2 Symbol Table =====
+return	int
+a	double	param
+
+===== Function f3 Symbol Table =====
+return	int
+c	char	param
+
+===== Function f4 Symbol Table =====
+return	void
+d	int	param
+e	short	param
+f	double	param
+
+===== Function f5 Symbol Table =====
+return	int
+d	char	param
+e	int	param
+f	int	param
+
+===== Function f6 Symbol Table =====
+return	double
+d	short	param
+e	double	param
+f	int	param
+
+===== Function f7 Symbol Table =====
+return	double
+d	short	param
+e	double	param
+f	int	param
+
+===== Function F4 Symbol Table =====
+return	void
+a	int	param
+b	double	param
+
+===== Function G5 Symbol Table =====
+return	int
+x	char	param
+y	char	param
+
+===== Function H6 Symbol Table =====
+return	char
+x	int	param
+y	char	param
+
+Program
+..FuncDeclaration
+....Void
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Void
+..FuncDeclaration
+....Int
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Double
+........Id(a)
+..FuncDeclaration
+....Int
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+..FuncDeclaration
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Short
+........Id(b)
+......ParamDeclaration
+........Double
+........Id(c)
+..FuncDeclaration
+....Int
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(c)
+..FuncDeclaration
+....Double
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(c)
+..FuncDeclaration
+....Double
+....Id(f7)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(b)
+..FuncDefinition
+....Char
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Double
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(A)
+......ParamDeclaration
+........Short
+........Id(B)
+......ParamDeclaration
+........Double
+........Id(C)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(d)
+......ParamDeclaration
+........Int
+........Id(e)
+......ParamDeclaration
+........Int
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(d)
+......ParamDeclaration
+........Double
+........Id(e)
+......ParamDeclaration
+........Int
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+......ParamDeclaration
+........Char
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(p)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+......ParamDeclaration
+........Char
+........Id(v)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Short
+........Id(b)
+......ParamDeclaration
+........Double
+........Id(c)
+......ParamDeclaration
+........Char
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(c)
+......ParamDeclaration
+........Double
+........Id(e)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(c)
+......ParamDeclaration
+........Char
+........Id(u)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Short
+........Id(b)
+......ParamDeclaration
+........Double
+........Id(c)
+......ParamDeclaration
+........Char
+........Id(f)
+......ParamDeclaration
+........Double
+........Id(t)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(c)
+......ParamDeclaration
+........Double
+........Id(e)
+......ParamDeclaration
+........Char
+........Id(t)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(c)
+......ParamDeclaration
+........Char
+........Id(u)
+......ParamDeclaration
+........Short
+........Id(i)
+....FuncBody
+..FuncDefinition
+....Char
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Short
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Double
+........Id(c)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(b)
+......ParamDeclaration
+........Double
+........Id(c)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Double
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(c)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(d)
+......ParamDeclaration
+........Short
+........Id(e)
+......ParamDeclaration
+........Double
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(d)
+......ParamDeclaration
+........Int
+........Id(e)
+......ParamDeclaration
+........Int
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(d)
+......ParamDeclaration
+........Double
+........Id(e)
+......ParamDeclaration
+........Int
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f7)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(d)
+......ParamDeclaration
+........Double
+........Id(e)
+......ParamDeclaration
+........Int
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Char
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(A)
+......ParamDeclaration
+........Short
+........Id(B)
+......ParamDeclaration
+........Double
+........Id(C)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(d)
+......ParamDeclaration
+........Int
+........Id(e)
+......ParamDeclaration
+........Int
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(d)
+......ParamDeclaration
+........Double
+........Id(e)
+......ParamDeclaration
+........Int
+........Id(f)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(F4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(G5)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(x)
+......ParamDeclaration
+........Char
+........Id(y)
+......ParamDeclaration
+........Char
+........Id(y)
+....FuncBody
+..FuncDefinition
+....Char
+....Id(H6)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(x)
+......ParamDeclaration
+........Char
+........Id(y)
+......ParamDeclaration
+........Int
+........Id(x)
+....FuncBody

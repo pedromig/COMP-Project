@@ -1,0 +1,62 @@
+Line 1, col 8: Invalid use of void type in declaration
+Line 14, col 10: Operator == cannot be applied to types int, void
+Line 16, col 13: Wrong number of arguments to function f2 (got 1, required 0)
+Line 16, col 10: Operator == cannot be applied to types int, void
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+f2	void(void)
+a	int
+main	int(void)
+
+===== Function f2 Symbol Table =====
+return	void
+
+===== Function main Symbol Table =====
+return	int
+
+Program
+..FuncDefinition
+....Int
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Void
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+......Return
+........IntLit(0)
+..FuncDefinition
+....Void
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+..Declaration
+....Int
+....Id(a)
+..FuncDefinition
+....Int
+....Id(main)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+......If
+........Eq - int
+..........Id(a) - int
+..........Call - void
+............Id(f2) - void(void)
+........Null
+........Null
+......If
+........Eq - int
+..........Id(a) - int
+..........Call - void
+............Id(f2) - void(void)
+............IntLit(33) - int
+........Null
+........Null

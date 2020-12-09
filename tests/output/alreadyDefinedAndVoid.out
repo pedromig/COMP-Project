@@ -1,0 +1,56 @@
+Line 1, col 34: Symbol b already defined
+Line 2, col 8: Conflicting types (got double(short,double), expected double(short,double,int))
+Line 4, col 20: Invalid use of void type in declaration
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+f7	double(short,double,int)
+f8	double(short)
+
+===== Function f8 Symbol Table =====
+return	double
+a	short	param
+
+Program
+..FuncDeclaration
+....Double
+....Id(f7)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(b)
+..FuncDefinition
+....Double
+....Id(f7)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+....FuncBody
+..FuncDeclaration
+....Double
+....Id(f8)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Void
+........Id(b)
+..FuncDefinition
+....Double
+....Id(f8)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+....FuncBody

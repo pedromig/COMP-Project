@@ -1,0 +1,534 @@
+Line 3, col 6: Conflicting types (got void(int,int), expected void(int))
+Line 6, col 6: Conflicting types (got void(int), expected void(int,int))
+Line 9, col 6: Conflicting types (got void(int), expected void(void))
+Line 11, col 9: Invalid use of void type in declaration
+Line 21, col 5: Conflicting types (got int(int,double), expected void(int,double))
+Line 23, col 5: Conflicting types (got int(int,double), expected void(int,double))
+Line 31, col 12: Conflicting types (got double, expected int)
+Line 42, col 6: Symbol f4 already defined
+Line 46, col 16: Invalid use of void type in declaration
+Line 48, col 8: Invalid use of void type in declaration
+Line 51, col 2: Wrong number of arguments to function fC (got 1, required 0)
+Line 52, col 10: Invalid use of void type in declaration
+Line 58, col 9: Symbol a already defined
+Line 59, col 12: Symbol b already defined
+Line 64, col 8: Operator ! cannot be applied to type double
+Line 65, col 9: Unknown symbol e
+Line 65, col 8: Operator ! cannot be applied to type undef
+Line 67, col 8: Unknown symbol h
+Line 67, col 8: Conflicting types (got undef, expected int)
+Line 74, col 8: Conflicting types (got double, expected int)
+Line 77, col 11: Operator = cannot be applied to types int, void
+Line 82, col 8: Conflicting types (got double, expected int)
+Line 82, col 10: Conflicting types (got double, expected char)
+Line 82, col 12: Conflicting types (got double, expected short)
+Line 87, col 10: Operator || cannot be applied to types int, double
+Line 88, col 13: Unknown symbol h
+Line 88, col 10: Operator || cannot be applied to types int, undef
+Line 90, col 5: Lvalue required
+Line 95, col 10: Conflicting types (got double, expected int)
+Line 100, col 9: Conflicting types (got double, expected int)
+Line 105, col 9: Conflicting types (got double, expected int)
+Line 110, col 9: Operator % cannot be applied to types int, double
+Line 117, col 8: Conflicting types (got void, expected int)
+Line 119, col 12: Conflicting types (got double, expected int)
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+fA	void(int)
+fB	void(int,int)
+fC	void(void)
+fD	void(int)
+a	int
+f1	void(int,double)
+f2	int(int,double)
+f3	void(void)
+f4	void(int,char,short,double)
+main	int(void)
+
+===== Function f2 Symbol Table =====
+return	int
+a	int	param
+b	double	param
+
+===== Function f3 Symbol Table =====
+return	void
+
+===== Function f4 Symbol Table =====
+return	void
+a	int	param
+b	char	param
+c	short	param
+d	double	param
+
+===== Function main Symbol Table =====
+return	int
+a	int
+b	char
+c	short
+d	double
+coiso	int
+
+Program
+..FuncDeclaration
+....Void
+....Id(fA)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+..FuncDeclaration
+....Void
+....Id(fA)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(b)
+..FuncDeclaration
+....Void
+....Id(fB)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(b)
+..FuncDeclaration
+....Void
+....Id(fB)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+..FuncDeclaration
+....Void
+....Id(fC)
+....ParamList
+......ParamDeclaration
+........Void
+..FuncDeclaration
+....Void
+....Id(fC)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+..FuncDeclaration
+....Void
+....Id(fD)
+....ParamList
+......ParamDeclaration
+........Void
+......ParamDeclaration
+........Void
+..FuncDeclaration
+....Void
+....Id(fD)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(c)
+..Declaration
+....Int
+....Id(a)
+....IntLit(3) - int
+..FuncDeclaration
+....Void
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+..FuncDeclaration
+....Int
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+..FuncDefinition
+....Int
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+....FuncBody
+......Return
+........Id(a)
+..FuncDeclaration
+....Int
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+..FuncDefinition
+....Int
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+....FuncBody
+......Return
+........Id(b) - double
+..FuncDefinition
+....Void
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Char
+........Id(b)
+......ParamDeclaration
+........Short
+........Id(c)
+......ParamDeclaration
+........Double
+........Id(d)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Char
+........Id(b)
+......ParamDeclaration
+........Short
+........Id(c)
+......ParamDeclaration
+........Double
+........Id(d)
+....FuncBody
+..FuncDeclaration
+....Void
+....Id(f5)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Void
+......ParamDeclaration
+........Double
+........Id(b)
+..FuncDeclaration
+....Int
+....Id(f6)
+....ParamList
+......ParamDeclaration
+........Void
+......ParamDeclaration
+........Void
+......ParamDeclaration
+........Void
+..FuncDefinition
+....Int
+....Id(main)
+....ParamList
+......ParamDeclaration
+........Void
+....FuncBody
+......Call - void
+........Id(fC) - void(void)
+........Id(a) - int
+......Declaration
+........Void
+........Id(erro)
+......Declaration
+........Int
+........Id(a)
+......Declaration
+........Char
+........Id(b)
+......Declaration
+........Short
+........Id(c)
+......Declaration
+........Double
+........Id(d)
+......Declaration
+........Int
+........Id(a)
+......Declaration
+........Double
+........Id(b)
+......If
+........Not - int
+..........Id(a) - int
+........Null
+........Null
+......If
+........Not - int
+..........Id(b) - char
+........Null
+........Null
+......If
+........Not - int
+..........Id(c) - short
+........Null
+........Null
+......If
+........Not - int
+..........Id(d) - double
+........Null
+........Null
+......If
+........Not - int
+..........Id(e) - undef
+........Null
+........Null
+......If
+........Id(h) - undef
+........Null
+........Null
+......If
+........Store - char
+..........Id(b) - char
+..........Id(b) - char
+........Null
+........Null
+......If
+........Id(a) - int
+........Null
+........Null
+......If
+........Id(b) - char
+........Null
+........Null
+......If
+........Id(c) - short
+........Null
+........Null
+......If
+........Id(d) - double
+........Null
+........Null
+......Declaration
+........Int
+........Id(coiso)
+......Store - int
+........Id(coiso) - int
+........Call - void
+..........Id(f3) - void(void)
+......Call - void
+........Id(f4) - void(int,char,short,double)
+........Id(a) - int
+........Id(a) - int
+........Id(a) - int
+........Id(a) - int
+......Call - void
+........Id(f4) - void(int,char,short,double)
+........Id(b) - char
+........Id(b) - char
+........Id(b) - char
+........Id(b) - char
+......Call - void
+........Id(f4) - void(int,char,short,double)
+........Id(c) - short
+........Id(c) - short
+........Id(c) - short
+........Id(c) - short
+......Call - void
+........Id(f4) - void(int,char,short,double)
+........Id(d) - double
+........Id(d) - double
+........Id(d) - double
+........Id(d) - double
+......If
+........Or - int
+..........Id(a) - int
+..........Id(a) - int
+........Null
+........Null
+......If
+........Or - int
+..........Id(a) - int
+..........Id(b) - char
+........Null
+........Null
+......If
+........Or - int
+..........Id(a) - int
+..........Id(c) - short
+........Null
+........Null
+......If
+........Or - int
+..........Id(a) - int
+..........Id(d) - double
+........Null
+........Null
+......If
+........Or - int
+..........Id(a) - int
+..........Id(h) - undef
+........Null
+........Null
+......Store - double
+........RealLit(1.5) - double
+........Id(b) - char
+......If
+........Add - int
+..........Id(a) - int
+..........Id(a) - int
+........Null
+........Null
+......If
+........Add - int
+..........Id(a) - int
+..........Id(b) - char
+........Null
+........Null
+......If
+........Add - int
+..........Id(a) - int
+..........Id(c) - short
+........Null
+........Null
+......If
+........Add - double
+..........Id(a) - int
+..........Id(d) - double
+........Null
+........Null
+......If
+........Comma - int
+..........Id(a) - int
+..........Id(a) - int
+........Null
+........Null
+......If
+........Comma - char
+..........Id(a) - int
+..........Id(b) - char
+........Null
+........Null
+......If
+........Comma - short
+..........Id(a) - int
+..........Id(c) - short
+........Null
+........Null
+......If
+........Comma - double
+..........Id(a) - int
+..........Id(d) - double
+........Null
+........Null
+......If
+........Div - int
+..........Id(a) - int
+..........Id(a) - int
+........Null
+........Null
+......If
+........Div - int
+..........Id(a) - int
+..........Id(b) - char
+........Null
+........Null
+......If
+........Div - int
+..........Id(a) - int
+..........Id(c) - short
+........Null
+........Null
+......If
+........Div - double
+..........Id(a) - int
+..........Id(d) - double
+........Null
+........Null
+......If
+........Mod - int
+..........Id(a) - int
+..........Id(a) - int
+........Null
+........Null
+......If
+........Mod - int
+..........Id(a) - int
+..........Id(b) - char
+........Null
+........Null
+......If
+........Mod - int
+..........Id(a) - int
+..........Id(c) - short
+........Null
+........Null
+......If
+........Mod - int
+..........Id(a) - int
+..........Id(d) - double
+........Null
+........Null
+......If
+........Eq - int
+..........Id(a) - int
+..........Id(a) - int
+........Null
+........Null
+......If
+........Eq - int
+..........Id(a) - int
+..........Id(b) - char
+........Null
+........Null
+......If
+........Eq - int
+..........Id(a) - int
+..........Id(c) - short
+........Null
+........Null
+......If
+........Eq - int
+..........Id(a) - int
+..........Id(d) - double
+........Null
+........Null
+......If
+........Call - void
+..........Id(f4) - void(int,char,short,double)
+..........Id(a) - int
+..........Id(b) - char
+..........Id(c) - short
+..........Id(d) - double
+........Null
+........Null
+......Return
+........Id(d) - double

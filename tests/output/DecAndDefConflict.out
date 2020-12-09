@@ -1,0 +1,39 @@
+Line 3, col 5: Conflicting types (got int(double), expected int(int))
+Line 9, col 5: Conflicting types (got int(int), expected int(double))
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+func1	int(int)
+func2	int(double)
+
+Program
+..FuncDeclaration
+....Int
+....Id(func1)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+..FuncDefinition
+....Int
+....Id(func1)
+....ParamList
+......ParamDeclaration
+........Double
+........Id(a)
+....FuncBody
+..FuncDeclaration
+....Int
+....Id(func2)
+....ParamList
+......ParamDeclaration
+........Double
+........Id(a)
+..FuncDefinition
+....Int
+....Id(func2)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody

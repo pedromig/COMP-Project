@@ -1,0 +1,42 @@
+Line 1, col 9: Invalid use of void type in declaration
+Line 5, col 9: Invalid use of void type in declaration
+Line 10, col 5: Conflicting types (got int(int), expected int(char))
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+f3	int(char)
+
+Program
+..FuncDefinition
+....Void
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Void
+......ParamDeclaration
+........Int
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Void
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Void
+......ParamDeclaration
+........Void
+....FuncBody
+..FuncDeclaration
+....Int
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Char
+........Id(a)
+..FuncDeclaration
+....Int
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)

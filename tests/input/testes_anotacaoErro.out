@@ -1,0 +1,31 @@
+Line 1, col 8: Invalid use of void type in declaration
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+
+Program
+..FuncDefinition
+....Int
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Void
+........Id(a)
+....FuncBody
+......Declaration
+........Int
+........Id(h)
+......Declaration
+........Int
+........Id(a)
+......If
+........Eq
+..........Id(h)
+..........IntLit(1)
+........Store
+..........Id(a)
+..........Call
+............Id(f1)
+........Null
+......Return
+........Id(h)

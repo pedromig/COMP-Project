@@ -1,0 +1,109 @@
+Line 2, col 34: Symbol b already defined
+Line 4, col 34: Symbol b already defined
+Line 5, col 34: Symbol b already defined
+Line 7, col 34: Symbol b already defined
+Line 9, col 34: Symbol b already defined
+Line 10, col 8: Symbol f3 already defined
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+f1	double(short,double,int)
+f2	double(short,double,int)
+f3	double(short,double,int)
+f4	double(short,double,int)
+
+===== Function f2 Symbol Table =====
+return	double
+a	short	param
+b	double	param
+
+===== Function f3 Symbol Table =====
+return	double
+a	short	param
+b	double	param
+
+===== Function f4 Symbol Table =====
+return	double
+a	short	param
+b	double	param
+
+Program
+..FuncDeclaration
+....Double
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(b)
+..FuncDeclaration
+....Double
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(b)
+..FuncDefinition
+....Double
+....Id(f2)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f4)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+......ParamDeclaration
+........Int
+........Id(b)
+....FuncBody
+..FuncDefinition
+....Double
+....Id(f3)
+....ParamList
+......ParamDeclaration
+........Short
+........Id(a)
+......ParamDeclaration
+........Double
+........Id(b)
+....FuncBody
