@@ -83,7 +83,6 @@ Line 325, col 13: Operator < cannot be applied to types int, undef
 Line 327, col 11: Unknown symbol nao_existe
 Line 327, col 11: Symbol nao_existe is not a function
 Line 327, col 9: Operator % cannot be applied to types double, undef
-Line 327, col 9: Operator % cannot be applied to types double, undef
 Line 337, col 9: Operator ^ cannot be applied to types double, int
 Line 345, col 7: Operator = cannot be applied to types int, double
 Line 346, col 15: Unknown symbol e
@@ -1269,7 +1268,7 @@ Program
 ..........Call - undef
 ............Id(function) - undef
 ............IntLit(1) - int
-......Mod - undef
+......Mod - int
 ........RealLit(5.5) - double
 ........Call - undef
 ..........Id(nao_existe) - undef

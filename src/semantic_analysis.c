@@ -467,22 +467,26 @@ void annotate_arithmetic_operators(ast_node_t *node) {
     ast_node_t *rhs = lhs->next_sibling;
     bool is_mod_operator = false;
 
+    if (!strcmp(node->id, "Mod")) {
+        is_mod_operator = true;
+
+        if (!strcmp(lhs->annotation.type, "double") || !strcmp(rhs->annotation.type, "double") ||
+            !strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") ||
+            !strcmp(lhs->annotation.type, "void") || !strcmp(rhs->annotation.type, "void")) {
+            operator_cannot_be_applied_to_types(select_operator(node->id),
+                                                lhs->annotation, rhs->annotation,
+                                                node->token.line, node->token.column);
+        }
+        node->annotation.type = "int";
+        return;
+    }
+
     if (lhs->annotation.parameters || rhs->annotation.parameters) {
         operator_cannot_be_applied_to_types(select_operator(node->id),
                                             lhs->annotation, rhs->annotation,
                                             node->token.line, node->token.column);
         node->annotation.type = "undef";
         return;
-    }
-
-    if (!strcmp(node->id, "Mod")) {
-        is_mod_operator = true;
-
-        if (!strcmp(lhs->annotation.type, "double") || !strcmp(rhs->annotation.type, "double")) {
-            operator_cannot_be_applied_to_types(select_operator(node->id),
-                                                lhs->annotation, rhs->annotation,
-                                                node->token.line, node->token.column);
-        }
     }
 
     if (!strcmp(lhs->annotation.type, "undef") || !strcmp(rhs->annotation.type, "undef") ||
@@ -522,7 +526,7 @@ void annotate_unary_operators(ast_node_t *node) {
         operator_cannot_be_applied_to_type(select_operator(node->id),
                                            operand->annotation,
                                            node->token.line, node->token.column);
-        node->annotation.type = "undef";
+        node->annotation.type = operand->annotation.type;
         return;
     }
 

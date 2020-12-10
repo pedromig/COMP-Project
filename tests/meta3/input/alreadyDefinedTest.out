@@ -1,0 +1,40 @@
+Line 2, col 5: Symbol f1 already defined
+Line 3, col 8: Invalid use of void type in declaration
+===== Global Symbol Table =====
+putchar	int(int)
+getchar	int(void)
+f1	double(double)
+
+===== Function f1 Symbol Table =====
+return	double
+a	double	param
+
+Program
+..FuncDefinition
+....Double
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Double
+........Id(a)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Int
+........Id(a)
+......ParamDeclaration
+........Int
+........Id(p)
+....FuncBody
+..FuncDefinition
+....Int
+....Id(f1)
+....ParamList
+......ParamDeclaration
+........Void
+......ParamDeclaration
+........Void
+....FuncBody
