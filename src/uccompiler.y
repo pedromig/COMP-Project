@@ -20,6 +20,7 @@
     #include "ast.h"
     #include "symbol_table.h"
     #include "semantic_analysis.h"
+    #include "codegen.h"
 
     // Functions
     extern int yylex(void);
@@ -30,6 +31,7 @@
     bool l_flag = false, e1_flag = false;
     bool e2_flag = false, t_flag = false; 
     bool s_flag = false;
+    bool e3_flag = false;
 
     // Error flags
     bool syntax_error = false;
@@ -240,21 +242,24 @@ OperatorExpression: Expr ASSIGN Expr                                            
 void argparse(int argc, char *argv[]) {
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "-l")) {
-            e1_flag = t_flag = e2_flag = s_flag = false;
+            e1_flag = t_flag = e2_flag = s_flag = e3_flag = false;
             l_flag = true;  
         } else if (!strcmp(argv[i], "-e1")){
-            t_flag = l_flag = e2_flag = s_flag = false;
+            t_flag = l_flag = e2_flag = s_flag = e3_flag = false;
             e1_flag = true;
         } else if (!strcmp(argv[i], "-e2")) {
-            e1_flag = t_flag = l_flag = s_flag = false;
+            e1_flag = t_flag = l_flag = s_flag = e3_flag = false;
             e2_flag = true;
         } else if (!strcmp(argv[i], "-t")) {
-            l_flag = e2_flag = e1_flag = s_flag = false;
+            l_flag = e2_flag = e1_flag = s_flag = e3_flag = false;
             t_flag = true; 
         } else if (!strcmp(argv[i], "-s")) {
-            l_flag = e2_flag = e1_flag = t_flag = false;
+            l_flag = e2_flag = e1_flag = t_flag = e3_flag = false;
             s_flag = true;
-        } 
+        } else if (!strcmp(argv[i], "-e3")) {
+            l_flag = e2_flag = e1_flag = t_flag = s_flag = false;
+            e3_flag = true;
+        }
     }
 }
 
@@ -274,9 +279,12 @@ int main(int argc, char *argv[]) {
         yyparse(); 
         if (!syntax_error && !lexical_error) {
             semantic_analysis(program); 
-            if (s_flag) {
+            if (s_flag && !e3_flag) {
                 print_table_list(symtab_list);
                 print_ast(program);
+            }
+            if (!e3_flag && !s_flag) {
+                code_generator(program);
             }
         }  
     } 

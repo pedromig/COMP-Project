@@ -181,3 +181,46 @@ const char *select_operator(const char *string) {
         return "!";
     return "unknown";
 }
+
+// * LLVM Util Functions
+
+// Return Ascii value for a one-character const char *
+int ord(const char *str) {
+    int ans = str[1];
+    if (str[1] == '\\') {
+        switch (str[2]) {
+            case 'n':
+                ans = 0x0a;
+                break;
+            case 't':
+                ans = 0x09;
+                break;
+            case '\\':
+                ans = 0x5c;
+                break;
+            case '\'':
+                ans = 0x27;
+                break;
+            case '"':
+                ans = 0x22;
+                break;
+            default:
+                ans = strtol(str + 2, NULL, 8);
+                break;
+        }
+    }
+    return ans;
+}
+
+const char *type_to_llvm(const char *type) {
+    return (!strcmp(type, "Double") || !strcmp(type, "double")) ? "double" : (!strcmp(type, "Void")) ? "void" : "i32";
+}
+
+int insert_default_return(const char *llvm_type, bool has_return_keyword) {
+    if (!has_return_keyword) {
+        return !strcmp(llvm_type, "double") ? printf("\tret %s %e\n", llvm_type, 0.0f)
+                                            : !strcmp(llvm_type, "void") ? printf("\tret void\n")
+                                                                         : printf("\tret %s %d\n", llvm_type, 0);
+    }
+    return 0;
+}

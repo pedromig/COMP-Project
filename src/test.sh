@@ -32,13 +32,23 @@ DIFF_FLAGS="" # Might be useful: "--suppress-common-lines"
 
 ################################################################################################
 
+function llvm_to_out() {
+    output=$1
+    cp $output ${output%.*}.ll
+    llc-3.9 ${output%.*}.ll && clang-3.9 ${output%.*}.s -o ${output%.*}.exe && ./${output%.*}.exe >${output%.*}.out
+    rm -f ${output%.*}.exe ${output%.*}.s
+}
+
 function run_tests() {
     for file_path in $1/*.{uc,c}; do
         ucfile=$(basename "$file_path")
         outfile=${ucfile%.*}.out
 
+        [[ $ucfile == "*.uc" || $ucfile == "*.c" ]] && continue
+
         ./$UC_COMPILER $UCCOMPILER_FLAGS <$file_path >$2/$outfile
 
+        [ $CODEGEN == "true" ] && llvm_to_out $2/$outfile
         (diff -y $DIFF_FLAGS $1/$outfile $2/$outfile) &>DIFFOUT
 
         if [ $? -eq 0 ]; then
@@ -126,10 +136,13 @@ if [ $# -eq 0 ]; then
 
 else
     UC_COMPILER=$1
+    CODEGEN="true"
+    COMPILE_INPUT_DIR="false"
     for option in "$@"; do
         case $option in
-        -l | -e1 | -e2 | -t | -s)
+        -l | -e1 | -e2 | -t | -s | -e3)
             UCCOMPILER_FLAGS="$UCCOMPILER_FLAGS $option"
+            CODEGEN="false"
             shift
             ;;
         -i=* | --input-dir=*)
@@ -157,6 +170,10 @@ else
             VALGRIND_MEMCHECK="true"
             shift
             ;;
+        -c | --compile-input)
+            COMPILE_INPUT_DIR="true"
+            shift
+            ;;
         esac
     done
 
@@ -176,5 +193,17 @@ else
             exit 1
         fi
     fi
+
+    if [[ $COMPILE_INPUT_DIR == "true" && $CODEGEN == "true" ]]; then
+        for file in $INPUT_DIR/*.c; do
+            f=$(basename $file)
+            f=${f%.*}
+            clang-3.9 -Wno-implicit-function-declaration -S -emit-llvm $file -o "$INPUT_DIR/$f.ll"
+            clang-3.9 -Wno-implicit-function-declaration "$file" -o "$INPUT_DIR/$f.exe"
+            ./"$INPUT_DIR/$f.exe" >"$INPUT_DIR/$f.out"
+            rm -f "$INPUT_DIR/$f.exe"
+        done
+    fi
+
     run_tests $INPUT_DIR $OUTPUT_DIR
 fi

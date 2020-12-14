@@ -10,7 +10,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "structures.h"
@@ -32,5 +34,11 @@ bool is_relational_operator(const char *operator);
 bool is_bitwise_operator(const char *operator);
 bool is_logical_operator(const char *operator);
 bool is_statement_id(const char *operator);
+
+// LLVM Utils
+
+int ord(const char *str);
+const char *type_to_llvm(const char *type);
+int insert_default_return(const char *llvm_type, bool has_return_keyword);
 
 #endif //UTILS_H

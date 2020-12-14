@@ -15,6 +15,7 @@
 #include "utils.h"
 
 extern symtab_t *symtab_list;
+extern symtab_t *current_table;
 
 void semantic_analysis(ast_node_t *program);
 
