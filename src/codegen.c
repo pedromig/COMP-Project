@@ -58,6 +58,7 @@ void funcdef_code_generator(ast_node_t *func_def) {
             printf("\t%%%d = alloca double\n", llvm_var_counter);
             printf("\tstore double %%%d, double* %%%d\n", i, llvm_var_counter++);
         }
+        //TODO atribuir na tabela de símbolos ao parametro atual o número que lhe corresponde dentro da função
         param = param->next_sibling;
     }
 
@@ -77,6 +78,13 @@ void funcdef_code_generator(ast_node_t *func_def) {
 }
 
 void call_code_generator(ast_node_t* node){
+    //load dos parâmetros da função a chamar para temporárias
+    //fazer call com as variáveis temporárias
+    //ter em atenção os tipos das variáveis loaded e dos tipos dos parâmetros da função a chamar
+
+    //usar load_terminal calculando previamente se é preciso dar cast para double a algum parâmetro
+    //while params..... verificar se tem de se dar cast .... load...guardar int retornado
+    //call ... (tipos e ints das variáveis de cada param)
 
 }
 
@@ -100,9 +108,40 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
     //pode ser apenas um statement --> verificar se o id deste node é StatList ou não
 }
 
+bool is_variable(ast_node_t* node){
+    if(!strcmp(node -> id, "Id"))
+        return true;
+    return false;
+}
+
+int load_variable_code_generator(ast_node_t* node, bool double_type){
+    bool global = false;
+    sym_t* sym;
+    int number;
+
+    sym = find_symbol(current_table -> symlist, node -> token.value);
+    if(!sym){
+        sym = find_symbol(symtab_list -> symlist, node -> token.value);
+        global = true;
+    }
+
+    if(global){//op2 global
+        printf("\t%%%d = load %s, %s* @%s\n", llvm_var_counter++, type_to_llvm(sym -> type), type_to_llvm(sym -> type), node -> token.value);
+    }
+    else{//op2 local
+        printf("\t%%%d = load %s, %s* %%%d\n", llvm_var_counter++, type_to_llvm(sym -> type), type_to_llvm(sym -> type), sym -> llvm_var);
+    }
+    number = llvm_var_counter - 1;
+    if(double_type && strcmp(type_to_llvm(node -> annotation.type), "double")){
+        printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(node -> annotation.type), number, "double");
+        number = llvm_var_counter - 1;
+    }
+    return number;
+}
+
 int load_terminal(ast_node_t* node, bool double_type){
     int number;
-    if(!strcmp(node -> token.value, "ChrLit")){
+    if(!strcmp(node -> id, "ChrLit")){
         printf("\t%%%d = add i32 0, %d\n", llvm_var_counter++, ord(node -> token.value));
         number = llvm_var_counter - 1;
         if(double_type){
@@ -110,13 +149,12 @@ int load_terminal(ast_node_t* node, bool double_type){
             number = llvm_var_counter - 1;
         }
     }
-    else if(!strcmp(node -> token.value, "RealLit")){
+    else if(!strcmp(node -> id, "RealLit")){
         printf("\t%%%d = fadd double 0.0, %e\n", llvm_var_counter++, strtod(node -> token.value, NULL));
         number = llvm_var_counter - 1;
-        if(double_type){
-            printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(node -> annotation.type), number, "double");
-            number = llvm_var_counter - 1;
-        }
+    }
+    else if(!strcmp(node -> id, "Id")){
+        number = load_variable_code_generator(node, double_type);
     }
     else{
         printf("\t%%%d = add i32 0, %s\n", llvm_var_counter++, node -> token.value);
@@ -129,80 +167,65 @@ int load_terminal(ast_node_t* node, bool double_type){
     return number;
 }
 
+void unary_operator_code_generator(ast_node_t* node, bool double_type){
+    ast_node_t* unary_operator = node;
+    int aux;
+    if(!strcmp(unary_operator -> id, "Not"))
+        aux = load_terminal(unary_operator -> first_child, false);
+    else
+        aux = load_terminal(unary_operator -> first_child, double_type);
+    
+    if(!strcmp(unary_operator -> id, "Minus")){
+        if(double_type)
+            printf("\t%%%d = fsub double 0.0, %%%d\n", llvm_var_counter++, aux);
+        else
+            printf("\t%%%d = sub i32 0, %%%d\n", llvm_var_counter++, aux);
+    }
+    else if(!strcmp(unary_operator -> id, "Not")){
+        // if(double_type){
+        //     printf("\t%%%d = fcmp une double %%%d, %e\n", llvm_var_counter++, aux, 0.0);
+        // }
+        // else{
+            printf("\t%%%d = icmp ne i32 %%%d, %d\n", llvm_var_counter++, aux, 0);
+        //}
+        printf("\t%%%d = xor i1 %%%d, true\n", llvm_var_counter, llvm_var_counter - 1);
+        llvm_var_counter++;
+        printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);
+        llvm_var_counter++;
+
+        if(double_type){
+            printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, llvm_var_counter - 1);
+            llvm_var_counter++;
+        }
+    }
+    else if(!strcmp(unary_operator -> id, "Plus")){
+        //! não faz nada, está aqui para saber que não me esqueci dele.
+    }
+}
+
 void binary_operator_code_generator(ast_node_t* node, const char* operation, bool terminais, bool double_type, bool relational){
     ast_node_t *operator = node;//assumi que se passa o node operador
     ast_node_t* op1 = operator -> first_child;//pode ser outro operador ou um terminal
     ast_node_t* op2 = op1 -> next_sibling;//e um terminal
-    sym_t* op1_sym, *op2_sym;
-    bool op1_global = false, op1_local = false, op2_global = false, op2_local = false;
     int op1_number, op2_number;
     const char* type = double_type ? "double" : "i32";
 
-    //to know whether it's global or local and get the symbol when it's local
-    if(!strcmp(op1 -> id, "Id")){
-        op1_sym = find_symbol(current_table -> symlist, op1 -> token.value);
-        op1_local = true;
-        if(!op1_sym){//global
-            op1_sym = find_symbol(symtab_list -> symlist, op1 -> token.value);
-            op1_local = false;
-            op1_global = true;
-        }
-    }
-    if(!strcmp(op2 -> id, "Id")){
-        op2_sym = find_symbol(current_table -> symlist, op2 -> token.value);
-        op2_local = true;
-        if(!op2_sym){//global
-            op2_sym = find_symbol(symtab_list ->symlist, op2 -> token.value);
-            op2_local = false;
-            op2_global = true;
-        }
-    }
-
     if(terminais){
         //verificar se o op1 é variável ou nao
-        if(op1_global || op1_local){
+        if(is_variable(op1)){
             //oload op1
-            if(op1_global){//op1 global
-                printf("\t%%%d = load %s, %s* @%s\n", llvm_var_counter++, type_to_llvm(op1_sym -> type), type_to_llvm(op1_sym -> type), op1 -> token.value);
-                op1_number = llvm_var_counter - 1;
-            }
-            else{//op1 local
-                printf("\t%%%d = load %s, %s* %%%d\n", llvm_var_counter++, type_to_llvm(op1_sym -> type), type_to_llvm(op1_sym -> type), op1_sym -> llvm_var);
-                op1_number = llvm_var_counter - 1;
-            }
-            
-            //se for double_type fazer o sitofp e a variável nao for double
-            if(double_type && strcmp(type_to_llvm(op1 -> annotation.type), "double")){
-                printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(op1 -> annotation.type), op1_number, "double");
-                op1_number = llvm_var_counter - 1;
-            }
+            op1_number = load_variable_code_generator(op1, double_type);
 
             //verificar se op2 é variável
-            if(op2_global || op2_local){//op1 var e op2 var
+            if(is_variable(op2)){//op1 var e op2 var
                 //load op2
-                if(op2_global){//op2 global
-                    printf("\t%%%d = load %s, %s* @%s\n", llvm_var_counter++, type_to_llvm(op2_sym -> type), type_to_llvm(op2_sym -> type), op2 -> token.value);
-                    op2_number = llvm_var_counter - 1;
-                }
-                else{//op2 local
-                    printf("\t%%%d = load %s, %s* %%%d\n", llvm_var_counter++, type_to_llvm(op2_sym -> type), type_to_llvm(op2_sym -> type), op2_sym -> llvm_var);
-                    op2_number = llvm_var_counter - 1;
-                }
-
-                if(double_type && strcmp(type_to_llvm(op2 -> annotation.type), "double")){
-                    printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(op2 -> annotation.type), op2_number, "double");
-                    op2_number = llvm_var_counter - 1;
-                }
+                op2_number = load_variable_code_generator(op2, double_type);
                 
             }
             else{//op1 var e op2 nvar
                 //verificar o tipo de op2
-                if(!strcmp(op2 -> id, "Minus")){
-                    op2_number = load_terminal(op2 -> first_child, double_type);
-                    if(double_type)
-                        printf("\t%%%d = fsub double 0.0, %%%d\n", llvm_var_counter++, op2_number);
-                    else
-                        printf("\t%%%d = sub i32 0, %%%d\n", llvm_var_counter++, op2_number);
+                if(!strcmp(op2 -> id, "Minus") || !strcmp(op2 -> id, "Plus") || !strcmp(op2 -> id, "Not")){//se o op2 for unario
+                    unary_operator_code_generator(op2, double_type);
                     op2_number = llvm_var_counter - 1;
                 }
                 else{
@@ -215,29 +238,13 @@ void binary_operator_code_generator(ast_node_t* node, const char* operation, boo
             op1_number = load_terminal(op1, double_type);
 
             //verificar se op2 é variável
-            if(op2_global || op2_local){//op1 nvar e op2 var
-                if(op2_global){//op2 global
-                    printf("\t%%%d = load %s, %s* @%s\n", llvm_var_counter++, type_to_llvm(op2_sym -> type), type_to_llvm(op2_sym -> type), op2 -> token.value);
-                    op2_number = llvm_var_counter - 1;
-                }
-                else{//op2 local
-                    printf("\t%%%d = load %s, %s* %%%d\n", llvm_var_counter++, type_to_llvm(op2_sym -> type), type_to_llvm(op2_sym -> type), op2_sym -> llvm_var);
-                    op2_number = llvm_var_counter - 1;
-                }
-
-                if(double_type && strcmp(type_to_llvm(op2 -> annotation.type), "double")){
-                    printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(op2 -> annotation.type), op2_number, "double");
-                    op2_number = llvm_var_counter - 1;
-                }
+            if(is_variable(op2)){//op1 nvar e op2 var
+                op2_number = load_variable_code_generator(op2, double_type);
 
             }
             else{//op1 nvar e op2 nvar
-                if(!strcmp(op2 -> id, "Minus")){//se o op2 for um Minus
-                    op2_number = load_terminal(op2 -> first_child, double_type);
-                    if(double_type)
-                        printf("\t%%%d = fsub double 0.0, %%%d\n", llvm_var_counter++, op2_number);
-                    else
-                        printf("\t%%%d = sub i32 0, %%%d\n", llvm_var_counter++, op2_number);
+                if(!strcmp(op2 -> id, "Minus") || !strcmp(op2 -> id, "Plus") || !strcmp(op2 -> id, "Not")){//se o op2 for unario
+                    unary_operator_code_generator(op2, double_type);
                     op2_number = llvm_var_counter - 1;
                 }
                 else{
@@ -250,30 +257,14 @@ void binary_operator_code_generator(ast_node_t* node, const char* operation, boo
         //se chegar aqui quer dizer que o op1 foi obtido por cálculo intermédio, mas o op2 é variável ou valor
         op1_number = llvm_var_counter - 1;
 
-        if(op2_global || op2_local){//op2 variavel
-            if(op2_global){//op2 global
-                printf("\t%%%d = load %s, %s* @%s\n", llvm_var_counter++, type_to_llvm(op2_sym -> type), type_to_llvm(op2_sym -> type), op2 -> token.value);
-                op2_number = llvm_var_counter - 1;
-            }
-            else{//op2 local
-                printf("\t%%%d = load %s, %s* %%%d\n", llvm_var_counter++, type_to_llvm(op2_sym -> type), type_to_llvm(op2_sym -> type), op2_sym -> llvm_var);
-                op2_number = llvm_var_counter - 1;
-            }
-
-            if(double_type && strcmp(type_to_llvm(op2 -> annotation.type), "double")){
-                printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(op2 -> annotation.type), op2_number, "double");
-                op2_number = llvm_var_counter - 1;
-            }
+        if(is_variable(op2)){//op2 variavel
+            op2_number = load_variable_code_generator(op2, double_type);
 
         }
         else{//op2 valor
             //verificar o tipo de op2
-            if(!strcmp(op2 -> id, "Minus")){//se o op2 for um Minus
-                op2_number = load_terminal(op2 -> first_child, double_type);
-                if(double_type)
-                    printf("\t%%%d = fsub double 0.0, %%%d\n", llvm_var_counter++, op2_number);
-                else
-                    printf("\t%%%d = sub i32 0, %%%d\n", llvm_var_counter++, op2_number);
+            if(!strcmp(op2 -> id, "Minus") || !strcmp(op2 -> id, "Plus") || !strcmp(op2 -> id, "Not")){//se o op2 for unario
+                unary_operator_code_generator(op2, double_type);
                 op2_number = llvm_var_counter - 1;
             }
             else{
@@ -299,6 +290,8 @@ void binary_operator_code_generator(ast_node_t* node, const char* operation, boo
         printf("\t%%%d = %s %s %%%d, %%%d\n", llvm_var_counter++, operation, type, op1_number, op2_number);
     }
 }
+
+
 
 void operator_code_generator(ast_node_t *node, const char* assign_type) {
     bool terminais = false;
@@ -411,23 +404,31 @@ void operator_code_generator(ast_node_t *node, const char* assign_type) {
             binary_operator_code_generator(operator, "sgt", terminais, false, true);
         }
     }
-    // else if(!strcmp(operator -> id, "Plus")){
-    //     //fazer alguma coisa nesta situação???
-    // }
-    else if(!strcmp(operator -> id, "Minus")){//se o Minus for o primeiro filho do operator
-        int aux;
+    else if(!strcmp(operator -> id, "Plus")){
         if(!strcmp(assign_type, "double")){
-            aux = load_terminal(operator -> first_child, true);
-            printf("\t%%%d = fsub double 0.0, %%%d\n", llvm_var_counter++, aux);
+            unary_operator_code_generator(operator, true);
         }
         else{
-            aux = load_terminal(operator -> first_child, false);
-            printf("\t%%%d = sub i32 0, %%%d\n", llvm_var_counter++, aux);
+            unary_operator_code_generator(operator, false);
         }
     }
-    // else if(!strcmp(operator -> id, "Not")){//fazer com o ne to 0 
-
-    // }
+    else if(!strcmp(operator -> id, "Minus")){//se o Minus for o primeiro filho do operator
+        //int aux;
+        if(!strcmp(assign_type, "double")){
+            unary_operator_code_generator(operator, true);
+        }
+        else{
+            unary_operator_code_generator(operator, false);
+        }
+    }
+    else if(!strcmp(operator -> id, "Not")){//
+        if(!strcmp(assign_type, "double")){
+            unary_operator_code_generator(operator, true);
+        }
+        else{
+            unary_operator_code_generator(operator, false);
+        }
+    }
     //else if(!strcmp(operator -> id, "Comma")){
         //bruh corri com o clang para saber o que acontece quando se usa a comma, guess what, borra-se todo, só dá warnings e não faz nada...... Por favor testa tu, para ter a certeza.
 
