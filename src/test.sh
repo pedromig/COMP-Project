@@ -15,6 +15,7 @@ BLUE="\x1B[34m"
 # Default Directory Search Path and Compiler Output Paths
 INPUT_DIR="../tests/input"
 OUTPUT_DIR="../tests/output"
+TEST_INPUT_DIR="../tests/input_files"
 
 # Default Configurations
 LEXER="uccompiler.l"
@@ -34,8 +35,9 @@ DIFF_FLAGS="" # Might be useful: "--suppress-common-lines"
 
 function llvm_to_out() {
     output=$1
+    aux=$(basename $1)
     cp $output ${output%.*}.ll
-    llc-3.9 ${output%.*}.ll && clang-3.9 ${output%.*}.s -o ${output%.*}.exe && ./${output%.*}.exe >${output%.*}.out
+    llc-3.9 ${output%.*}.ll && clang-3.9 ${output%.*}.s -o ${output%.*}.exe && ./${output%.*}.exe <  $TEST_INPUT_DIR/${aux%.*}.in > ${output%.*}.out
     rm -f ${output%.*}.exe ${output%.*}.s
 }
 
@@ -200,12 +202,10 @@ else
             f=${f%.*}
             clang-3.9 -Wno-implicit-function-declaration -S -emit-llvm $file -o "$INPUT_DIR/$f.ll"
             clang-3.9 -Wno-implicit-function-declaration "$file" -o "$INPUT_DIR/$f.exe"
-            ./"$INPUT_DIR/$f.exe" >"$INPUT_DIR/$f.out"
+            ./"$INPUT_DIR/$f.exe" < "$TEST_INPUT_DIR/$f.in" >"$INPUT_DIR/$f.out"
             rm -f "$INPUT_DIR/$f.exe"
         done
-
     else
         run_tests $INPUT_DIR $OUTPUT_DIR
     fi
-
 fi

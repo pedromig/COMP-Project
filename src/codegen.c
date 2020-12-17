@@ -476,6 +476,10 @@ int operator_code_generator(ast_node_t *node, const char *assign_type, bool logi
         result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, double_type);
     }
     //comma?
+    else if(!strcmp(operator -> id, "Comma")){
+        //fazer load do operator -> first_child -> next_sibling;
+        result = load_terminal(operator -> first_child -> next_sibling, double_type);
+    }
     //and
     else if (!strcmp(operator->id, "And")) {
         result = logical_operator_code_generator(operator, op1_number, op2_number, "false");
@@ -853,7 +857,13 @@ void code_generator(ast_node_t *node, bool is_if) {
     if (!strcmp(node->id, "Store")) {
         store_code_generator(node);
     }
-
+    if(!strcmp(node -> id, "Comma")){
+        ast_node_t* aux = node;
+        while(!strcmp(aux -> id, "Comma")){
+            aux = aux -> first_child;
+        }
+        code_generator(aux, false);
+    }
     if (!strcmp(node->id, "Return")) {
         return_code_generator(node);
     }
