@@ -284,7 +284,7 @@ int main(int argc, char *argv[]) {
                 print_ast(program);
             }
             if (!e3_flag && !s_flag) {
-                code_generator(program);
+                code_generator(program, false);
             }
         }  
     } 
