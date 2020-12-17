@@ -203,7 +203,9 @@ else
             ./"$INPUT_DIR/$f.exe" >"$INPUT_DIR/$f.out"
             rm -f "$INPUT_DIR/$f.exe"
         done
+
+    else
+        run_tests $INPUT_DIR $OUTPUT_DIR
     fi
 
-    run_tests $INPUT_DIR $OUTPUT_DIR
 fi
