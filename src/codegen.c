@@ -185,12 +185,14 @@ int call_code_generator(ast_node_t* node, bool double_type){
         params_table = table -> symlist -> next;
         printf("\t%%%d = call %s @%s(", llvm_var_counter++, type_to_llvm(call_id -> annotation.type), call_id -> token.value);
         result = llvm_var_counter - 1;
-        for(i = 0; i < n - 1; i++){
-            printf("%s %%%d, ", type_to_llvm(params_table -> type), indexs[i]);
-            params_table = params_table -> next;
+        if(n >0){
+            for(i = 0; i < n - 1; i++){
+                printf("%s %%%d, ", type_to_llvm(params_table -> type), indexs[i]);
+                params_table = params_table -> next;
+            }
+            printf("%s %%%d", type_to_llvm(params_table -> type), indexs[i]);
         }
-        printf("%s %%%d)\n", type_to_llvm(params_table -> type), indexs[i]);
-        
+        printf(")\n");
         if(double_type && strcmp(type_to_llvm(call_id -> annotation.type), "double")){
             printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, result);
             result = llvm_var_counter++;
