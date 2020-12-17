@@ -113,6 +113,13 @@ int load_variable_code_generator(ast_node_t* node, bool double_type){
     return number;
 }
 
+
+bool is_terminal(ast_node_t* node){
+    if(!strcmp(node -> id, "Id") || !strcmp(node -> id, "ChrLit") || !strcmp(node -> id, "IntLit") || !strcmp(node -> id, "Short") || !strcmp(node -> id, "RealLit") || !strcmp(node -> id, "Call"))
+        return true; 
+    return false;
+}
+
 int call_code_generator(ast_node_t* node, bool double_type){
     ast_node_t* call_id = node -> first_child;
     int result = -1;
@@ -125,7 +132,15 @@ int call_code_generator(ast_node_t* node, bool double_type){
         }
     }
     else if(!strcmp(call_id -> token.value, "putchar")){
-        result = load_terminal(call_id -> next_sibling, false);
+        if(is_terminal(call_id -> next_sibling)){
+            result = load_terminal(call_id -> next_sibling, false);    
+        }
+        else if(!strcmp(call_id -> id, "Call")){
+            result = call_code_generator(call_id -> next_sibling, false);
+        }
+        else{
+            result = operator_code_generator(call_id -> next_sibling, "i32", false);
+        }
         printf("\t%%%d = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %%%d)\n", llvm_var_counter, result);
         result = llvm_var_counter++;
         if(double_type){
@@ -152,13 +167,28 @@ int call_code_generator(ast_node_t* node, bool double_type){
             double_type = false;
             if(!strcmp(type_to_llvm(params_table -> type), "double") && strcmp(type_to_llvm(params_call -> annotation.type), "double"))
                 double_type = true;
-            indexs[i] = load_terminal(params_call, double_type);
+            //verificar se o params_call é um terminal, um call ou uma operação
+            if(is_terminal(params_call)){
+                indexs[i] = load_terminal(params_call, double_type);
+            }
+            else if(!strcmp(params_call -> id, "Call")){
+                indexs[i] = call_code_generator(params_call, double_type);
+            }
+            else{
+                indexs[i] = operator_code_generator(params_call, type_to_llvm(params_table -> type), false);
+            }
             i++;
             params_table = params_table -> next;
             params_call = params_call -> next_sibling;
         }
         params_table = table -> symlist -> next;
-        printf("\t%%%d = call %s @%s(", llvm_var_counter++, type_to_llvm(call_id -> annotation.type), call_id -> token.value);
+        const char* type = !strcmp(call_id -> annotation.type, "void") ? "void" : type_to_llvm(call_id -> annotation.type);
+        if(!strcmp(call_id -> annotation.type, "void")){
+            printf("\tcall %s @%s(", type, call_id -> token.value);
+        }
+        else{
+            printf("\t%%%d = call %s @%s(", llvm_var_counter++, type, call_id -> token.value);
+        }
         result = llvm_var_counter - 1;
         if(n >0){
             for(i = 0; i < n - 1; i++){
@@ -240,11 +270,6 @@ int unary_operator_code_generator(ast_node_t* node, bool double_type){
     return llvm_var_counter - 1;
 }
 
-bool is_terminal(ast_node_t* node){
-    if(!strcmp(node -> id, "Id") || !strcmp(node -> id, "ChrLit") || !strcmp(node -> id, "IntLit") || !strcmp(node -> id, "Short") || !strcmp(node -> id, "RealLit") || !strcmp(node -> id, "Call"))
-        return true; 
-    return false;
-}
 
 void arithmetic_operator_code_generator(const char* operation, const char* type, int op1_number, int op2_number){
     printf("\t%%%d = %s %s %%%d, %%%d\n", llvm_var_counter++, operation, type, op1_number, op2_number);
@@ -375,14 +400,14 @@ int logical_operator_code_generator(ast_node_t* node, int op1_number_inter, int 
     first_label = current_label++;
     second_label = current_label++;
     printf("\tbr label %%label%d\n", ini_label);
-    printf("label%d:\n", ini_label);
+    printf("\nlabel%d:\n", ini_label);
     printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op1_number);//8 -> 9
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
-    printf("label%d:\n", first_label);
+    printf("\nlabel%d:\n", first_label);
     printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op2_number);//10 -> 11
     temp_cmp = llvm_var_counter - 1;//10
     printf("\tbr label %%label%d\n", second_label);
-    printf("label%d:\n", second_label);
+    printf("\nlabel%d:\n", second_label);
     printf("\t%%%d = phi i1 [ %s, %%label%d ], [ %%%d, %%label%d ]\n", llvm_var_counter++, operation, ini_label, temp_cmp, first_label);//12 -> 13
     printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);//13 -> 13
     return llvm_var_counter++;
@@ -571,6 +596,7 @@ void return_code_generator(ast_node_t *node) {
         code_generator(return_value, false);
         printf("\tret %s %%%d\n", llvm_return_type, llvm_var_counter - 1);
     }
+    llvm_var_counter++;
 }
 
 void declaration_code_generator(ast_node_t *node) {
@@ -812,7 +838,7 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
     first_label = current_label++;
     second_label = current_label++;
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
-    printf("label%d:\n", first_label);
+    printf("\nlabel%d:\n", first_label);
 
     code_generator(instructions, false);
     //avaliar a condição outra vez
@@ -830,7 +856,7 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
 
     //print second_label
-    printf("label%d:\n", second_label);
+    printf("\nlabel%d:\n", second_label);
 
 }
 
@@ -860,15 +886,15 @@ void if_code_generator(ast_node_t *node) { //recebe o no do if
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
     // statlist_true = expression-> next_sibling ---------> statlist se for true
     //pode ser apenas um statement --> verificar se o id deste node é StatList ou não
-    printf("label%d:\n", first_label);
+    printf("\nlabel%d:\n", first_label);
     code_generator(instructions_true, true);
     printf("\tbr label %%label%d\n", third_label);
 
-    printf("label%d:\n", second_label);
+    printf("\nlabel%d:\n", second_label);
     code_generator(instructions_false, false);
     printf("\tbr label %%label%d\n", third_label);
 
-    printf("label%d:\n", third_label);
+    printf("\nlabel%d:\n", third_label);
 
     // statilist_false = statlist_true-> next_sibling --------> statlist se for false
     //pode ser apenas um statement --> verificar se o id deste node é StatList ou não
