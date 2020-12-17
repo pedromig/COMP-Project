@@ -264,7 +264,7 @@ int unary_operator_code_generator(ast_node_t* node, bool double_type){
 }
 
 bool is_terminal(ast_node_t* node){
-    if(!strcmp(node -> id, "Id") || !strcmp(node -> id, "ChrLit") || !strcmp(node -> id, "IntLit") || !strcmp(node -> id, "RealLit") || !strcmp(node -> id, "Call"))
+    if(!strcmp(node -> id, "Id") || !strcmp(node -> id, "ChrLit") || !strcmp(node -> id, "IntLit") || !strcmp(node -> id, "Short") || !strcmp(node -> id, "RealLit") || !strcmp(node -> id, "Call"))
         return true; 
     return false;
 }
