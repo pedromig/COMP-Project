@@ -1322,3 +1322,79 @@ label3:
 label1:
 	ret i32 0
 }
+
+define i32 @f51() {
+	%1 = add i32 0, 10
+	%2 = add i32 0, 1
+	%3 = icmp slt i32 %1, %2
+	%4 = zext i1 %3 to i32
+	%5 = add i32 0, 1
+	%6 = add i32 0, 10
+	%7 = icmp sgt i32 %5, %6
+	%8 = zext i1 %7 to i32
+	br label %label0
+label0:
+	%9 = icmp ne i32 %4, 0
+	br i1 %9, label %label1, label %label2
+label1:
+	%10 = icmp ne i32 %8, 0
+	br label %label2
+label2:
+	%11 = phi i1 [ false, %label0 ], [ %10, %label1 ]
+	%12 = zext i1 %11 to i32
+	%13 = add i32 0, 1
+	%14 = add i32 0, 10
+	%15 = icmp eq i32 %13, %14
+	%16 = zext i1 %15 to i32
+	br label %label3
+label3:
+	%17 = icmp ne i32 %12, 0
+	br i1 %17, label %label4, label %label5
+label4:
+	%18 = icmp ne i32 %16, 0
+	br label %label5
+label5:
+	%19 = phi i1 [ true, %label3 ], [ %18, %label4 ]
+	%20 = zext i1 %19 to i32
+	%21 = alloca i32
+	store i32 %20, i32* %21
+	ret i32 0
+}
+
+define i32 @f52() {
+	%1 = add i32 0, 10
+	%2 = add i32 0, 1
+	%3 = icmp slt i32 %1, %2
+	%4 = zext i1 %3 to i32
+	%5 = add i32 0, 1
+	%6 = add i32 0, 10
+	%7 = icmp sgt i32 %5, %6
+	%8 = zext i1 %7 to i32
+	%9 = add i32 0, 1
+	%10 = add i32 0, 10
+	%11 = icmp eq i32 %9, %10
+	%12 = zext i1 %11 to i32
+	br label %label0
+label0:
+	%13 = icmp ne i32 %8, 0
+	br i1 %13, label %label1, label %label2
+label1:
+	%14 = icmp ne i32 %12, 0
+	br label %label2
+label2:
+	%15 = phi i1 [ true, %label0 ], [ %14, %label1 ]
+	%16 = zext i1 %15 to i32
+	br label %label3
+label3:
+	%17 = icmp ne i32 %4, 0
+	br i1 %17, label %label4, label %label5
+label4:
+	%18 = icmp ne i32 %16, 0
+	br label %label5
+label5:
+	%19 = phi i1 [ false, %label3 ], [ %18, %label4 ]
+	%20 = zext i1 %19 to i32
+	%21 = alloca i32
+	store i32 %20, i32* %21
+	ret i32 0
+}

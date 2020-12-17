@@ -143,11 +143,11 @@ int f16(void) {
     return 0;
 }
 
-int f17(void){
-  double d = 10;
-  double v = 20;
-//   double a = d & v;
-  return 0;
+int f17(void) {
+    double d = 10;
+    double v = 20;
+    //   double a = d & v;
+    return 0;
 }
 
 int f18(int a, double b) {
@@ -462,4 +462,14 @@ int f50(void) {
         e = 0;
         i = i + 1;
     }
+}
+
+int f51(void) {
+    int a = (10 < 1 && 1 > 10) || 1 == 10;
+    return 0;
+}
+
+int f52(void) {
+    int a = 10 < 1 && (1 > 10 || 1 == 10);
+    return 0;
 }
