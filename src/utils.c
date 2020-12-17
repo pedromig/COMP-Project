@@ -205,7 +205,13 @@ int ord(const char *str) {
                 ans = 0x22;
                 break;
             default:
-                ans = strtol(str + 2, NULL, 8);
+                ans = 0;
+                for (int i = 4, octal = 1; i >= 2; --i) {
+                    if (isdigit(str[i])) {
+                        ans += ((str[i] - '0') * octal);
+                        octal *= 8;
+                    }
+                }
                 break;
         }
     }
