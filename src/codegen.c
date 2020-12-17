@@ -113,6 +113,13 @@ int load_variable_code_generator(ast_node_t* node, bool double_type){
     return number;
 }
 
+
+bool is_terminal(ast_node_t* node){
+    if(!strcmp(node -> id, "Id") || !strcmp(node -> id, "ChrLit") || !strcmp(node -> id, "IntLit") || !strcmp(node -> id, "Short") || !strcmp(node -> id, "RealLit") || !strcmp(node -> id, "Call"))
+        return true; 
+    return false;
+}
+
 int call_code_generator(ast_node_t* node, bool double_type){
     ast_node_t* call_id = node -> first_child;
     int result = -1;
@@ -152,13 +159,28 @@ int call_code_generator(ast_node_t* node, bool double_type){
             double_type = false;
             if(!strcmp(type_to_llvm(params_table -> type), "double") && strcmp(type_to_llvm(params_call -> annotation.type), "double"))
                 double_type = true;
-            indexs[i] = load_terminal(params_call, double_type);
+            //verificar se o params_call é um terminal, um call ou uma operação
+            if(is_terminal(params_call)){
+                indexs[i] = load_terminal(params_call, double_type);
+            }
+            else if(!strcmp(params_call -> id, "Call")){
+                indexs[i] = call_code_generator(params_call, double_type);
+            }
+            else{
+                indexs[i] = operator_code_generator(params_call, type_to_llvm(params_table -> type), false);
+            }
             i++;
             params_table = params_table -> next;
             params_call = params_call -> next_sibling;
         }
         params_table = table -> symlist -> next;
-        printf("\t%%%d = call %s @%s(", llvm_var_counter++, type_to_llvm(call_id -> annotation.type), call_id -> token.value);
+        const char* type = !strcmp(call_id -> annotation.type, "void") ? "void" : type_to_llvm(call_id -> annotation.type);
+        if(!strcmp(call_id -> annotation.type, "void")){
+            printf("\tcall %s @%s(", type, call_id -> token.value);
+        }
+        else{
+            printf("\t%%%d = call %s @%s(", llvm_var_counter++, type, call_id -> token.value);
+        }
         result = llvm_var_counter - 1;
         if(n >0){
             for(i = 0; i < n - 1; i++){
@@ -240,11 +262,6 @@ int unary_operator_code_generator(ast_node_t* node, bool double_type){
     return llvm_var_counter - 1;
 }
 
-bool is_terminal(ast_node_t* node){
-    if(!strcmp(node -> id, "Id") || !strcmp(node -> id, "ChrLit") || !strcmp(node -> id, "IntLit") || !strcmp(node -> id, "Short") || !strcmp(node -> id, "RealLit") || !strcmp(node -> id, "Call"))
-        return true; 
-    return false;
-}
 
 void arithmetic_operator_code_generator(const char* operation, const char* type, int op1_number, int op2_number){
     printf("\t%%%d = %s %s %%%d, %%%d\n", llvm_var_counter++, operation, type, op1_number, op2_number);
@@ -571,6 +588,7 @@ void return_code_generator(ast_node_t *node) {
         code_generator(return_value, false);
         printf("\tret %s %%%d\n", llvm_return_type, llvm_var_counter - 1);
     }
+    llvm_var_counter++;
 }
 
 void declaration_code_generator(ast_node_t *node) {
