@@ -132,7 +132,15 @@ int call_code_generator(ast_node_t* node, bool double_type){
         }
     }
     else if(!strcmp(call_id -> token.value, "putchar")){
-        result = load_terminal(call_id -> next_sibling, false);
+        if(is_terminal(call_id -> next_sibling)){
+            result = load_terminal(call_id -> next_sibling, false);    
+        }
+        else if(!strcmp(call_id -> id, "Call")){
+            result = call_code_generator(call_id -> next_sibling, false);
+        }
+        else{
+            result = operator_code_generator(call_id -> next_sibling, "i32", false);
+        }
         printf("\t%%%d = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %%%d)\n", llvm_var_counter, result);
         result = llvm_var_counter++;
         if(double_type){
@@ -392,14 +400,14 @@ int logical_operator_code_generator(ast_node_t* node, int op1_number_inter, int 
     first_label = current_label++;
     second_label = current_label++;
     printf("\tbr label %%label%d\n", ini_label);
-    printf("label%d:\n", ini_label);
+    printf("\nlabel%d:\n", ini_label);
     printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op1_number);//8 -> 9
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
-    printf("label%d:\n", first_label);
+    printf("\nlabel%d:\n", first_label);
     printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op2_number);//10 -> 11
     temp_cmp = llvm_var_counter - 1;//10
     printf("\tbr label %%label%d\n", second_label);
-    printf("label%d:\n", second_label);
+    printf("\nlabel%d:\n", second_label);
     printf("\t%%%d = phi i1 [ %s, %%label%d ], [ %%%d, %%label%d ]\n", llvm_var_counter++, operation, ini_label, temp_cmp, first_label);//12 -> 13
     printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);//13 -> 13
     return llvm_var_counter++;
@@ -830,7 +838,7 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
     first_label = current_label++;
     second_label = current_label++;
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
-    printf("label%d:\n", first_label);
+    printf("\nlabel%d:\n", first_label);
 
     code_generator(instructions, false);
     //avaliar a condição outra vez
@@ -848,7 +856,7 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
 
     //print second_label
-    printf("label%d:\n", second_label);
+    printf("\nlabel%d:\n", second_label);
 
 }
 
@@ -878,15 +886,15 @@ void if_code_generator(ast_node_t *node) { //recebe o no do if
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
     // statlist_true = expression-> next_sibling ---------> statlist se for true
     //pode ser apenas um statement --> verificar se o id deste node é StatList ou não
-    printf("label%d:\n", first_label);
+    printf("\nlabel%d:\n", first_label);
     code_generator(instructions_true, true);
     printf("\tbr label %%label%d\n", third_label);
 
-    printf("label%d:\n", second_label);
+    printf("\nlabel%d:\n", second_label);
     code_generator(instructions_false, false);
     printf("\tbr label %%label%d\n", third_label);
 
-    printf("label%d:\n", third_label);
+    printf("\nlabel%d:\n", third_label);
 
     // statilist_false = statlist_true-> next_sibling --------> statlist se for false
     //pode ser apenas um statement --> verificar se o id deste node é StatList ou não
