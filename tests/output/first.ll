@@ -1,5 +1,5 @@
-declare i32 @putchar(i32)
-declare i32 @getchar()
+declare i32 @putchar(...)
+declare i32 @getchar(...)
 
 
 define i32 @main() {
