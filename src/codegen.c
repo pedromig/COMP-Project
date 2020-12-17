@@ -340,47 +340,6 @@ int bitwise_operator_code_generator(ast_node_t* node, const char* operation, int
     return llvm_var_counter - 1;
 }
 
-int and_logical_operator_code_generator(int op1_number_inter, int op2_number_inter){
-    // int temp_label, temp_cmp, final_label;
-    // //%x = icmp ne op1,0
-    // printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op1_number_inter);//8 -> 9
-    // //temp_label = x + 1 
-    // temp_label = llvm_var_counter;//9
-    // //br i1 %x, label temp_label, label temp_label + 2
-    // printf("\tbr i1 %%%d, label %%%d, label %%%d\n", llvm_var_counter - 1, temp_label, temp_label + 2);
-    // //;<label>:temp_label:
-    // printf("; <label>:%d:\n", llvm_var_counter++);//9 -> 10
-    // //%temp_label + 1 = icmp ne op2, 0
-    // printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op2_number_inter);//10 -> 11
-    // temp_cmp = llvm_var_counter - 1;//10
-    // //br temp_label + 2
-    // printf("\tbr label %%%d\n", llvm_var_counter);//11 -> 11
-    // //;<label>:temp_label + 2:
-    // printf("; <label>:%d:\n", llvm_var_counter++);//11 -> 12
-    // final_label = llvm_var_counter - 1;
-    // //%temp_label + 3 = phi i1 [false, current_label], [temp_label + 1, temp_label]
-    // printf("\t%%%d = phi i1 [ false, %%%d ], [ %%%d, %%%d ]\n", llvm_var_counter++, current_label, temp_cmp, temp_label);//12 -> 13
-    // //%temp_label + 4 = zext i1 %temp_label + 3 to i32
-    // printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);//13 -> 13
-    // current_label = final_label;
-    // return llvm_var_counter++;//13 -> 14;
-    int ini_label, first_label, second_label, temp_cmp;
-    ini_label = current_label++;
-    first_label = current_label++;
-    second_label = current_label++;
-    printf("\tbr label %%label%d\n", ini_label);
-    printf("label%d:\n", ini_label);
-    printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op1_number_inter);//8 -> 9
-    printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
-    printf("label%d:\n", first_label);
-    printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op2_number_inter);//10 -> 11
-    temp_cmp = llvm_var_counter - 1;//10
-    printf("\tbr label %%label%d\n", second_label);
-    printf("label%d:\n", second_label);
-    printf("\t%%%d = phi i1 [ false, %%%d ], [ %%%d, %%%d ]\n", llvm_var_counter++, ini_label, temp_cmp, first_label);//12 -> 13
-    printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);//13 -> 13
-    return llvm_var_counter++;
-}
 
 int logical_operator_code_generator(ast_node_t* node, int op1_number_inter, int op2_number_inter, const char* operation){
     ast_node_t* operator = node;
@@ -417,10 +376,10 @@ int logical_operator_code_generator(ast_node_t* node, int op1_number_inter, int 
     second_label = current_label++;
     printf("\tbr label %%label%d\n", ini_label);
     printf("label%d:\n", ini_label);
-    printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op1_number_inter);//8 -> 9
+    printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op1_number);//8 -> 9
     printf("\tbr i1 %%%d, label %%label%d, label %%label%d\n", llvm_var_counter - 1, first_label, second_label);
     printf("label%d:\n", first_label);
-    printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op2_number_inter);//10 -> 11
+    printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, op2_number);//10 -> 11
     temp_cmp = llvm_var_counter - 1;//10
     printf("\tbr label %%label%d\n", second_label);
     printf("label%d:\n", second_label);
