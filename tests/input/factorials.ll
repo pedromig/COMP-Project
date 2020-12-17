@@ -42,19 +42,20 @@ define i32 @recursive_factorial(i32) #0 {
 
 ; <label>:6:                                      ; preds = %1
   store i32 1, i32* %2, align 4
-  br label %12
+  br label %13
 
 ; <label>:7:                                      ; preds = %1
   %8 = load i32, i32* %3, align 4
   %9 = load i32, i32* %3, align 4
-  %10 = call i32 @recursive_factorial(i32 %9)
-  %11 = mul nsw i32 %8, %10
-  store i32 %11, i32* %2, align 4
-  br label %12
+  %10 = sub nsw i32 %9, 1
+  %11 = call i32 @recursive_factorial(i32 %10)
+  %12 = mul nsw i32 %8, %11
+  store i32 %12, i32* %2, align 4
+  br label %13
 
-; <label>:12:                                     ; preds = %7, %6
-  %13 = load i32, i32* %2, align 4
-  ret i32 %13
+; <label>:13:                                     ; preds = %7, %6
+  %14 = load i32, i32* %2, align 4
+  ret i32 %14
 }
 
 ; Function Attrs: nounwind uwtable
@@ -102,9 +103,9 @@ define void @i_have_no_life_xD() #0 {
   %11 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 65)
   %12 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 76)
   %13 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 83)
-  %14 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 35)
+  %14 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 9)
   %15 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 35)
-  %16 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 9)
+  %16 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 35)
   %17 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 10)
   ret void
 }

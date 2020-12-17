@@ -11,6 +11,7 @@ define i32 @main() {
 	%5 = zext i1 %4 to i32
 	%6 = icmp ne i32 %5, 0
 	br i1 %6, label %label0, label %label1
+
 label0:
 	%7 = load i32, i32* %1
 	%8 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %7)
@@ -24,6 +25,7 @@ label0:
 	%15 = zext i1 %14 to i32
 	%16 = icmp ne i32 %15, 0
 	br i1 %16, label %label0, label %label1
+
 label1:
 	ret i32 0
 }

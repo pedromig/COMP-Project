@@ -13,6 +13,7 @@ define i32 @factorial(i32) {
 	%7 = zext i1 %6 to i32
 	%8 = icmp ne i32 %7, 0
 	br i1 %8, label %label0, label %label1
+
 label0:
 	%9 = load i32, i32* %3
 	%10 = load i32, i32* %2
@@ -28,6 +29,7 @@ label0:
 	%18 = zext i1 %17 to i32
 	%19 = icmp ne i32 %18, 0
 	br i1 %19, label %label0, label %label1
+
 label1:
 	%20 = load i32, i32* %3
 	ret i32 %20
@@ -42,17 +44,22 @@ define i32 @recursive_factorial(i32) {
 	%6 = zext i1 %5 to i32
 	%7 = icmp ne i32 %6, 0
 	br i1 %7, label %label0, label %label1
+
 label0:
 	ret i32 1
 	br label %label2
+
 label1:
 	br label %label2
+
 label2:
-	%8 = load i32, i32* %2
 	%9 = load i32, i32* %2
-	%10 = call i32 @recursive_factorial(i32 %9)
-	%11 = mul i32 %8, %10
-	ret i32 %11
+	%10 = load i32, i32* %2
+	%11 = add i32 0, 1
+	%12 = sub i32 %10, %11
+	%13 = call i32 @recursive_factorial(i32 %12)
+	%14 = mul i32 %9, %13
+	ret i32 %14
 }
 
 define i32 @tail_recursive_factorial(i32, i32) {
@@ -66,16 +73,23 @@ define i32 @tail_recursive_factorial(i32, i32) {
 	%8 = zext i1 %7 to i32
 	%9 = icmp ne i32 %8, 0
 	br i1 %9, label %label0, label %label1
+
 label0:
 	ret i32 1
 	br label %label2
+
 label1:
 	br label %label2
+
 label2:
-	%10 = add i32 0, (null)
-	%11 = add i32 0, (null)
-	%12 = call i32 @tail_recursive_factorial(i32 %10, i32 %11)
-	ret i32 %12
+	%11 = load i32, i32* %3
+	%12 = add i32 0, 1
+	%13 = sub i32 %11, %12
+	%14 = load i32, i32* %4
+	%15 = load i32, i32* %3
+	%16 = mul i32 %14, %15
+	%17 = call i32 @tail_recursive_factorial(i32 %13, i32 %16)
+	ret i32 %17
 }
 
 define void @i_have_no_life_xD() {
@@ -105,11 +119,11 @@ define void @i_have_no_life_xD() {
 	%24 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %23)
 	%25 = add i32 0, 83
 	%26 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %25)
-	%27 = add i32 0, 35
+	%27 = add i32 0, 9
 	%28 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %27)
 	%29 = add i32 0, 35
 	%30 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %29)
-	%31 = add i32 0, 9
+	%31 = add i32 0, 35
 	%32 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %31)
 	%33 = add i32 0, 10
 	%34 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %33)
@@ -117,22 +131,22 @@ define void @i_have_no_life_xD() {
 }
 
 define i32 @main() {
-	%1 = call i32 @i_have_no_life_xD()
-	%2 = alloca i32
-	store i32 5, i32* %2
-	%3 = load i32, i32* %2
-	%4 = call i32 @recursive_factorial(i32 %3)
-	%5 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %4)
-	%6 = add i32 0, 10
-	%7 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %6)
-	%8 = load i32, i32* %2
-	%9 = add i32 0, 1
-	%10 = call i32 @tail_recursive_factorial(i32 %8, i32 %9)
-	%11 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %10)
-	%12 = add i32 0, 10
-	%13 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %12)
-	%14 = load i32, i32* %2
-	%15 = call i32 @factorial(i32 %14)
-	%16 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %15)
+	call void @i_have_no_life_xD()
+	%1 = alloca i32
+	store i32 5, i32* %1
+	%2 = load i32, i32* %1
+	%3 = call i32 @recursive_factorial(i32 %2)
+	%4 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %3)
+	%5 = add i32 0, 10
+	%6 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %5)
+	%7 = load i32, i32* %1
+	%8 = add i32 0, 1
+	%9 = call i32 @tail_recursive_factorial(i32 %7, i32 %8)
+	%10 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %9)
+	%11 = add i32 0, 10
+	%12 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %11)
+	%13 = load i32, i32* %1
+	%14 = call i32 @factorial(i32 %13)
+	%15 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %14)
 	ret i32 0
 }

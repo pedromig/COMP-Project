@@ -11,7 +11,7 @@ int recursive_factorial(int number) {
     if (number == 0) {
         return 1;
     }
-    return number * recursive_factorial(number);
+    return number * recursive_factorial(number - 1);
 }
 
 int tail_recursive_factorial(int number, int k) {
@@ -35,9 +35,9 @@ void i_have_no_life_xD(void) {
     putchar('A');
     putchar('L');
     putchar('S');
-    putchar('#');
-    putchar('#');
     putchar('\t');
+    putchar('#');
+    putchar('#');
     putchar('\n');
 }
 

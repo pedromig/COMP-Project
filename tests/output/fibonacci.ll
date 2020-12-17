@@ -11,19 +11,26 @@ define i32 @fibonacci(i32) {
 	%6 = zext i1 %5 to i32
 	%7 = icmp ne i32 %6, 0
 	br i1 %7, label %label0, label %label1
+
 label0:
 	%8 = load i32, i32* %2
 	ret i32 %8
 	br label %label2
+
 label1:
 	br label %label2
+
 label2:
-	%9 = add i32 0, (null)
-	%10 = call i32 @fibonacci(i32 %9)
-	%11 = add i32 0, (null)
-	%12 = call i32 @fibonacci(i32 %11)
-	%13 = add i32 %10, %12
-	ret i32 %13
+	%10 = load i32, i32* %2
+	%11 = add i32 0, 1
+	%12 = sub i32 %10, %11
+	%13 = call i32 @fibonacci(i32 %12)
+	%14 = load i32, i32* %2
+	%15 = add i32 0, 2
+	%16 = sub i32 %14, %15
+	%17 = call i32 @fibonacci(i32 %16)
+	%18 = add i32 %13, %17
+	ret i32 %18
 }
 
 define i32 @fibonacci_seq(i32) {
@@ -43,6 +50,7 @@ define i32 @fibonacci_seq(i32) {
 	%10 = zext i1 %9 to i32
 	%11 = icmp ne i32 %10, 0
 	br i1 %11, label %label0, label %label1
+
 label0:
 	%12 = load i32, i32* %3
 	%13 = load i32, i32* %4
@@ -66,6 +74,7 @@ label0:
 	%27 = zext i1 %26 to i32
 	%28 = icmp ne i32 %27, 0
 	br i1 %28, label %label0, label %label1
+
 label1:
 	ret i32 0
 }
