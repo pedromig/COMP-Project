@@ -145,7 +145,7 @@ int call_code_generator(ast_node_t *node, bool double_type) {
         symtab_t *table = find_table(symtab_list, call_id->token.value);
         ast_node_t *params_call = call_id->next_sibling;
         sym_t *params_table = table->symlist->next;
-        bool double_type;
+        bool is_double;
         //printf("%s\n", table -> symlist -> next ->id);
         int n = 0, i = 0;
         while (params_call) {
@@ -157,14 +157,14 @@ int call_code_generator(ast_node_t *node, bool double_type) {
         int indexs[n];
 
         while (params_call) {
-            double_type = false;
+            is_double= false;
             if (!strcmp(type_to_llvm(params_table->type), "double") && strcmp(type_to_llvm(params_call->annotation.type), "double"))
-                double_type = true;
+                is_double = true;
             //verificar se o params_call é um terminal, um call ou uma operação
             if (is_terminal(params_call)) {
-                indexs[i] = load_terminal(params_call, double_type);
+                indexs[i] = load_terminal(params_call, is_double);
             } else if (!strcmp(params_call->id, "Call")) {
-                indexs[i] = call_code_generator(params_call, double_type);
+                indexs[i] = call_code_generator(params_call, is_double);
             } else {
                 indexs[i] = operator_code_generator(params_call, type_to_llvm(params_table->type), false);
             }
@@ -188,7 +188,7 @@ int call_code_generator(ast_node_t *node, bool double_type) {
             printf("%s %%%d", type_to_llvm(params_table->type), indexs[i]);
         }
         printf(")\n");
-        if (double_type && strcmp(type_to_llvm(call_id->annotation.type), "double")) {
+        if (double_type && strcmp(type_to_llvm(node->annotation.type), "double")) {
             printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, result);
             result = llvm_var_counter++;
         }
@@ -223,13 +223,25 @@ int load_terminal(ast_node_t *node, bool double_type) {
     return number;
 }
 
-int unary_operator_code_generator(ast_node_t *node, bool double_type) {
+int unary_operator_code_generator(ast_node_t *node, int op1_number_inter, bool double_type) {
     ast_node_t *unary_operator = node;
     int aux;
-    if (!strcmp(unary_operator->id, "Not"))
-        aux = load_terminal(unary_operator->first_child, false);
-    else
-        aux = load_terminal(unary_operator->first_child, double_type);
+    if (!strcmp(unary_operator->id, "Not")){
+        if(is_terminal(unary_operator -> first_child)){
+            aux = load_terminal(unary_operator->first_child, false);    
+        }
+        else{
+            aux = op1_number_inter;
+        }
+    }
+    else{
+        if(is_terminal(unary_operator -> first_child)){
+            aux = load_terminal(unary_operator->first_child, double_type);
+        }
+        else{
+            aux = op1_number_inter;
+        }
+    }
 
     if (!strcmp(unary_operator->id, "Minus")) {
         if (double_type)
@@ -460,11 +472,11 @@ int operator_code_generator(ast_node_t *node, const char *assign_type, bool logi
         operation = double_type ? "ogt" : "sgt";
         result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, true);
     } else if (!strcmp(operator->id, "Not")) {
-        result = unary_operator_code_generator(operator, double_type);
+        result = unary_operator_code_generator(operator, op1_number, double_type);
     } else if (!strcmp(operator->id, "Minus")) {
-        result = unary_operator_code_generator(operator, double_type);
+        result = unary_operator_code_generator(operator, op1_number, double_type);
     } else if (!strcmp(operator->id, "Plus")) {
-        result = unary_operator_code_generator(operator, double_type);
+        result = unary_operator_code_generator(operator, op1_number, double_type);
     } else if (!strcmp(operator->id, "BitWiseAnd")) {
         operation = "and";
         result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, double_type);
