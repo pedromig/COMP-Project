@@ -157,7 +157,7 @@ int call_code_generator(ast_node_t *node, bool double_type) {
         int indexs[n];
 
         while (params_call) {
-            is_double= false;
+            is_double = false;
             if (!strcmp(type_to_llvm(params_table->type), "double") && strcmp(type_to_llvm(params_call->annotation.type), "double"))
                 is_double = true;
             //verificar se o params_call é um terminal, um call ou uma operação
@@ -226,19 +226,16 @@ int load_terminal(ast_node_t *node, bool double_type) {
 int unary_operator_code_generator(ast_node_t *node, int op1_number_inter, bool double_type) {
     ast_node_t *unary_operator = node;
     int aux;
-    if (!strcmp(unary_operator->id, "Not")){
-        if(is_terminal(unary_operator -> first_child)){
-            aux = load_terminal(unary_operator->first_child, false);    
-        }
-        else{
+    if (!strcmp(unary_operator->id, "Not")) {
+        if (is_terminal(unary_operator->first_child)) {
+            aux = load_terminal(unary_operator->first_child, false);
+        } else {
             aux = op1_number_inter;
         }
-    }
-    else{
-        if(is_terminal(unary_operator -> first_child)){
+    } else {
+        if (is_terminal(unary_operator->first_child)) {
             aux = load_terminal(unary_operator->first_child, double_type);
-        }
-        else{
+        } else {
             aux = op1_number_inter;
         }
     }
@@ -488,9 +485,9 @@ int operator_code_generator(ast_node_t *node, const char *assign_type, bool logi
         result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, double_type);
     }
     //comma?
-    else if(!strcmp(operator -> id, "Comma")){
+    else if (!strcmp(operator->id, "Comma")) {
         //fazer load do operator -> first_child -> next_sibling;
-        result = load_terminal(operator -> first_child -> next_sibling, double_type);
+        result = load_terminal(operator->first_child->next_sibling, double_type);
     }
     //and
     else if (!strcmp(operator->id, "And")) {
@@ -869,10 +866,10 @@ void code_generator(ast_node_t *node, bool is_if) {
     if (!strcmp(node->id, "Store")) {
         store_code_generator(node);
     }
-    if(!strcmp(node -> id, "Comma")){
-        ast_node_t* aux = node;
-        while(!strcmp(aux -> id, "Comma")){
-            aux = aux -> first_child;
+    if (!strcmp(node->id, "Comma")) {
+        ast_node_t *aux = node;
+        while (!strcmp(aux->id, "Comma")) {
+            aux = aux->first_child;
         }
         code_generator(aux, false);
     }

@@ -53,8 +53,9 @@ define double @f(double, i32) {
 	%6 = call double @d(double %5)
 	%7 = load i32, i32* %4
 	%8 = call i32 @a(i32 %7)
-	%9 = fadd double %6, %8
-	ret double %9
+	%9 = sitofp i32 %8 to double
+	%10 = fadd double %6, %9
+	ret double %10
 }
 
 define double @g(double, double) {
@@ -67,43 +68,47 @@ define double @g(double, double) {
 	%7 = fmul double %5, %6
 	%8 = add i32 0, 10
 	%9 = call i32 @b(i32 %8)
-	%10 = fadd double %7, %9
-	ret double %10
+	%10 = sitofp i32 %9 to double
+	%11 = fadd double %7, %10
+	ret double %11
 }
 
 define double @h() {
 	%1 = add i32 0, 1
 	%2 = call i32 @c(i32 %1)
-	%3 = fadd double 0.0, 1.700000e+00
-	%4 = call double @d(double %3)
-	%5 = call double @g(double %2, double %4)
-	%6 = fadd double 0.0, 1.600000e+00
-	%7 = add i32 0, 65
-	%8 = call double @f(double %6, i32 %7)
-	%9 = add i32 0, 88
-	%10 = call i32 @a(i32 %9)
-	%11 = call double @f(double %8, i32 %10)
-	%12 = call double @g(double %5, double %11)
-	ret double %12
+	%3 = sitofp i32 %2 to double
+	%4 = fadd double 0.0, 1.700000e+00
+	%5 = call double @d(double %4)
+	%6 = call double @g(double %3, double %5)
+	%7 = fadd double 0.0, 1.600000e+00
+	%8 = add i32 0, 65
+	%9 = call double @f(double %7, i32 %8)
+	%10 = add i32 0, 88
+	%11 = call i32 @a(i32 %10)
+	%12 = call double @f(double %9, i32 %11)
+	%13 = call double @g(double %6, double %12)
+	ret double %13
 }
 
 define i32 @main() {
 	%1 = add i32 0, 1
 	%2 = call i32 @c(i32 %1)
-	%3 = fadd double 0.0, 1.700000e+00
-	%4 = call double @d(double %3)
-	%5 = call double @g(double %2, double %4)
-	%6 = add i32 0, 1
-	%7 = call i32 @c(i32 %6)
-	%8 = fadd double 0.0, 1.700000e+00
-	%9 = call double @d(double %8)
-	%10 = call double @g(double %7, double %9)
-	%11 = fadd double 0.0, 1.600000e+00
-	%12 = add i32 0, 65
-	%13 = call double @f(double %11, i32 %12)
-	%14 = add i32 0, 88
-	%15 = call i32 @a(i32 %14)
-	%16 = call double @f(double %13, i32 %15)
-	%17 = call double @g(double %10, double %16)
+	%3 = sitofp i32 %2 to double
+	%4 = fadd double 0.0, 1.700000e+00
+	%5 = call double @d(double %4)
+	%6 = call double @g(double %3, double %5)
+	%7 = add i32 0, 1
+	%8 = call i32 @c(i32 %7)
+	%9 = sitofp i32 %8 to double
+	%10 = fadd double 0.0, 1.700000e+00
+	%11 = call double @d(double %10)
+	%12 = call double @g(double %9, double %11)
+	%13 = fadd double 0.0, 1.600000e+00
+	%14 = add i32 0, 65
+	%15 = call double @f(double %13, i32 %14)
+	%16 = add i32 0, 88
+	%17 = call i32 @a(i32 %16)
+	%18 = call double @f(double %15, i32 %17)
+	%19 = call double @g(double %12, double %18)
 	ret i32 0
 }

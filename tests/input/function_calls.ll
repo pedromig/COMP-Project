@@ -67,32 +67,31 @@ define double @f(double, i8 signext) #0 {
 }
 
 ; Function Attrs: nounwind uwtable
-define double @g(i32, double) #0 {
-  %3 = alloca i32, align 4
+define double @g(double, double) #0 {
+  %3 = alloca double, align 8
   %4 = alloca double, align 8
-  store i32 %0, i32* %3, align 4
+  store double %0, double* %3, align 8
   store double %1, double* %4, align 8
-  %5 = load i32, i32* %3, align 4
-  %6 = sitofp i32 %5 to double
-  %7 = load double, double* %4, align 8
-  %8 = fmul double %6, %7
-  %9 = call signext i16 @b(i16 signext 10)
-  %10 = sext i16 %9 to i32
-  %11 = sitofp i32 %10 to double
-  %12 = fadd double %8, %11
-  ret double %12
+  %5 = load double, double* %3, align 8
+  %6 = load double, double* %4, align 8
+  %7 = fmul double %5, %6
+  %8 = call signext i16 @b(i16 signext 10)
+  %9 = sext i16 %8 to i32
+  %10 = sitofp i32 %9 to double
+  %11 = fadd double %7, %10
+  ret double %11
 }
 
 ; Function Attrs: nounwind uwtable
 define double @h() #0 {
   %1 = call i32 @c(i32 1)
-  %2 = call double @d(double 1.700000e+00)
-  %3 = call double @g(i32 %1, double %2)
-  %4 = fptosi double %3 to i32
+  %2 = sitofp i32 %1 to double
+  %3 = call double @d(double 1.700000e+00)
+  %4 = call double @g(double %2, double %3)
   %5 = call double @f(double 1.600000e+00, i8 signext 65)
   %6 = call signext i8 @a(i8 signext 88)
   %7 = call double @f(double %5, i8 signext %6)
-  %8 = call double @g(i32 %4, double %7)
+  %8 = call double @g(double %4, double %7)
   ret double %8
 }
 
@@ -101,13 +100,17 @@ define i32 @main() #0 {
   %1 = alloca i32, align 4
   store i32 0, i32* %1, align 4
   %2 = call i32 @c(i32 1)
-  %3 = call double @d(double 1.700000e+00)
-  %4 = call double @g(i32 %2, double %3)
-  %5 = fptosi double %4 to i32
-  %6 = call double @f(double 1.600000e+00, i8 signext 65)
-  %7 = call signext i8 @a(i8 signext 88)
-  %8 = call double @f(double %6, i8 signext %7)
-  %9 = call double @g(i32 %5, double %8)
+  %3 = sitofp i32 %2 to double
+  %4 = call double @d(double 1.700000e+00)
+  %5 = call double @g(double %3, double %4)
+  %6 = call i32 @c(i32 1)
+  %7 = sitofp i32 %6 to double
+  %8 = call double @d(double 1.700000e+00)
+  %9 = call double @g(double %7, double %8)
+  %10 = call double @f(double 1.600000e+00, i8 signext 65)
+  %11 = call signext i8 @a(i8 signext 88)
+  %12 = call double @f(double %10, i8 signext %11)
+  %13 = call double @g(double %9, double %12)
   ret i32 0
 }
 
