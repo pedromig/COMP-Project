@@ -1,99 +1,271 @@
-int x(void) {
-    int a, b, c, x;
-    int d = 2, j;
-    a = d != x;
+
+
+int arithmetic(double a, double b, double c) {
+    double d = 1.2;
+
+    d = a + b;
+    d = a - b;
+    d = a / b;
+    d = a * b;
+
+    d = a + b + c;
+    d = a - b - c;
+    d = a / b / c;
+    d = a * b * c;
+
+    d = a - b + c;
+    d = a + b - c;
+    d = a * b / c;
+    d = a / b * c;
 }
 
-int statements(void) {
-    int x = 1;
+int arithmetic1(int a, int b, int c) {
+    double d = 1.3;
 
-    if (1) {
-    } else {
-    }
+    d = a + b;
+    d = a - b;
+    d = a / b;
+    d = a * b;
 
-    if (x == 1 && x != 1) {
-        if (x != 0 && x != statements() || (x % 2) && (x ^ 2)) {
-            if (!x + !statements() != 'C') {
-                if ((!!x * statements() && 2) & 1) {
+    d = a + b + c;
+    d = a - b - c;
+    d = a / b / c;
+    d = a * b * c;
 
-                } else {
-                    return 5;
-                }
-                return 4;
-            }
-            return 3;
-        }
-        return 2;
-    }
-    return 1;
+    d = a - b + c;
+    d = a + b - c;
+    d = a * b / c;
+    d = a / b * c;
 }
 
-int oi(int x, int y) {
-    char a;
-    char b, c = 'd';
-    double d, e, f;
-    e = 4;
-    f = d + e;
+int arithmetic2(int a, int b, int c) {
+
+    int d = 12;
+
+    d = a + b;
+    d = a - b;
+    d = a / b;
+    d = a * b;
+
+    d = a + b + c;
+    d = a - b - c;
+    d = a / b / c;
+    d = a * b * c;
+
+    d = a - b + c;
+    d = a + b - c;
+    d = a * b / c;
+    d = a / b * c;
+
+    if (a + b)
+        ;
+    if (a - b)
+        ;
+    if (a / b)
+        ;
+    if (a * b)
+        ;
+    if (d = a + b)
+        ;
+    if (d = a - b)
+        ;
+    if (d = a * b)
+        ;
+    if (d = a / b)
+        ;
+
+    while (a + b)
+        ;
+    while (a - b)
+        ;
+    while (a / b)
+        ;
+    while (a * b)
+        ;
+    while (d = a + b)
+        ;
+    while (d = a - b)
+        ;
+    while (d = a * b)
+        ;
+    while (d = a / b)
+        ;
+}
+
+int relational(double a, double b) {
+    if (a == b)
+        ;
+    if (a > b)
+        ;
+    if (a < b)
+        ;
+    if (a >= b)
+        ;
+    if (a <= b)
+        ;
+    if (a != b)
+        ;
+
+    while (a == b)
+        ;
+    while (a > b)
+        ;
+    while (a < b)
+        ;
+    while (a >= b)
+        ;
+    while (a <= b)
+        ;
+    while (a != b)
+        ;
     return 0;
 }
 
-int asd(int x) {
-    int b = 2, v, d, c;
-    char a = x, r = a - b;
-    putchar(x = a);
-    putchar(a + v);
-    putchar(c - d);
+int relational2(int a, int b) {
+    if (a == b)
+        ;
+    if (a > b)
+        ;
+    if (a < b)
+        ;
+    if (a >= b)
+        ;
+    if (a <= b)
+        ;
+    if (a != b)
+        ;
 
-    putchar(!b);
-    putchar(+a);
-    putchar(-b);
-    return oi(1, 2), oi(2, 2), oi(192, 2);
+    while (a == b)
+        ;
+    while (a > b)
+        ;
+    while (a < b)
+        ;
+    while (a >= b)
+        ;
+    while (a <= b)
+        ;
+    while (a != b)
+        ;
+    return 0;
 }
 
-int xddx(int xd, char l, double ups, short dx) {
+int relational3(double a, double b, double c) {
+    if (a == b == c)
+        ;
+    if (a > b > c)
+        ;
+    if (a < b < c)
+        ;
+    if ((a >= b) >= c)
+        ;
+    if (a <= (b <= c))
+        ;
+    if (a != (b != c))
+        ;
 
-    double v = 2.4;
-    xd == dx;
-    xd > dx;
-    xd < dx;
-    xd >= dx;
-    xd <= dx;
-    xd | dx;
-    xd &dx;
-    xd != dx;
-    xd &&dx;
-    xd || dx;
-    xd ^ dx;
-    xd = xd % dx;
-    xd = xd * dx;
-    xd = xd / dx;
-    !xd;
-    +xd;
-    -xd;
-    xd = dx;
+    while (a == b == c)
+        ;
+    while (a > b > c)
+        ;
+    while (a < b < c)
+        ;
+    while ((a >= b) >= c)
+        ;
+    while (a <= (b <= c))
+        ;
+    while (a != (b != c))
+        ;
+    return 0;
 }
 
-int m(char xx, int yy, int zz) {
-    int x = 1, y = 2, z;
-    int a, b, c, d, e;
+int relational4(int a, int b, int c) {
+    if (a == b == c)
+        ;
+    if (a > b > c)
+        ;
+    if (a < b < c)
+        ;
+    if ((a >= b) >= c)
+        ;
+    if (a <= (b <= c))
+        ;
+    if (a != (b != c))
+        ;
 
-    if (x > y && z > y || z != x) {
-        return 1;
-    } else {
-        return 0;
-    }
+    while (a == b == c)
+        ;
+    while (a > b > c)
+        ;
+    while (a < b < c)
+        ;
+    while ((a >= b) >= c)
+        ;
+    while (a <= (b <= c))
+        ;
+    while (a != (b != c))
+        ;
+    return 0;
+}
 
-    if (2, 1, 2) {
-    }
+int relational5(int a, double b, int c) {
+    if (a == b == c)
+        ;
+    if (a > b > c)
+        ;
+    if (a < b < c)
+        ;
+    if ((a >= b) >= c)
+        ;
+    if (a <= (b <= c))
+        ;
+    if (a != (b != c))
+        ;
+
+    while (a == b == c)
+        ;
+    while (a > b > c)
+        ;
+    while (a < b < c)
+        ;
+    while ((a >= b) >= c)
+        ;
+    while (a <= (b <= c))
+        ;
+    while (a != (b != c))
+        ;
+    return 0;
+}
+
+int relational6(double a, double b, double c) {
+    if (a == b == c)
+        ;
+    if (a > b > c)
+        ;
+    if (a < b < c)
+        ;
+    if ((a >= b) >= c)
+        ;
+    if (a <= (b <= c))
+        ;
+    if (a != (b != c))
+        ;
+
+    while (a == b == c)
+        ;
+    while (a > b > c)
+        ;
+    while (a < b < c)
+        ;
+    while ((a >= b) >= c)
+        ;
+    while (a <= (b <= c))
+        ;
+    while (a != (b != c))
+        ;
+    return 0;
 }
 
 int main(void) {
-    int xd = 0, dx = 0;
-    putchar(xd = dx);
-    if (xd = dx) {
-        putchar(xd = dx);
-    } else {
-        putchar('A');
-    }
     return 0;
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compiler Tester!
-# @version 3.2
+# @version 4.0
 # @author Pedro Miguel Duque Rodrigues
 
 ################################################################################################
