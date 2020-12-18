@@ -5,8 +5,9 @@ static int llvm_var_counter;
 static const char *llvm_return_type;
 static bool llvm_has_return_keyword;
 static int current_label;
+static const char* op1_type, *op2_type, *result_type;
 
-int load_terminal(ast_node_t *node, bool double_type);
+int load_terminal(ast_node_t *node);
 
 void funcdef_code_generator(ast_node_t *func_def) {
     ast_node_t *typespec = func_def->first_child;
@@ -87,10 +88,9 @@ void funcdef_code_generator(ast_node_t *func_def) {
     current_table = symtab_list;
 }
 
-int load_variable_code_generator(ast_node_t *node, bool double_type) {
+int load_variable_code_generator(ast_node_t *node) {
     bool global = false;
     sym_t *sym;
-    int number;
 
     sym = find_symbol(current_table->symlist, node->token.value);
     if (!sym) {
@@ -103,12 +103,7 @@ int load_variable_code_generator(ast_node_t *node, bool double_type) {
     } else { //op2 local
         printf("\t%%%d = load %s, %s* %%%d\n", llvm_var_counter++, type_to_llvm(sym->type), type_to_llvm(sym->type), sym->llvm_var);
     }
-    number = llvm_var_counter - 1;
-    if (double_type && strcmp(type_to_llvm(node->annotation.type), "double")) {
-        printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(node->annotation.type), number, "double");
-        number = llvm_var_counter - 1;
-    }
-    return number;
+    return llvm_var_counter - 1;
 }
 
 bool is_terminal(ast_node_t *node) {
@@ -117,37 +112,29 @@ bool is_terminal(ast_node_t *node) {
     return false;
 }
 
-int call_code_generator(ast_node_t *node, bool double_type) {
+int call_code_generator(ast_node_t *node) {
     llvm_has_return_keyword = false;
     ast_node_t *call_id = node->first_child;
     int result = -1;
     if (!strcmp(call_id->token.value, "getchar")) {
         printf("\t%%%d = call i32 (...) @getchar()\n", llvm_var_counter);
         result = llvm_var_counter++;
-        if (double_type) {
-            printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, result);
-            result = llvm_var_counter++;
-        }
     } else if (!strcmp(call_id->token.value, "putchar")) {
         if (is_terminal(call_id->next_sibling)) {
-            result = load_terminal(call_id->next_sibling, false);
+            result = load_terminal(call_id->next_sibling);
         } else if (!strcmp(call_id-> next_sibling -> id, "Call")) {
-            result = call_code_generator(call_id->next_sibling, false);
+            result = call_code_generator(call_id->next_sibling);
         } 
         else if(!strcmp(call_id -> next_sibling -> id, "Store")){
             store_code_generator(call_id -> next_sibling);
             //dar load do que foi stored
-            result = load_terminal(call_id -> next_sibling -> first_child, false);
+            result = load_terminal(call_id -> next_sibling -> first_child);
         }
         else {
-            result = operator_code_generator(call_id->next_sibling, "i32", false);
+            result = operator_code_generator(call_id->next_sibling, false);
         }
         printf("\t%%%d = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %%%d)\n", llvm_var_counter, result);
         result = llvm_var_counter++;
-        if (double_type) {
-            printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, result);
-            result = llvm_var_counter++;
-        }
     } else {
         symtab_t *table = find_table(symtab_list, call_id->token.value);
         ast_node_t *params_call = call_id->next_sibling;
@@ -169,11 +156,23 @@ int call_code_generator(ast_node_t *node, bool double_type) {
                 is_double = true;
             //verificar se o params_call é um terminal, um call ou uma operação
             if (is_terminal(params_call)) {
-                indexs[i] = load_terminal(params_call, is_double);
+                indexs[i] = load_terminal(params_call);
+                if(is_double){
+                    printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, indexs[i]);
+                    indexs[i] = llvm_var_counter - 1;
+                }
             } else if (!strcmp(params_call->id, "Call")) {
-                indexs[i] = call_code_generator(params_call, is_double);
+                indexs[i] = call_code_generator(params_call);
+                if(is_double){
+                    printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, indexs[i]);
+                    indexs[i] = llvm_var_counter - 1;
+                }
             } else {
-                indexs[i] = operator_code_generator(params_call, type_to_llvm(params_table->type), false);
+                indexs[i] = operator_code_generator(params_call, false);
+                if(is_double){
+                    printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, indexs[i]);
+                    indexs[i] = llvm_var_counter - 1;
+                }
             }
             i++;
             params_table = params_table->next;
@@ -195,47 +194,36 @@ int call_code_generator(ast_node_t *node, bool double_type) {
             printf("%s %%%d", type_to_llvm(params_table->type), indexs[i]);
         }
         printf(")\n");
-        if (double_type && strcmp(type_to_llvm(node->annotation.type), "double")) {
-            printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, result);
-            result = llvm_var_counter++;
-        }
     }
     return result;
 }
 
-int load_terminal(ast_node_t *node, bool double_type) {
+int load_terminal(ast_node_t *node) {
     int number;
     if (!strcmp(node->id, "ChrLit")) {
         printf("\t%%%d = add i32 0, %d\n", llvm_var_counter++, ord(node->token.value));
         number = llvm_var_counter - 1;
-        if (double_type) {
-            printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(node->annotation.type), number, "double");
-            number = llvm_var_counter - 1;
-        }
     } else if (!strcmp(node->id, "RealLit")) {
         printf("\t%%%d = fadd double 0.0, %e\n", llvm_var_counter++, strtod(node->token.value, NULL));
         number = llvm_var_counter - 1;
     } else if (!strcmp(node->id, "Id")) {
-        number = load_variable_code_generator(node, double_type);
+        number = load_variable_code_generator(node);
     } else if (!strcmp(node->id, "Call")) {
-        number = call_code_generator(node, double_type);
+        number = call_code_generator(node);
     } else {
         printf("\t%%%d = add i32 0, %s\n", llvm_var_counter++, node->token.value);
         number = llvm_var_counter - 1;
-        if (double_type) {
-            printf("\t%%%d = sitofp %s %%%d to %s\n", llvm_var_counter++, type_to_llvm(node->annotation.type), number, "double");
-            number = llvm_var_counter - 1;
-        }
     }
     return number;
 }
 
-int unary_operator_code_generator(ast_node_t *node, int op1_number_inter, bool double_type) {
+int unary_operator_code_generator(ast_node_t *node, int op1_number_inter) {
     ast_node_t *unary_operator = node;
     int aux;
     if (!strcmp(unary_operator->id, "Not")){
         if(is_terminal(unary_operator -> first_child)){
-            aux = load_terminal(unary_operator->first_child, false);    
+            aux = load_terminal(unary_operator->first_child);
+            op1_type = get_type(unary_operator -> first_child);
         }
         else{
             aux = op1_number_inter;
@@ -243,7 +231,8 @@ int unary_operator_code_generator(ast_node_t *node, int op1_number_inter, bool d
     }
     else{
         if(is_terminal(unary_operator -> first_child)){
-            aux = load_terminal(unary_operator->first_child, double_type);
+            aux = load_terminal(unary_operator->first_child);
+            op1_type = get_type(unary_operator -> first_child);
         }
         else{
             aux = op1_number_inter;
@@ -251,66 +240,99 @@ int unary_operator_code_generator(ast_node_t *node, int op1_number_inter, bool d
     }
 
     if (!strcmp(unary_operator->id, "Minus")) {
-        if (double_type)
+        if (!strcmp(op1_type, "double")){
             printf("\t%%%d = fsub double 0.0, %%%d\n", llvm_var_counter++, aux);
-        else
+        }
+        else{
             printf("\t%%%d = sub i32 0, %%%d\n", llvm_var_counter++, aux);
+        }
     } else if (!strcmp(unary_operator->id, "Not")) {
         printf("\t%%%d = icmp ne i32 %%%d, %d\n", llvm_var_counter++, aux, 0);
         printf("\t%%%d = xor i1 %%%d, true\n", llvm_var_counter, llvm_var_counter - 1);
         llvm_var_counter++;
         printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);
         llvm_var_counter++;
-
-        if (double_type) {
-            printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, llvm_var_counter - 1);
-            llvm_var_counter++;
-        }
+        
+        // if (double_type) {
+        //     printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, llvm_var_counter - 1);
+        //     llvm_var_counter++;
+        // }
     } else if (!strcmp(unary_operator->id, "Plus")) {
         //! não faz nada, está aqui para saber que não me esqueci dele.
     }
+
+    result_type = op1_type;
 
     return llvm_var_counter - 1;
 }
 
 void arithmetic_operator_code_generator(const char *operation, const char *type, int op1_number, int op2_number) {
     printf("\t%%%d = %s %s %%%d, %%%d\n", llvm_var_counter++, operation, type, op1_number, op2_number);
+    result_type = type;
 }
 
-void relational_operator_code_generator(const char *operation, const char *type, int op1_number, int op2_number, bool double_type) {
-    if (double_type) { //se for stored num double
+void relational_operator_code_generator(const char *operation, const char *type, int op1_number, int op2_number) {
+    //TODO usar outra flag para verificar se uso fcmp ou icmp consoante o tipo de operadores
+    if (!strcmp(type, "double")) { //se for stored num double
         printf("\t%%%d = fcmp %s %s %%%d, %%%d\n", llvm_var_counter++, operation, type, op1_number, op2_number);
         printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);
-        llvm_var_counter++;
-        printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, llvm_var_counter - 1);
         llvm_var_counter++;
     } else {
         printf("\t%%%d = icmp %s %s %%%d, %%%d\n", llvm_var_counter++, operation, type, op1_number, op2_number);
         printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);
         llvm_var_counter++;
     }
+    result_type = "i32";
 }
 
-int binary_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, bool double_type, bool relational) {
+const char* get_type(ast_node_t* node){
+    if(!strcmp(node -> id, "Id")){
+        sym_t *sym;
+        sym = find_symbol(current_table->symlist, node->token.value);
+        if (!sym) {
+            sym = find_symbol(symtab_list->symlist, node->token.value);
+        }
+        return type_to_llvm(sym -> type);
+    }
+    else if(!strcmp(node -> id, "Call")){
+        return type_to_llvm(node -> annotation.type);
+    }
+    else if(!strcmp(node -> id, "RealLit")){
+        return "double";
+    }
+    else{
+        return "i32";
+    }
+}
+
+
+//TODO separar os relational dos arithmetic
+int binary_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, bool relational) {
     ast_node_t *operator= node;
     ast_node_t *op1 = operator->first_child;
     ast_node_t *op2 = op1->next_sibling;
     int op1_number = -1, op2_number = -1;
-    const char *type = double_type ? "double" : "i32";
+    const char *type;
 
     //ambos terminais
     if (is_terminal(op1) && is_terminal(op2)) {
-        op1_number = load_terminal(op1, double_type);
-        op2_number = load_terminal(op2, double_type);
+        op1_number = load_terminal(op1);
+        //função para dar set do type
+        op1_type = get_type(op1);
+        op2_number = load_terminal(op2);
+        //função para dar set do type
+        op2_type = get_type(op2);
     }
     //op2 terminal
     else if (!is_terminal(op1) && is_terminal(op2)) {
         op1_number = op1_number_inter;
-        op2_number = load_terminal(op2, double_type);
+        op2_number = load_terminal(op2);
+        op2_type = get_type(op2);
     }
     //op1 terminal
     else if (is_terminal(op1) && !is_terminal(op2)) {
-        op1_number = load_terminal(op1, double_type);
+        op1_number = load_terminal(op1);
+        op1_type = get_type(op1);
         op2_number = op2_number_inter;
     }
     //nenhum terminal
@@ -320,33 +342,54 @@ int binary_operator_code_generator(ast_node_t *node, const char *operation, int 
     } else {
         printf("ERRO binary_operator_code_generator\n");
     }
-    //print da operação
+    if(!strcmp(op1_type, "double") && strcmp(op2_type, "double")){
+        //sitofp do op2
+        printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, op2_number);
+        op2_number = llvm_var_counter - 1;
+        op2_type = "double";
+    }
+    else if(strcmp(op1_type, "double") && !strcmp(op2_type, "double")){
+        //sitofp do op1
+        printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, op1_number);
+        op1_number = llvm_var_counter - 1;
+        op1_type = "double";
+    }
+
+    type = op1_type;
+
     if (relational)
-        relational_operator_code_generator(operation, type, op1_number, op2_number, double_type);
+        relational_operator_code_generator(operation, type, op1_number, op2_number);
     else
         arithmetic_operator_code_generator(operation, type, op1_number, op2_number);
 
     return llvm_var_counter - 1;
 }
 
-int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, bool double_type) {
+int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter) {
     ast_node_t *operator= node;
     ast_node_t *op1 = operator->first_child;
     ast_node_t *op2 = op1->next_sibling;
-    int op1_number = -1, op2_number = -1, aux;
+    int op1_number = -1, op2_number = -1;
 
+    //ambos terminais
     if (is_terminal(op1) && is_terminal(op2)) {
-        op1_number = load_terminal(op1, false);
-        op2_number = load_terminal(op2, false);
+        op1_number = load_terminal(op1);
+        //função para dar set do type
+        op1_type = get_type(op1);
+        op2_number = load_terminal(op2);
+        //função para dar set do type
+        op2_type = get_type(op2);
     }
     //op2 terminal
     else if (!is_terminal(op1) && is_terminal(op2)) {
         op1_number = op1_number_inter;
-        op2_number = load_terminal(op2, false);
+        op2_number = load_terminal(op2);
+        op2_type = get_type(op2);
     }
     //op1 terminal
     else if (is_terminal(op1) && !is_terminal(op2)) {
-        op1_number = load_terminal(op1, false);
+        op1_number = load_terminal(op1);
+        op1_type = get_type(op1);
         op2_number = op2_number_inter;
     }
     //nenhum terminal
@@ -358,9 +401,7 @@ int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int
     }
 
     printf("\t%%%d = %s i32 %%%d, %%%d\n", llvm_var_counter++, operation, op1_number, op2_number);
-    aux = llvm_var_counter - 1;
-    if (double_type)
-        printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, aux);
+    result_type = "i32";
     return llvm_var_counter - 1;
 }
 
@@ -370,18 +411,25 @@ int logical_operator_code_generator(ast_node_t *node, int op1_number_inter, int 
     ast_node_t *op2 = op1->next_sibling;
     int op1_number = -1, op2_number = -1;
 
+    //ambos terminais
     if (is_terminal(op1) && is_terminal(op2)) {
-        op1_number = load_terminal(op1, false);
-        op2_number = load_terminal(op2, false);
+        op1_number = load_terminal(op1);
+        //função para dar set do type
+        op1_type = get_type(op1);
+        op2_number = load_terminal(op2);
+        //função para dar set do type
+        op2_type = get_type(op2);
     }
     //op2 terminal
     else if (!is_terminal(op1) && is_terminal(op2)) {
         op1_number = op1_number_inter;
-        op2_number = load_terminal(op2, false);
+        op2_number = load_terminal(op2);
+        op2_type = get_type(op2);
     }
     //op1 terminal
     else if (is_terminal(op1) && !is_terminal(op2)) {
-        op1_number = load_terminal(op1, false);
+        op1_number = load_terminal(op1);
+        op1_type = get_type(op1);
         op2_number = op2_number_inter;
     }
     //nenhum terminal
@@ -407,6 +455,7 @@ int logical_operator_code_generator(ast_node_t *node, int op1_number_inter, int 
     printf("\nlabel%d:\n", second_label);
     printf("\t%%%d = phi i1 [ %s, %%label%d ], [ %%%d, %%label%d ]\n", llvm_var_counter++, operation, ini_label, temp_cmp, first_label); //12 -> 13
     printf("\t%%%d = zext i1 %%%d to i32\n", llvm_var_counter, llvm_var_counter - 1);                                                    //13 -> 13
+    result_type = "i32";
     return llvm_var_counter++;
 }
 
@@ -416,103 +465,127 @@ bool is_logical(ast_node_t *node) {
     return false;
 }
 
-int operator_code_generator(ast_node_t *node, const char *assign_type, bool logical) {
+int operator_code_generator(ast_node_t *node, bool logical) {
     llvm_has_return_keyword = false;
     ast_node_t *operator= node;
     ast_node_t *op1 = node->first_child;
     ast_node_t *op2 = op1->next_sibling;
-    bool double_type = !strcmp(assign_type, "double") ? true : false;
+    bool double_type;
     const char *operation;
     int result = -1, op1_number = -1, op2_number = -1;
 
+    const char* op1_type_temp, *op2_type_temp;
+
     bool tmp_logical = logical;
-    bool cast = false;
     if (is_logical(operator) && !tmp_logical) {
         tmp_logical = true;
-        cast = double_type ? true : false;
     }
 
-    //atualizar double_type por causa dos logical
-    double_type = tmp_logical ? false : double_type;
 
     if (!is_terminal(op1)) {
-        op1_number = operator_code_generator(op1, assign_type, tmp_logical);
+        //TODO variável global para saber se esotu no operador 1 ou 2 para poder guardar o tipo da variável
+        op1_number = operator_code_generator(op1, tmp_logical);
+        op1_type = result_type;
     }
 
     if (op2 && !is_terminal(op2)) {
-        op2_number = operator_code_generator(op2, assign_type, tmp_logical);
+        op2_number = operator_code_generator(op2, tmp_logical);
+        op2_type = result_type;
     }
 
+    //TODO acrescentar uma verificação do tipo de operandos, se um for double usa-se double
+    //TODO uma especie de load terminal que retorne true se for double e false se for int, para saber a operação a usar
+    //TODO se for terminal ir buscar o tipo
+    //TODO se um for double e outro não, fazer cast para double do que não é
+
+    if(is_terminal(op1)){
+        op1_type_temp = get_type(op1);
+    }
+    else{
+        op1_type_temp = op1_type;
+    }
+    if(op2 && is_terminal(op2)){
+        op2_type_temp = get_type(op2);
+    }
+    else if(op2 && !is_terminal(op2)){
+        op2_type_temp = op2_type;
+    }
+
+
+    //TODO para os relational passar sempre double_type como false, se o double type do operator_code_generator for true, então fazer o cast
     if (!strcmp(operator->id, "Add")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "fadd" : "add";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
     } else if (!strcmp(operator->id, "Sub")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "fsub" : "sub";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
     } else if (!strcmp(operator->id, "Mul")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "fmul" : "mul";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
     } else if (!strcmp(operator->id, "Div")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "fdiv" : "sdiv";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
     } else if (!strcmp(operator->id, "Mod")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "frem" : "srem";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
     } else if (!strcmp(operator->id, "Eq")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "oeq" : "eq";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
     } else if (!strcmp(operator->id, "Ne")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "une" : "ne";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
     } else if (!strcmp(operator->id, "Le")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "ole" : "sle";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
     } else if (!strcmp(operator->id, "Ge")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "oge" : "sge";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
     } else if (!strcmp(operator->id, "Lt")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "olt" : "slt";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
     } else if (!strcmp(operator->id, "Gt")) {
+        double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "ogt" : "sgt";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, double_type, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
     } else if (!strcmp(operator->id, "Not")) {
-        result = unary_operator_code_generator(operator, op1_number, double_type);
+        result = unary_operator_code_generator(operator, op1_number);
     } else if (!strcmp(operator->id, "Minus")) {
-        result = unary_operator_code_generator(operator, op1_number, double_type);
+        result = unary_operator_code_generator(operator, op1_number);
     } else if (!strcmp(operator->id, "Plus")) {
-        result = unary_operator_code_generator(operator, op1_number, double_type);
+        result = unary_operator_code_generator(operator, op1_number);
     } else if (!strcmp(operator->id, "BitWiseAnd")) {
         operation = "and";
-        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, double_type);
+        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number);
     } else if (!strcmp(operator->id, "BitWiseOr")) {
         operation = "or";
-        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, double_type);
+        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number);
     } else if (!strcmp(operator->id, "BitWiseXor")) {
         operation = "xor";
-        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, double_type);
+        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number);
     }
     //comma?
     else if(!strcmp(operator -> id, "Comma")){
         //fazer load do operator -> first_child -> next_sibling;
-        result = load_terminal(operator -> first_child -> next_sibling, double_type);
+        result = load_terminal(operator -> first_child -> next_sibling);
     }
     //and
     else if (!strcmp(operator->id, "And")) {
         result = logical_operator_code_generator(operator, op1_number, op2_number, "false");
-        if (cast) {
-            printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, result);
-            result = llvm_var_counter++;
-        }
     }
     //não esquecer verificar cast
     //or
     else if (!strcmp(operator->id, "Or")) {
         result = logical_operator_code_generator(operator, op1_number, op2_number, "true");
-        if (cast) {
-            printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter, result);
-            result = llvm_var_counter++;
-        }
     }
     return result;
 }
@@ -544,10 +617,10 @@ void return_code_generator(ast_node_t *node) {
         } else if (!strcmp(return_value->id, "IntLit") || !strcmp(return_value->id, "Short")) {
             printf("\tret %s %s\n", llvm_return_type, return_value->token.value);
         } else if (!strcmp(return_value->id, "Call")) {
-            int result = call_code_generator(return_value, false);
+            int result = call_code_generator(return_value);
             printf("\tret %s %%%d\n", llvm_return_type, result);
         } else {
-            int result = operator_code_generator(return_value, "i32", false);
+            int result = operator_code_generator(return_value, false);
             printf("\tret %s %%%d\n", llvm_return_type, result);
         }
 
@@ -558,10 +631,20 @@ void return_code_generator(ast_node_t *node) {
         } else if (!strcmp(return_value->id, "IntLit") || !strcmp(return_value->id, "Short") || !strcmp(return_value->id, "RealLit")) {
             printf("\tret %s %e\n", llvm_return_type, strtod(return_value->token.value, NULL));
         } else if (!strcmp(return_value->id, "Call")) {
-            int result = call_code_generator(return_value, true);
+            int result = call_code_generator(return_value);
+            //verificar se o resultype é int, se não for dar cast para double
+            if(!strcmp(result_type, "i32")){
+                printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, result);
+                result = llvm_var_counter - 1;
+            }
             printf("\tret %s %%%d\n", llvm_return_type, result);
         } else {
-            int result = operator_code_generator(return_value, "double", false);
+            int result = operator_code_generator(return_value, false);
+            //verificar se o resultype é int, se não for dar cast para double
+            if(!strcmp(result_type, "i32")){
+                printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, result);
+                result = llvm_var_counter - 1;
+            }
             printf("\tret %s %%%d\n", llvm_return_type, result);
         }
 
@@ -665,18 +748,26 @@ void declaration_code_generator(ast_node_t *node) {
                 }
             }
         } else if (!strcmp(expr->id, "Call")) {
-            bool double_type = false;
-            if (!strcmp(type_to_llvm(typespec->id), "double") && strcmp(type_to_llvm(expr->annotation.type), "double"))
-                double_type = true;
+            //bool double_type = false;
+            // if (!strcmp(type_to_llvm(typespec->id), "double") && strcmp(type_to_llvm(expr->annotation.type), "double"))
+            //     double_type = true;
 
-            int result = call_code_generator(expr, double_type);
+            int result = call_code_generator(expr);
+            if(!strcmp(type_to_llvm(typespec->id), "double") && !strcmp(result_type, "i32")){
+                printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, result);
+                result = llvm_var_counter - 1;
+            }
             printf("\t%%%d = alloca %s\n", llvm_var_counter++, type_to_llvm(typespec->id));
             sym->llvm_var = llvm_var_counter - 1;
             printf("\tstore %s %%%d, %s* %%%d\n", type_to_llvm(typespec->id), result, type_to_llvm(typespec->id), llvm_var_counter - 1);
 
         } else {
             int result;
-            result = operator_code_generator(expr, type_to_llvm(typespec->id), false);
+            result = operator_code_generator(expr, false);
+            if(!strcmp(type_to_llvm(typespec->id), "double") && !strcmp(result_type, "i32")){
+                printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, result);
+                result = llvm_var_counter - 1;
+            }
             printf("\t%%%d = alloca %s\n", llvm_var_counter++, type_to_llvm(typespec->id));
             sym->llvm_var = llvm_var_counter - 1;
             //printf("\tstore %s %%%d, %s* %%%d\n", type_to_llvm(typespec->id), llvm_var_counter - 2, type_to_llvm(typespec->id), llvm_var_counter - 1);
@@ -759,10 +850,14 @@ void store_code_generator(ast_node_t *node) {
             }
         }
     } else if (!strcmp(rhs->id, "Call")) {
-        bool double_type = false;
-        if (!strcmp(type_to_llvm(lhs->annotation.type), "double") && strcmp(type_to_llvm(rhs->annotation.type), "double"))
-            double_type = true;
-        int result = call_code_generator(rhs, double_type);
+        //bool double_type = false;
+        // if (!strcmp(type_to_llvm(lhs->annotation.type), "double") && strcmp(type_to_llvm(rhs->annotation.type), "double"))
+        //     double_type = true;
+        int result = call_code_generator(rhs);
+        if(!strcmp(type_to_llvm(lhs->annotation.type), "double") && !strcmp(result_type, "i32")){
+                printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, result);
+                result = llvm_var_counter - 1;
+            }
         sym_t *lhs_sym = find_symbol(current_table->symlist, lhs->token.value);
         if (!lhs_sym) { //global
             printf("\tstore %s %%%d, %s* @%s\n", type_to_llvm(node->annotation.type), result, type_to_llvm(node->annotation.type), lhs->token.value);
@@ -772,7 +867,11 @@ void store_code_generator(ast_node_t *node) {
 
     } else {
         int result;
-        result = operator_code_generator(rhs, type_to_llvm(lhs->annotation.type), false); //passar o operador e o tipo da variável onde vai ficar guardado
+        result = operator_code_generator(rhs, false); //passar o operador e o tipo da variável onde vai ficar guardado
+        if(!strcmp(type_to_llvm(lhs->annotation.type), "double") && !strcmp(result_type, "i32")){
+                printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, result);
+                result = llvm_var_counter - 1;
+            }
         sym_t *lhs_sym = find_symbol(current_table->symlist, lhs->token.value);
         if (!lhs_sym) { //global
             //printf("\tstore %s %%%d, %s* @%s\n", type_to_llvm(node->annotation.type), llvm_var_counter - 1, type_to_llvm(node->annotation.type), lhs->token.value);
@@ -793,16 +892,16 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
     //expression = node -> first_child -----> expression dentro do while
     //obter o valor da avaliação da condição do while
     if (is_terminal(condition)) {
-        condition_result = load_terminal(condition, false);
+        condition_result = load_terminal(condition);
     } else if (!strcmp(condition->id, "Call")) {
-        condition_result = call_code_generator(condition, false);
+        condition_result = call_code_generator(condition);
     } 
     else if(!strcmp(condition -> id, "Store")){
         store_code_generator(condition);
-        condition_result = load_terminal(condition -> first_child, false);
+        condition_result = load_terminal(condition -> first_child);
     }
     else {
-        condition_result = operator_code_generator(condition, "i32", false);
+        condition_result = operator_code_generator(condition, false);
     }
 
     //ver se verifica a condição pelo menos a primeira vez
@@ -815,16 +914,16 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
     code_generator(instructions, false);
     //avaliar a condição outra vez
     if (is_terminal(condition)) {
-        condition_result = load_terminal(condition, false);
+        condition_result = load_terminal(condition);
     } else if (!strcmp(condition->id, "Call")) {
-        condition_result = call_code_generator(condition, false);
+        condition_result = call_code_generator(condition);
     } 
     else if(!strcmp(condition -> id, "Store")){
         store_code_generator(condition);
-        condition_result = load_terminal(condition -> first_child, false);
+        condition_result = load_terminal(condition -> first_child);
     }
     else {
-        condition_result = operator_code_generator(condition, "i32", false);
+        condition_result = operator_code_generator(condition, false);
     }
 
     printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, condition_result);
@@ -845,16 +944,16 @@ void if_code_generator(ast_node_t *node) { //recebe o no do if
     //expression_code_genrator(expression)
     //obter o valor da avaliação da condição do while
     if (is_terminal(condition)) {
-        condition_result = load_terminal(condition, false);
+        condition_result = load_terminal(condition);
     } else if (!strcmp(condition->id, "Call")) {
-        condition_result = call_code_generator(condition, false);
+        condition_result = call_code_generator(condition);
     } 
     else if(!strcmp(condition -> id, "Store")){
         store_code_generator(condition);
-        condition_result = load_terminal(condition -> first_child, false);
+        condition_result = load_terminal(condition -> first_child);
     }
     else {
-        condition_result = operator_code_generator(condition, "i32", false);
+        condition_result = operator_code_generator(condition, false);
     }
 
     printf("\t%%%d = icmp ne i32 %%%d, 0\n", llvm_var_counter++, condition_result);
@@ -913,7 +1012,7 @@ void code_generator(ast_node_t *node, bool is_if) {
     }
     //está aqui para o caso de se fazer uma call sem ser num store, numa declaration ou return
     if (!strcmp(node->id, "Call")) {
-        call_code_generator(node, false);
+        call_code_generator(node);
     }
 
     if (!strcmp(node->id, "While")) {
@@ -927,10 +1026,10 @@ void code_generator(ast_node_t *node, bool is_if) {
         code_generator(node->first_child, false);
     }
     if(!strcmp(node -> id, "Not") || !strcmp(node -> id, "Minus") || !strcmp(node -> id, "Plus") || !strcmp(node -> id, "Add") || !strcmp(node -> id, "Sub") || !strcmp(node ->id, "Mul") || !strcmp(node ->id, "Div") || !strcmp(node ->id, "Mod") || !strcmp(node ->id, "Eq") || !strcmp(node ->id, "Ne") || !strcmp(node ->id, "Le") || !strcmp(node ->id, "Ge") || !strcmp(node ->id, "Lt") || !strcmp(node ->id, "Gt") || !strcmp(node ->id, "BitWiseAnd") || !strcmp(node ->id, "BitWiseOr") || !strcmp(node ->id, "BitWiseXor")){
-        operator_code_generator(node, "double", false);
+        operator_code_generator(node, false);
     }
     if(!strcmp(node ->id, "And") || !strcmp(node ->id, "Or")){
-        operator_code_generator(node, "double", true);
+        operator_code_generator(node, true);
     }
 
     if (node->next_sibling != NULL && !is_if) {
