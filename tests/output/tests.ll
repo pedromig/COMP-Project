@@ -31,6 +31,7 @@ define i32 @c() {
 
 define i32 @cc() {
 	ret i32 65
+	ret i32 0
 }
 
 define void @d() {
