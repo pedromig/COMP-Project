@@ -22,7 +22,8 @@ extern symtab_t *current_table;
 
 void code_generation(ast_node_t *program);
 void code_generator(ast_node_t *node, bool is_if);
-int operator_code_generator(ast_node_t *node, const char *assign_type, bool logical);
+int operator_code_generator(ast_node_t *node, bool logical);
 void store_code_generator(ast_node_t *node);
+const char* get_type(ast_node_t* node);
 
 #endif // __CODEGEN_H
