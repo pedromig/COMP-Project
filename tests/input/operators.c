@@ -88,7 +88,7 @@ int m(char xx, int yy, int zz) {
 }
 
 int main(void) {
-    int xd, dx;
+    int xd = 0, dx = 0;
     putchar(xd = dx);
     if (xd = dx) {
         putchar(xd = dx);

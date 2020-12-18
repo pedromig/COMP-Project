@@ -131,15 +131,13 @@ int call_code_generator(ast_node_t *node, bool double_type) {
     } else if (!strcmp(call_id->token.value, "putchar")) {
         if (is_terminal(call_id->next_sibling)) {
             result = load_terminal(call_id->next_sibling, false);
-        } else if (!strcmp(call_id-> next_sibling -> id, "Call")) {
+        } else if (!strcmp(call_id->next_sibling->id, "Call")) {
             result = call_code_generator(call_id->next_sibling, false);
-        } 
-        else if(!strcmp(call_id -> next_sibling -> id, "Store")){
-            store_code_generator(call_id -> next_sibling);
+        } else if (!strcmp(call_id->next_sibling->id, "Store")) {
+            store_code_generator(call_id->next_sibling);
             //dar load do que foi stored
-            result = load_terminal(call_id -> next_sibling -> first_child, false);
-        }
-        else {
+            result = load_terminal(call_id->next_sibling->first_child, false);
+        } else {
             result = operator_code_generator(call_id->next_sibling, "i32", false);
         }
         printf("\t%%%d = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %%%d)\n", llvm_var_counter, result);
@@ -793,12 +791,10 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
         condition_result = load_terminal(condition, false);
     } else if (!strcmp(condition->id, "Call")) {
         condition_result = call_code_generator(condition, false);
-    } 
-    else if(!strcmp(condition -> id, "Store")){
+    } else if (!strcmp(condition->id, "Store")) {
         store_code_generator(condition);
-        condition_result = load_terminal(condition -> first_child, false);
-    }
-    else {
+        condition_result = load_terminal(condition->first_child, false);
+    } else {
         condition_result = operator_code_generator(condition, "i32", false);
     }
 
@@ -815,12 +811,10 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
         condition_result = load_terminal(condition, false);
     } else if (!strcmp(condition->id, "Call")) {
         condition_result = call_code_generator(condition, false);
-    } 
-    else if(!strcmp(condition -> id, "Store")){
+    } else if (!strcmp(condition->id, "Store")) {
         store_code_generator(condition);
-        condition_result = load_terminal(condition -> first_child, false);
-    }
-    else {
+        condition_result = load_terminal(condition->first_child, false);
+    } else {
         condition_result = operator_code_generator(condition, "i32", false);
     }
 
@@ -845,12 +839,10 @@ void if_code_generator(ast_node_t *node) { //recebe o no do if
         condition_result = load_terminal(condition, false);
     } else if (!strcmp(condition->id, "Call")) {
         condition_result = call_code_generator(condition, false);
-    } 
-    else if(!strcmp(condition -> id, "Store")){
+    } else if (!strcmp(condition->id, "Store")) {
         store_code_generator(condition);
-        condition_result = load_terminal(condition -> first_child, false);
-    }
-    else {
+        condition_result = load_terminal(condition->first_child, false);
+    } else {
         condition_result = operator_code_generator(condition, "i32", false);
     }
 
@@ -902,7 +894,7 @@ void code_generator(ast_node_t *node, bool is_if) {
         while (!strcmp(aux->id, "Comma")) {
             aux = aux->first_child;
         }
-        if(!strcmp(aux -> id, "Store"))//só quero que entre se for um store
+        if (!strcmp(aux->id, "Store")) //só quero que entre se for um store
             code_generator(aux, false);
     }
     if (!strcmp(node->id, "Return")) {
@@ -923,10 +915,10 @@ void code_generator(ast_node_t *node, bool is_if) {
     if (!strcmp(node->id, "StatList")) {
         code_generator(node->first_child, false);
     }
-    if(!strcmp(node -> id, "Not") || !strcmp(node -> id, "Minus") || !strcmp(node -> id, "Plus") || !strcmp(node -> id, "Add") || !strcmp(node -> id, "Sub") || !strcmp(node ->id, "Mul") || !strcmp(node ->id, "Div") || !strcmp(node ->id, "Mod") || !strcmp(node ->id, "Eq") || !strcmp(node ->id, "Ne") || !strcmp(node ->id, "Le") || !strcmp(node ->id, "Ge") || !strcmp(node ->id, "Lt") || !strcmp(node ->id, "Gt") || !strcmp(node ->id, "BitWiseAnd") || !strcmp(node ->id, "BitWiseOr") || !strcmp(node ->id, "BitWiseXor")){
+    if (!strcmp(node->id, "Not") || !strcmp(node->id, "Minus") || !strcmp(node->id, "Plus") || !strcmp(node->id, "Add") || !strcmp(node->id, "Sub") || !strcmp(node->id, "Mul") || !strcmp(node->id, "Div") || !strcmp(node->id, "Mod") || !strcmp(node->id, "Eq") || !strcmp(node->id, "Ne") || !strcmp(node->id, "Le") || !strcmp(node->id, "Ge") || !strcmp(node->id, "Lt") || !strcmp(node->id, "Gt") || !strcmp(node->id, "BitWiseAnd") || !strcmp(node->id, "BitWiseOr") || !strcmp(node->id, "BitWiseXor")) {
         operator_code_generator(node, "double", false);
     }
-    if(!strcmp(node ->id, "And") || !strcmp(node ->id, "Or")){
+    if (!strcmp(node->id, "And") || !strcmp(node->id, "Or")) {
         operator_code_generator(node, "double", true);
     }
 
