@@ -482,6 +482,206 @@ label39:
 	ret i32 0
 }
 
+define i32 @arithmetic3() {
+	%1 = alloca i32
+	store i32 1, i32* %1
+	%2 = alloca i32
+	store i32 2, i32* %2
+	%3 = alloca double
+	store double 1.410000e+00, double* %3
+	%4 = alloca double
+	store double 1.512000e+02, double* %4
+	%5 = load double, double* %4
+	%6 = load double, double* %3
+	%7 = fadd double %5, %6
+	store double %7, double* %3
+	%8 = load double, double* %3
+	%9 = load double, double* %3
+	%10 = fadd double %8, %9
+	store double %10, double* %3
+	%11 = load i32, i32* %2
+	%12 = load i32, i32* %1
+	%13 = add i32 %11, %12
+	store i32 %13, i32* %1
+	%14 = load i32, i32* %1
+	%15 = load i32, i32* %1
+	%16 = add i32 %14, %15
+	store i32 %16, i32* %1
+	%17 = load i32, i32* %1
+	%18 = add i32 0, 8
+	%19 = add i32 %17, %18
+	store i32 %19, i32* %1
+	%20 = load i32, i32* %2
+	%21 = add i32 0, 39
+	%22 = add i32 %20, %21
+	%23 = add i32 0, 401
+	%24 = add i32 %22, %23
+	store i32 %24, i32* %1
+	%25 = load i32, i32* %1
+	%26 = load i32, i32* %2
+	%27 = add i32 %25, %26
+	%28 = load double, double* %3
+	%29 = sitofp i32 %27 to double
+	%30 = fadd double %29, %28
+	%31 = load double, double* %4
+	%32 = fadd double %30, %31
+	%33 = alloca double
+	store double %32, double* %33
+	%34 = load double, double* %33
+	%35 = load i32, i32* %1
+	%36 = sitofp i32 %35 to double
+	%37 = fadd double %34, %36
+	store double %37, double* %33
+	%38 = load double, double* %33
+	%39 = load double, double* %4
+	%40 = fmul double %38, %39
+	%41 = load i32, i32* %1
+	%42 = sitofp i32 %41 to double
+	%43 = fmul double %40, %42
+	store double %43, double* %33
+	%44 = load double, double* %3
+	%45 = load double, double* %3
+	%46 = fmul double %44, %45
+	%47 = load i32, i32* %1
+	%48 = sitofp i32 %47 to double
+	%49 = fadd double %46, %48
+	%50 = load double, double* %3
+	%51 = load double, double* %4
+	%52 = fmul double %50, %51
+	%53 = fadd double %49, %52
+	%54 = alloca double
+	store double %53, double* %54
+	%55 = load i32, i32* %1
+	%56 = sitofp i32 %55 to double
+	%57 = fcmp oeq double %56, %-1
+	%58 = zext i1 %57 to i32
+	%59 = icmp ne i32 %58, 0
+	br i1 %59, label %label0, label %label1
+
+label0:
+	%60 = load i32, i32* %1
+	%61 = load double, double* %4
+	%62 = sitofp i32 %60 to double
+	%63 = fadd double %62, %61
+	%64 = call i32 @arithmetic3()
+	%65 = call i32 @arithmetic3()
+	%66 = add i32 %64, %65
+	%67 = sitofp i32 %66 to double
+	%68 = fcmp une double %63, %67
+	%69 = zext i1 %68 to i32
+	%70 = icmp ne i32 %69, 0
+	br i1 %70, label %label3, label %label4
+
+label3:
+	br label %label5
+
+label4:
+	%71 = add i32 0, 1
+	%72 = icmp ne i32 %71, 0
+	br i1 %72, label %label6, label %label7
+
+label6:
+	%73 = add i32 0, 1
+	%74 = icmp ne i32 %73, 0
+	br i1 %74, label %label6, label %label7
+
+label7:
+	br label %label5
+
+label5:
+	br label %label2
+
+label1:
+	%75 = add i32 0, 1
+	%76 = icmp ne i32 %75, 0
+	br i1 %76, label %label8, label %label9
+
+label8:
+	%77 = add i32 0, 1
+	%78 = icmp ne i32 %77, 0
+	br i1 %78, label %label10, label %label11
+
+label10:
+	br label %label12
+
+label11:
+	br label %label12
+
+label12:
+	%79 = add i32 0, 1
+	%80 = icmp ne i32 %79, 0
+	br i1 %80, label %label8, label %label9
+
+label9:
+	br label %label2
+
+label2:
+	%81 = add i32 0, 0
+	%82 = load i32, i32* %2
+	%83 = add i32 %81, %82
+	%84 = add i32 0, 0
+	%85 = load double, double* %4
+	%86 = sitofp i32 %84 to double
+	%87 = fadd double %86, %85
+	%88 = sitofp i32 %83 to double
+	%89 = fcmp une double %88, %87
+	%90 = zext i1 %89 to i32
+	%91 = icmp ne i32 %90, 0
+	br i1 %91, label %label13, label %label14
+
+label13:
+	%92 = load i32, i32* %1
+	%93 = load i32, i32* %1
+	%94 = add i32 %92, %93
+	store i32 %94, i32* %1
+	%95 = add i32 0, 0
+	%96 = load i32, i32* %2
+	%97 = add i32 %95, %96
+	%98 = add i32 0, 0
+	%99 = load double, double* %4
+	%100 = sitofp i32 %98 to double
+	%101 = fadd double %100, %99
+	%102 = sitofp i32 %97 to double
+	%103 = fcmp oeq double %102, %101
+	%104 = zext i1 %103 to i32
+	%105 = icmp ne i32 %104, 0
+	br i1 %105, label %label16, label %label17
+
+label16:
+	%106 = load double, double* %3
+	%107 = load double, double* %3
+	%108 = fadd double %106, %107
+	store double %108, double* %3
+	br label %label18
+
+label17:
+	%109 = load double, double* %3
+	%110 = load double, double* %3
+	%111 = fadd double %109, %110
+	store double %111, double* %3
+	br label %label18
+
+label18:
+	br label %label15
+
+label14:
+	%112 = load i32, i32* %1
+	%113 = add i32 0, 1
+	%114 = add i32 %112, %113
+	store i32 %114, i32* %1
+	br label %label15
+
+label15:
+	%115 = load i32, i32* %1
+	%116 = icmp ne i32 %115, 0
+	%117 = xor i1 %116, true
+	%118 = zext i1 %117 to i32
+	%119 = icmp ne i32 %118, 0
+	%120 = xor i1 %119, true
+	%121 = zext i1 %120 to i32
+	ret i32 %121
+}
+
 define i32 @relational(double, double) {
 	%3 = alloca double
 	store double %0, double* %3

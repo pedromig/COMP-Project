@@ -14,7 +14,7 @@ static int llvm_var_counter;
 static const char *llvm_return_type;
 static bool llvm_has_return_keyword;
 static int current_label;
-static const char *op1_type, *op2_type, *result_type;
+static const char* result_type;
 
 int load_terminal(ast_node_t *node);
 
@@ -224,7 +224,7 @@ int load_terminal(ast_node_t *node) {
     return number;
 }
 
-int unary_operator_code_generator(ast_node_t *node, int op1_number_inter) {
+int unary_operator_code_generator(ast_node_t *node, int op1_number_inter, const char* op1_type) {
     ast_node_t *unary_operator = node;
     int aux;
     if (!strcmp(unary_operator->id, "Not")) {
@@ -306,7 +306,7 @@ const char *get_type(ast_node_t *node) {
 }
 
 //TODO separar os relational dos arithmetic
-int binary_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, bool relational) {
+int binary_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, const char* op1_type, const char* op2_type, bool relational) {
     ast_node_t *operator= node;
     ast_node_t *op1 = operator->first_child;
     ast_node_t *op2 = op1->next_sibling;
@@ -363,7 +363,7 @@ int binary_operator_code_generator(ast_node_t *node, const char *operation, int 
     return llvm_var_counter - 1;
 }
 
-int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter) {
+int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, const char* op1_type, const char*  op2_type) {
     ast_node_t *operator= node;
     ast_node_t *op1 = operator->first_child;
     ast_node_t *op2 = op1->next_sibling;
@@ -403,7 +403,7 @@ int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int
     return llvm_var_counter - 1;
 }
 
-int logical_operator_code_generator(ast_node_t *node, int op1_number_inter, int op2_number_inter, const char *operation) {
+int logical_operator_code_generator(ast_node_t *node, int op1_number_inter, int op2_number_inter, const char *operation, const char* op1_type, const char* op2_type) {
     ast_node_t *operator= node;
     ast_node_t *op1 = operator->first_child;
     ast_node_t *op2 = op1->next_sibling;
@@ -482,12 +482,12 @@ int operator_code_generator(ast_node_t *node, bool logical) {
     if (!is_terminal(op1)) {
         //TODO variável global para saber se esotu no operador 1 ou 2 para poder guardar o tipo da variável
         op1_number = operator_code_generator(op1, tmp_logical);
-        op1_type = result_type;
+        op1_type_temp = result_type;
     }
 
     if (op2 && !is_terminal(op2)) {
         op2_number = operator_code_generator(op2, tmp_logical);
-        op2_type = result_type;
+        op2_type_temp = result_type;
     }
 
     //TODO acrescentar uma verificação do tipo de operandos, se um for double usa-se double
@@ -497,75 +497,72 @@ int operator_code_generator(ast_node_t *node, bool logical) {
 
     if (is_terminal(op1)) {
         op1_type_temp = get_type(op1);
-    } else {
-        op1_type_temp = op1_type;
     }
-    if (op2 && is_terminal(op2)) {
+    if(op2 && is_terminal(op2)){
         op2_type_temp = get_type(op2);
-    } else if (op2 && !is_terminal(op2)) {
-        op2_type_temp = op2_type;
     }
+
 
     //TODO para os relational passar sempre double_type como false, se o double type do operator_code_generator for true, então fazer o cast
     if (!strcmp(operator->id, "Add")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "fadd" : "add";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, false);
     } else if (!strcmp(operator->id, "Sub")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "fsub" : "sub";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, false);
     } else if (!strcmp(operator->id, "Mul")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "fmul" : "mul";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, false);
     } else if (!strcmp(operator->id, "Div")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "fdiv" : "sdiv";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, false);
     } else if (!strcmp(operator->id, "Mod")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "frem" : "srem";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, false);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, false);
     } else if (!strcmp(operator->id, "Eq")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "oeq" : "eq";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, true);
     } else if (!strcmp(operator->id, "Ne")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "une" : "ne";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, true);
     } else if (!strcmp(operator->id, "Le")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "ole" : "sle";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, true);
     } else if (!strcmp(operator->id, "Ge")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "oge" : "sge";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, true);
     } else if (!strcmp(operator->id, "Lt")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "olt" : "slt";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, true);
     } else if (!strcmp(operator->id, "Gt")) {
         double_type = (!strcmp(op1_type_temp, "double") || !strcmp(op2_type_temp, "double")) ? true : false;
         operation = double_type ? "ogt" : "sgt";
-        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, true);
+        result = binary_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp, true);
     } else if (!strcmp(operator->id, "Not")) {
-        result = unary_operator_code_generator(operator, op1_number);
+        result = unary_operator_code_generator(operator, op1_number, op1_type_temp);
     } else if (!strcmp(operator->id, "Minus")) {
-        result = unary_operator_code_generator(operator, op1_number);
+        result = unary_operator_code_generator(operator, op1_number, op1_type_temp);
     } else if (!strcmp(operator->id, "Plus")) {
-        result = unary_operator_code_generator(operator, op1_number);
+        result = unary_operator_code_generator(operator, op1_number, op1_type_temp);
     } else if (!strcmp(operator->id, "BitWiseAnd")) {
         operation = "and";
-        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number);
+        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp);
     } else if (!strcmp(operator->id, "BitWiseOr")) {
         operation = "or";
-        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number);
+        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp);
     } else if (!strcmp(operator->id, "BitWiseXor")) {
         operation = "xor";
-        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number);
+        result = bitwise_operator_code_generator(operator, operation, op1_number, op2_number, op1_type_temp, op2_type_temp);
     }
     //comma?
     else if (!strcmp(operator->id, "Comma")) {
@@ -574,12 +571,12 @@ int operator_code_generator(ast_node_t *node, bool logical) {
     }
     //and
     else if (!strcmp(operator->id, "And")) {
-        result = logical_operator_code_generator(operator, op1_number, op2_number, "false");
+        result = logical_operator_code_generator(operator, op1_number, op2_number, "false", op1_type_temp, op2_type_temp);
     }
     //não esquecer verificar cast
-    //or
+    //orß
     else if (!strcmp(operator->id, "Or")) {
-        result = logical_operator_code_generator(operator, op1_number, op2_number, "true");
+        result = logical_operator_code_generator(operator, op1_number, op2_number, "true", op1_type_temp, op2_type_temp);
     }
     return result;
 }

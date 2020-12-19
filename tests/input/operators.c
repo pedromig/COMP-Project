@@ -92,6 +92,54 @@ int arithmetic2(int a, int b, int c) {
         ;
 }
 
+int arithmetic3(void) {
+    int a = 1, b = 2;
+    double c = 1.41, d = 151.2;
+
+    c = d + c;
+    c = c + c;
+    a = b + a;
+    a = a + a;
+
+    a = a + '\010';
+    a = b + '\'' + '\621';
+
+
+    double x = a + b + c + d;
+    x = x + a;
+    x = x * d * a;
+    double y = c * c + a + c * d;
+
+    if (a == (y = a)) {
+        if (a + d != arithmetic3() + arithmetic3()) {
+
+        } else {
+            while (1) {
+            }
+        }
+    } else {
+        while (1) {
+            if (1) {
+
+            } else {
+
+            }
+        }
+    }
+
+    if (0 + b != 0 + d) {
+        a = a + a;
+        if (0 + b == 0 + d) {
+            c = c + c;
+        } else {
+            c = c + c;
+        }
+    } else {
+        a = a + 1;
+    }
+    return !!a;
+}
+
 int relational(double a, double b) {
     if (a == b)
         ;
