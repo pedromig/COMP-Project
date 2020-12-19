@@ -771,7 +771,7 @@ void declaration_code_generator(ast_node_t *node) {
 
             const char *type = type_to_llvm(typespec->id);
             bool use_sitofp = false;
-            if (!strcmp(typespec->id, "Double") && strcmp("double", find_symbol(current_table->symlist, expr->token.value)->type)) {
+            if (!strcmp(typespec->id, "Double") && strcmp("double", rhs_symbol->type)) {
                 type = "i32";
                 use_sitofp = true;
             }
