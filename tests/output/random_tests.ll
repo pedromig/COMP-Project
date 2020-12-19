@@ -422,10 +422,9 @@ label7:
 	br label %label8
 
 label8:
-	%38 = add i32 0, 1
-	%39 = add i32 0, 2
-	%40 = icmp ne i32 %39, 0
-	br i1 %40, label %label9, label %label10
+	%38 = add i32 0, 2
+	%39 = icmp ne i32 %38, 0
+	br i1 %39, label %label9, label %label10
 
 label9:
 	br label %label11

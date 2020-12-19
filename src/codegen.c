@@ -127,6 +127,7 @@ int call_code_generator(ast_node_t *node) {
     int result = -1;
     if (!strcmp(call_id->token.value, "getchar")) {
         printf("\t%%%d = call i32 (...) @getchar()\n", llvm_var_counter);
+        result_type = "i32";
         result = llvm_var_counter++;
     } else if (!strcmp(call_id->token.value, "putchar")) {
         if (is_terminal(call_id->next_sibling)) {
@@ -141,6 +142,7 @@ int call_code_generator(ast_node_t *node) {
             result = operator_code_generator(call_id->next_sibling, false);
         }
         printf("\t%%%d = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %%%d)\n", llvm_var_counter, result);
+        result_type = "i32";
         result = llvm_var_counter++;
     } else {
         symtab_t *table = find_table(symtab_list, call_id->token.value);
@@ -189,8 +191,10 @@ int call_code_generator(ast_node_t *node) {
         const char *type = !strcmp(call_id->annotation.type, "void") ? "void" : type_to_llvm(call_id->annotation.type);
         if (!strcmp(call_id->annotation.type, "void")) {
             printf("\tcall %s @%s(", type, call_id->token.value);
+            result_type = "void";
         } else {
             printf("\t%%%d = call %s @%s(", llvm_var_counter++, type, call_id->token.value);
+            result_type = type;
         }
         result = llvm_var_counter - 1;
         if (n > 0) {
@@ -566,7 +570,20 @@ int operator_code_generator(ast_node_t *node, bool logical) {
     //comma?
     else if (!strcmp(operator->id, "Comma")) {
         //fazer load do operator -> first_child -> next_sibling;
-        result = load_terminal(operator->first_child->next_sibling);
+        if(is_terminal(operator -> first_child -> next_sibling)){
+            result = load_terminal(operator -> first_child -> next_sibling);
+            result_type = get_type(operator -> first_child -> next_sibling);
+        }
+        else if(!strcmp(operator -> first_child -> next_sibling -> id, "Call")){
+            result = call_code_generator(operator -> first_child -> next_sibling);
+        }
+        else if(!strcmp(operator -> first_child -> next_sibling -> id, "Store")){
+            store_code_generator(operator -> first_child -> next_sibling);
+            result = load_terminal(operator -> first_child -> next_sibling -> first_child);
+        }
+        else{
+            result = operator_code_generator(operator -> first_child -> next_sibling, false);
+        }
     }
     //and
     else if (!strcmp(operator->id, "And")) {
@@ -583,6 +600,31 @@ int operator_code_generator(ast_node_t *node, bool logical) {
     }
     return result;
 }
+
+
+int comma_if_while_return_code_generator(ast_node_t* node){
+    //dar load do último operando
+    ast_node_t* op = node -> first_child -> next_sibling;
+    int result = -1;
+    if(is_terminal(op)){
+        result = load_terminal(op);
+        result_type = get_type(op);
+    }
+    else if(!strcmp(op -> id, "Call")){
+        result = call_code_generator(op);
+    }
+    else if(!strcmp(op -> id, "Store")){
+        store_code_generator(op);
+        result = load_terminal(op -> first_child);
+    }
+    else{
+        result = operator_code_generator(op, false);
+    }
+
+    return result;
+}
+
+
 //????????????????????????????????????????????????????????????????????????????????????????
 //?coloquei isto a ir para operadores e call por aqui
 //!falar com o Pedro para esclarecer dúvida
@@ -596,6 +638,7 @@ void return_code_generator(ast_node_t *node) {
         if (!sym) {
             printf("\t%%%d = load %s, %s* @%s\n", llvm_var_counter++, llvm_return_type, llvm_return_type, return_value->token.value);
             printf("\tret %s %%%d\n", llvm_return_type, llvm_var_counter - 1);
+            llvm_var_counter++;
             return;
         }
         printf("\t%%%d = load %s, %s* %%%d\n", llvm_var_counter++, llvm_return_type, llvm_return_type, sym->llvm_var);
@@ -607,6 +650,7 @@ void return_code_generator(ast_node_t *node) {
     } else if (!strcmp(llvm_return_type, "i32")) {
         if (!strcmp(return_value->id, "ChrLit")) {
             printf("\tret %s %d\n", llvm_return_type, ord(return_value->token.value));
+            llvm_var_counter++;
             return;
         } else if (!strcmp(return_value->id, "IntLit") || !strcmp(return_value->id, "Short")) {
             printf("\tret %s %s\n", llvm_return_type, return_value->token.value);
@@ -621,6 +665,7 @@ void return_code_generator(ast_node_t *node) {
     } else if (!strcmp(llvm_return_type, "double")) {
         if (!strcmp(return_value->id, "ChrLit")) {
             printf("\tret %s %e\n", llvm_return_type, (double)ord(return_value->token.value));
+            llvm_var_counter++;
             return;
         } else if (!strcmp(return_value->id, "IntLit") || !strcmp(return_value->id, "Short") || !strcmp(return_value->id, "RealLit")) {
             printf("\tret %s %e\n", llvm_return_type, strtod(return_value->token.value, NULL));
@@ -632,7 +677,16 @@ void return_code_generator(ast_node_t *node) {
                 result = llvm_var_counter - 1;
             }
             printf("\tret %s %%%d\n", llvm_return_type, result);
-        } else {
+        } 
+        else if(!strcmp(return_value -> id, "Comma")){
+            int result = comma_if_while_return_code_generator(return_value);
+            if(!strcmp(result_type, "i32")){
+                printf("\t%%%d = sitofp i32 %%%d to double\n", llvm_var_counter++, result);
+                result = llvm_var_counter - 1;
+            }
+            printf("\tret %s %%%d\n", llvm_return_type, result);
+        }
+        else {
             int result = operator_code_generator(return_value, false);
             //verificar se o resultype é int, se não for dar cast para double
             if (!strcmp(result_type, "i32")) {
@@ -891,8 +945,12 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
         condition_result = call_code_generator(condition);
     } else if (!strcmp(condition->id, "Store")) {
         store_code_generator(condition);
-        condition_result = load_terminal(condition->first_child);
-    } else {
+        condition_result = load_terminal(condition -> first_child);
+    }
+    else if(!strcmp(condition -> id, "Comma")){
+        condition_result = comma_if_while_return_code_generator(condition);
+    }
+    else {
         condition_result = operator_code_generator(condition, false);
     }
 
@@ -911,8 +969,12 @@ void while_code_generator(ast_node_t *node) { //recebe o no do while
         condition_result = call_code_generator(condition);
     } else if (!strcmp(condition->id, "Store")) {
         store_code_generator(condition);
-        condition_result = load_terminal(condition->first_child);
-    } else {
+        condition_result = load_terminal(condition -> first_child);
+    }
+    else if(!strcmp(condition -> id, "Comma")){
+        condition_result = comma_if_while_return_code_generator(condition);
+    }
+    else {
         condition_result = operator_code_generator(condition, false);
     }
 
@@ -939,8 +1001,12 @@ void if_code_generator(ast_node_t *node) { //recebe o no do if
         condition_result = call_code_generator(condition);
     } else if (!strcmp(condition->id, "Store")) {
         store_code_generator(condition);
-        condition_result = load_terminal(condition->first_child);
-    } else {
+        condition_result = load_terminal(condition -> first_child);
+    }
+    else if(!strcmp(condition -> id, "Comma")){
+        condition_result = comma_if_while_return_code_generator(condition);
+    }
+    else {
         condition_result = operator_code_generator(condition, false);
     }
 
