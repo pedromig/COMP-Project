@@ -536,7 +536,7 @@ define i32 @arithmetic3() {
 	%16 = add i32 %14, %15
 	store i32 %16, i32* %1
 	%17 = load i32, i32* %1
-	%18 = add i32 0, 8
+	%18 = add i32 0, 92
 	%19 = add i32 %17, %18
 	store i32 %19, i32* %1
 	%20 = load i32, i32* %2
@@ -647,7 +647,7 @@ label9:
 	br label %label2
 
 label2:
-	%83 = add i32 0, 0
+	%83 = add i32 0, 92
 	%84 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %83)
 	%85 = icmp ne i32 %84, 0
 	br i1 %85, label %label13, label %label14
