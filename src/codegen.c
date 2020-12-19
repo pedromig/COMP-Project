@@ -14,7 +14,7 @@ static int llvm_var_counter;
 static const char *llvm_return_type;
 static bool llvm_has_return_keyword;
 static int current_label;
-static const char* result_type;
+static const char *result_type;
 
 int load_terminal(ast_node_t *node);
 
@@ -224,7 +224,7 @@ int load_terminal(ast_node_t *node) {
     return number;
 }
 
-int unary_operator_code_generator(ast_node_t *node, int op1_number_inter, const char* op1_type) {
+int unary_operator_code_generator(ast_node_t *node, int op1_number_inter, const char *op1_type) {
     ast_node_t *unary_operator = node;
     int aux;
     if (!strcmp(unary_operator->id, "Not")) {
@@ -306,7 +306,7 @@ const char *get_type(ast_node_t *node) {
 }
 
 //TODO separar os relational dos arithmetic
-int binary_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, const char* op1_type, const char* op2_type, bool relational) {
+int binary_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, const char *op1_type, const char *op2_type, bool relational) {
     ast_node_t *operator= node;
     ast_node_t *op1 = operator->first_child;
     ast_node_t *op2 = op1->next_sibling;
@@ -363,7 +363,7 @@ int binary_operator_code_generator(ast_node_t *node, const char *operation, int 
     return llvm_var_counter - 1;
 }
 
-int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, const char* op1_type, const char*  op2_type) {
+int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int op1_number_inter, int op2_number_inter, const char *op1_type, const char *op2_type) {
     ast_node_t *operator= node;
     ast_node_t *op1 = operator->first_child;
     ast_node_t *op2 = op1->next_sibling;
@@ -403,7 +403,7 @@ int bitwise_operator_code_generator(ast_node_t *node, const char *operation, int
     return llvm_var_counter - 1;
 }
 
-int logical_operator_code_generator(ast_node_t *node, int op1_number_inter, int op2_number_inter, const char *operation, const char* op1_type, const char* op2_type) {
+int logical_operator_code_generator(ast_node_t *node, int op1_number_inter, int op2_number_inter, const char *operation, const char *op1_type, const char *op2_type) {
     ast_node_t *operator= node;
     ast_node_t *op1 = operator->first_child;
     ast_node_t *op2 = op1->next_sibling;
@@ -498,10 +498,9 @@ int operator_code_generator(ast_node_t *node, bool logical) {
     if (is_terminal(op1)) {
         op1_type_temp = get_type(op1);
     }
-    if(op2 && is_terminal(op2)){
+    if (op2 && is_terminal(op2)) {
         op2_type_temp = get_type(op2);
     }
-
 
     //TODO para os relational passar sempre double_type como false, se o double type do operator_code_generator for true, então fazer o cast
     if (!strcmp(operator->id, "Add")) {
@@ -577,11 +576,10 @@ int operator_code_generator(ast_node_t *node, bool logical) {
     //orß
     else if (!strcmp(operator->id, "Or")) {
         result = logical_operator_code_generator(operator, op1_number, op2_number, "true", op1_type_temp, op2_type_temp);
-    }
-    else if(!strcmp(operator -> id, "Store")){
+    } else if (!strcmp(operator->id, "Store")) {
         store_code_generator(operator);
         result = llvm_var_counter - 1;
-        result_type = type_to_llvm(operator -> annotation.type);
+        result_type = type_to_llvm(operator->annotation.type);
     }
     return result;
 }
