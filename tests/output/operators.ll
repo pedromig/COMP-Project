@@ -88,101 +88,81 @@ define i32 @arithmetic1(i32, i32, i32) {
 	%7 = alloca double
 	store double 1.300000e+00, double* %7
 	%8 = load i32, i32* %4
-	%9 = sitofp i32 %8 to double
-	%10 = load i32, i32* %5
+	%9 = load i32, i32* %5
+	%10 = add i32 %8, %9
 	%11 = sitofp i32 %10 to double
-	%12 = fadd double %9, %11
-	store double %12, double* %7
-	%13 = load i32, i32* %4
-	%14 = sitofp i32 %13 to double
-	%15 = load i32, i32* %5
-	%16 = sitofp i32 %15 to double
-	%17 = fsub double %14, %16
-	store double %17, double* %7
-	%18 = load i32, i32* %4
+	store double %11, double* %7
+	%12 = load i32, i32* %4
+	%13 = load i32, i32* %5
+	%14 = sub i32 %12, %13
+	%15 = sitofp i32 %14 to double
+	store double %15, double* %7
+	%16 = load i32, i32* %4
+	%17 = load i32, i32* %5
+	%18 = sdiv i32 %16, %17
 	%19 = sitofp i32 %18 to double
-	%20 = load i32, i32* %5
-	%21 = sitofp i32 %20 to double
-	%22 = fdiv double %19, %21
-	store double %22, double* %7
-	%23 = load i32, i32* %4
-	%24 = sitofp i32 %23 to double
+	store double %19, double* %7
+	%20 = load i32, i32* %4
+	%21 = load i32, i32* %5
+	%22 = mul i32 %20, %21
+	%23 = sitofp i32 %22 to double
+	store double %23, double* %7
+	%24 = load i32, i32* %4
 	%25 = load i32, i32* %5
-	%26 = sitofp i32 %25 to double
-	%27 = fmul double %24, %26
-	store double %27, double* %7
-	%28 = load i32, i32* %4
+	%26 = add i32 %24, %25
+	%27 = load i32, i32* %6
+	%28 = add i32 %26, %27
 	%29 = sitofp i32 %28 to double
-	%30 = load i32, i32* %5
-	%31 = sitofp i32 %30 to double
-	%32 = fadd double %29, %31
+	store double %29, double* %7
+	%30 = load i32, i32* %4
+	%31 = load i32, i32* %5
+	%32 = sub i32 %30, %31
 	%33 = load i32, i32* %6
-	%34 = sitofp i32 %33 to double
-	%35 = fadd double %32, %34
+	%34 = sub i32 %32, %33
+	%35 = sitofp i32 %34 to double
 	store double %35, double* %7
 	%36 = load i32, i32* %4
-	%37 = sitofp i32 %36 to double
-	%38 = load i32, i32* %5
-	%39 = sitofp i32 %38 to double
-	%40 = fsub double %37, %39
-	%41 = load i32, i32* %6
-	%42 = sitofp i32 %41 to double
-	%43 = fsub double %40, %42
-	store double %43, double* %7
-	%44 = load i32, i32* %4
-	%45 = sitofp i32 %44 to double
-	%46 = load i32, i32* %5
+	%37 = load i32, i32* %5
+	%38 = sdiv i32 %36, %37
+	%39 = load i32, i32* %6
+	%40 = sdiv i32 %38, %39
+	%41 = sitofp i32 %40 to double
+	store double %41, double* %7
+	%42 = load i32, i32* %4
+	%43 = load i32, i32* %5
+	%44 = mul i32 %42, %43
+	%45 = load i32, i32* %6
+	%46 = mul i32 %44, %45
 	%47 = sitofp i32 %46 to double
-	%48 = fdiv double %45, %47
-	%49 = load i32, i32* %6
-	%50 = sitofp i32 %49 to double
-	%51 = fdiv double %48, %50
-	store double %51, double* %7
-	%52 = load i32, i32* %4
+	store double %47, double* %7
+	%48 = load i32, i32* %4
+	%49 = load i32, i32* %5
+	%50 = sub i32 %48, %49
+	%51 = load i32, i32* %6
+	%52 = add i32 %50, %51
 	%53 = sitofp i32 %52 to double
-	%54 = load i32, i32* %5
-	%55 = sitofp i32 %54 to double
-	%56 = fmul double %53, %55
+	store double %53, double* %7
+	%54 = load i32, i32* %4
+	%55 = load i32, i32* %5
+	%56 = add i32 %54, %55
 	%57 = load i32, i32* %6
-	%58 = sitofp i32 %57 to double
-	%59 = fmul double %56, %58
+	%58 = sub i32 %56, %57
+	%59 = sitofp i32 %58 to double
 	store double %59, double* %7
 	%60 = load i32, i32* %4
-	%61 = sitofp i32 %60 to double
-	%62 = load i32, i32* %5
-	%63 = sitofp i32 %62 to double
-	%64 = fsub double %61, %63
-	%65 = load i32, i32* %6
-	%66 = sitofp i32 %65 to double
-	%67 = fadd double %64, %66
-	store double %67, double* %7
-	%68 = load i32, i32* %4
-	%69 = sitofp i32 %68 to double
-	%70 = load i32, i32* %5
+	%61 = load i32, i32* %5
+	%62 = mul i32 %60, %61
+	%63 = load i32, i32* %6
+	%64 = sdiv i32 %62, %63
+	%65 = sitofp i32 %64 to double
+	store double %65, double* %7
+	%66 = load i32, i32* %4
+	%67 = load i32, i32* %5
+	%68 = sdiv i32 %66, %67
+	%69 = load i32, i32* %6
+	%70 = mul i32 %68, %69
 	%71 = sitofp i32 %70 to double
-	%72 = fadd double %69, %71
-	%73 = load i32, i32* %6
-	%74 = sitofp i32 %73 to double
-	%75 = fsub double %72, %74
-	store double %75, double* %7
-	%76 = load i32, i32* %4
-	%77 = sitofp i32 %76 to double
-	%78 = load i32, i32* %5
-	%79 = sitofp i32 %78 to double
-	%80 = fmul double %77, %79
-	%81 = load i32, i32* %6
-	%82 = sitofp i32 %81 to double
-	%83 = fdiv double %80, %82
-	store double %83, double* %7
-	%84 = load i32, i32* %4
-	%85 = sitofp i32 %84 to double
-	%86 = load i32, i32* %5
-	%87 = sitofp i32 %86 to double
-	%88 = fdiv double %85, %87
-	%89 = load i32, i32* %6
-	%90 = sitofp i32 %89 to double
-	%91 = fmul double %88, %90
-	store double %91, double* %7
+	store double %71, double* %7
 	ret i32 0
 }
 
@@ -509,7 +489,7 @@ define i32 @relational(double, double) {
 	store double %1, double* %4
 	%5 = load double, double* %3
 	%6 = load double, double* %4
-	%7 = icmp eq i32 %5, %6
+	%7 = fcmp oeq double %5, %6
 	%8 = zext i1 %7 to i32
 	%9 = icmp ne i32 %8, 0
 	br i1 %9, label %label0, label %label1
@@ -523,7 +503,7 @@ label1:
 label2:
 	%10 = load double, double* %3
 	%11 = load double, double* %4
-	%12 = icmp sgt i32 %10, %11
+	%12 = fcmp ogt double %10, %11
 	%13 = zext i1 %12 to i32
 	%14 = icmp ne i32 %13, 0
 	br i1 %14, label %label3, label %label4
@@ -537,7 +517,7 @@ label4:
 label5:
 	%15 = load double, double* %3
 	%16 = load double, double* %4
-	%17 = icmp slt i32 %15, %16
+	%17 = fcmp olt double %15, %16
 	%18 = zext i1 %17 to i32
 	%19 = icmp ne i32 %18, 0
 	br i1 %19, label %label6, label %label7
@@ -551,7 +531,7 @@ label7:
 label8:
 	%20 = load double, double* %3
 	%21 = load double, double* %4
-	%22 = icmp sge i32 %20, %21
+	%22 = fcmp oge double %20, %21
 	%23 = zext i1 %22 to i32
 	%24 = icmp ne i32 %23, 0
 	br i1 %24, label %label9, label %label10
@@ -565,7 +545,7 @@ label10:
 label11:
 	%25 = load double, double* %3
 	%26 = load double, double* %4
-	%27 = icmp sle i32 %25, %26
+	%27 = fcmp ole double %25, %26
 	%28 = zext i1 %27 to i32
 	%29 = icmp ne i32 %28, 0
 	br i1 %29, label %label12, label %label13
@@ -579,7 +559,7 @@ label13:
 label14:
 	%30 = load double, double* %3
 	%31 = load double, double* %4
-	%32 = icmp ne i32 %30, %31
+	%32 = fcmp une double %30, %31
 	%33 = zext i1 %32 to i32
 	%34 = icmp ne i32 %33, 0
 	br i1 %34, label %label15, label %label16
@@ -593,7 +573,7 @@ label16:
 label17:
 	%35 = load double, double* %3
 	%36 = load double, double* %4
-	%37 = icmp eq i32 %35, %36
+	%37 = fcmp oeq double %35, %36
 	%38 = zext i1 %37 to i32
 	%39 = icmp ne i32 %38, 0
 	br i1 %39, label %label18, label %label19
@@ -601,7 +581,7 @@ label17:
 label18:
 	%40 = load double, double* %3
 	%41 = load double, double* %4
-	%42 = icmp eq i32 %40, %41
+	%42 = fcmp oeq double %40, %41
 	%43 = zext i1 %42 to i32
 	%44 = icmp ne i32 %43, 0
 	br i1 %44, label %label18, label %label19
@@ -609,7 +589,7 @@ label18:
 label19:
 	%45 = load double, double* %3
 	%46 = load double, double* %4
-	%47 = icmp sgt i32 %45, %46
+	%47 = fcmp ogt double %45, %46
 	%48 = zext i1 %47 to i32
 	%49 = icmp ne i32 %48, 0
 	br i1 %49, label %label20, label %label21
@@ -617,7 +597,7 @@ label19:
 label20:
 	%50 = load double, double* %3
 	%51 = load double, double* %4
-	%52 = icmp sgt i32 %50, %51
+	%52 = fcmp ogt double %50, %51
 	%53 = zext i1 %52 to i32
 	%54 = icmp ne i32 %53, 0
 	br i1 %54, label %label20, label %label21
@@ -625,7 +605,7 @@ label20:
 label21:
 	%55 = load double, double* %3
 	%56 = load double, double* %4
-	%57 = icmp slt i32 %55, %56
+	%57 = fcmp olt double %55, %56
 	%58 = zext i1 %57 to i32
 	%59 = icmp ne i32 %58, 0
 	br i1 %59, label %label22, label %label23
@@ -633,7 +613,7 @@ label21:
 label22:
 	%60 = load double, double* %3
 	%61 = load double, double* %4
-	%62 = icmp slt i32 %60, %61
+	%62 = fcmp olt double %60, %61
 	%63 = zext i1 %62 to i32
 	%64 = icmp ne i32 %63, 0
 	br i1 %64, label %label22, label %label23
@@ -641,7 +621,7 @@ label22:
 label23:
 	%65 = load double, double* %3
 	%66 = load double, double* %4
-	%67 = icmp sge i32 %65, %66
+	%67 = fcmp oge double %65, %66
 	%68 = zext i1 %67 to i32
 	%69 = icmp ne i32 %68, 0
 	br i1 %69, label %label24, label %label25
@@ -649,7 +629,7 @@ label23:
 label24:
 	%70 = load double, double* %3
 	%71 = load double, double* %4
-	%72 = icmp sge i32 %70, %71
+	%72 = fcmp oge double %70, %71
 	%73 = zext i1 %72 to i32
 	%74 = icmp ne i32 %73, 0
 	br i1 %74, label %label24, label %label25
@@ -657,7 +637,7 @@ label24:
 label25:
 	%75 = load double, double* %3
 	%76 = load double, double* %4
-	%77 = icmp sle i32 %75, %76
+	%77 = fcmp ole double %75, %76
 	%78 = zext i1 %77 to i32
 	%79 = icmp ne i32 %78, 0
 	br i1 %79, label %label26, label %label27
@@ -665,7 +645,7 @@ label25:
 label26:
 	%80 = load double, double* %3
 	%81 = load double, double* %4
-	%82 = icmp sle i32 %80, %81
+	%82 = fcmp ole double %80, %81
 	%83 = zext i1 %82 to i32
 	%84 = icmp ne i32 %83, 0
 	br i1 %84, label %label26, label %label27
@@ -673,7 +653,7 @@ label26:
 label27:
 	%85 = load double, double* %3
 	%86 = load double, double* %4
-	%87 = icmp ne i32 %85, %86
+	%87 = fcmp une double %85, %86
 	%88 = zext i1 %87 to i32
 	%89 = icmp ne i32 %88, 0
 	br i1 %89, label %label28, label %label29
@@ -681,7 +661,7 @@ label27:
 label28:
 	%90 = load double, double* %3
 	%91 = load double, double* %4
-	%92 = icmp ne i32 %90, %91
+	%92 = fcmp une double %90, %91
 	%93 = zext i1 %92 to i32
 	%94 = icmp ne i32 %93, 0
 	br i1 %94, label %label28, label %label29
@@ -887,13 +867,14 @@ define i32 @relational3(double, double, double) {
 	store double %2, double* %6
 	%7 = load double, double* %4
 	%8 = load double, double* %5
-	%9 = icmp eq i32 %7, %8
+	%9 = fcmp oeq double %7, %8
 	%10 = zext i1 %9 to i32
 	%11 = load double, double* %6
-	%12 = icmp eq i32 %10, %11
-	%13 = zext i1 %12 to i32
-	%14 = icmp ne i32 %13, 0
-	br i1 %14, label %label0, label %label1
+	%12 = sitofp i32 %10 to double
+	%13 = fcmp oeq double %12, %11
+	%14 = zext i1 %13 to i32
+	%15 = icmp ne i32 %14, 0
+	br i1 %15, label %label0, label %label1
 
 label0:
 	br label %label2
@@ -902,15 +883,16 @@ label1:
 	br label %label2
 
 label2:
-	%15 = load double, double* %4
-	%16 = load double, double* %5
-	%17 = icmp sgt i32 %15, %16
-	%18 = zext i1 %17 to i32
-	%19 = load double, double* %6
-	%20 = icmp sgt i32 %18, %19
-	%21 = zext i1 %20 to i32
-	%22 = icmp ne i32 %21, 0
-	br i1 %22, label %label3, label %label4
+	%16 = load double, double* %4
+	%17 = load double, double* %5
+	%18 = fcmp ogt double %16, %17
+	%19 = zext i1 %18 to i32
+	%20 = load double, double* %6
+	%21 = sitofp i32 %19 to double
+	%22 = fcmp ogt double %21, %20
+	%23 = zext i1 %22 to i32
+	%24 = icmp ne i32 %23, 0
+	br i1 %24, label %label3, label %label4
 
 label3:
 	br label %label5
@@ -919,15 +901,16 @@ label4:
 	br label %label5
 
 label5:
-	%23 = load double, double* %4
-	%24 = load double, double* %5
-	%25 = icmp slt i32 %23, %24
-	%26 = zext i1 %25 to i32
-	%27 = load double, double* %6
-	%28 = icmp slt i32 %26, %27
-	%29 = zext i1 %28 to i32
-	%30 = icmp ne i32 %29, 0
-	br i1 %30, label %label6, label %label7
+	%25 = load double, double* %4
+	%26 = load double, double* %5
+	%27 = fcmp olt double %25, %26
+	%28 = zext i1 %27 to i32
+	%29 = load double, double* %6
+	%30 = sitofp i32 %28 to double
+	%31 = fcmp olt double %30, %29
+	%32 = zext i1 %31 to i32
+	%33 = icmp ne i32 %32, 0
+	br i1 %33, label %label6, label %label7
 
 label6:
 	br label %label8
@@ -936,15 +919,16 @@ label7:
 	br label %label8
 
 label8:
-	%31 = load double, double* %4
-	%32 = load double, double* %5
-	%33 = icmp sge i32 %31, %32
-	%34 = zext i1 %33 to i32
-	%35 = load double, double* %6
-	%36 = icmp sge i32 %34, %35
+	%34 = load double, double* %4
+	%35 = load double, double* %5
+	%36 = fcmp oge double %34, %35
 	%37 = zext i1 %36 to i32
-	%38 = icmp ne i32 %37, 0
-	br i1 %38, label %label9, label %label10
+	%38 = load double, double* %6
+	%39 = sitofp i32 %37 to double
+	%40 = fcmp oge double %39, %38
+	%41 = zext i1 %40 to i32
+	%42 = icmp ne i32 %41, 0
+	br i1 %42, label %label9, label %label10
 
 label9:
 	br label %label11
@@ -953,15 +937,16 @@ label10:
 	br label %label11
 
 label11:
-	%39 = load double, double* %5
-	%40 = load double, double* %6
-	%41 = icmp sle i32 %39, %40
-	%42 = zext i1 %41 to i32
-	%43 = load double, double* %4
-	%44 = icmp sle i32 %43, %42
-	%45 = zext i1 %44 to i32
-	%46 = icmp ne i32 %45, 0
-	br i1 %46, label %label12, label %label13
+	%43 = load double, double* %5
+	%44 = load double, double* %6
+	%45 = fcmp ole double %43, %44
+	%46 = zext i1 %45 to i32
+	%47 = load double, double* %4
+	%48 = sitofp i32 %46 to double
+	%49 = fcmp ole double %47, %48
+	%50 = zext i1 %49 to i32
+	%51 = icmp ne i32 %50, 0
+	br i1 %51, label %label12, label %label13
 
 label12:
 	br label %label14
@@ -970,15 +955,16 @@ label13:
 	br label %label14
 
 label14:
-	%47 = load double, double* %5
-	%48 = load double, double* %6
-	%49 = icmp ne i32 %47, %48
-	%50 = zext i1 %49 to i32
-	%51 = load double, double* %4
-	%52 = icmp ne i32 %51, %50
-	%53 = zext i1 %52 to i32
-	%54 = icmp ne i32 %53, 0
-	br i1 %54, label %label15, label %label16
+	%52 = load double, double* %5
+	%53 = load double, double* %6
+	%54 = fcmp une double %52, %53
+	%55 = zext i1 %54 to i32
+	%56 = load double, double* %4
+	%57 = sitofp i32 %55 to double
+	%58 = fcmp une double %56, %57
+	%59 = zext i1 %58 to i32
+	%60 = icmp ne i32 %59, 0
+	br i1 %60, label %label15, label %label16
 
 label15:
 	br label %label17
@@ -987,136 +973,148 @@ label16:
 	br label %label17
 
 label17:
-	%55 = load double, double* %4
-	%56 = load double, double* %5
-	%57 = icmp eq i32 %55, %56
-	%58 = zext i1 %57 to i32
-	%59 = load double, double* %6
-	%60 = icmp eq i32 %58, %59
-	%61 = zext i1 %60 to i32
-	%62 = icmp ne i32 %61, 0
-	br i1 %62, label %label18, label %label19
+	%61 = load double, double* %4
+	%62 = load double, double* %5
+	%63 = fcmp oeq double %61, %62
+	%64 = zext i1 %63 to i32
+	%65 = load double, double* %6
+	%66 = sitofp i32 %64 to double
+	%67 = fcmp oeq double %66, %65
+	%68 = zext i1 %67 to i32
+	%69 = icmp ne i32 %68, 0
+	br i1 %69, label %label18, label %label19
 
 label18:
-	%63 = load double, double* %4
-	%64 = load double, double* %5
-	%65 = icmp eq i32 %63, %64
-	%66 = zext i1 %65 to i32
-	%67 = load double, double* %6
-	%68 = icmp eq i32 %66, %67
-	%69 = zext i1 %68 to i32
-	%70 = icmp ne i32 %69, 0
-	br i1 %70, label %label18, label %label19
-
-label19:
-	%71 = load double, double* %4
-	%72 = load double, double* %5
-	%73 = icmp sgt i32 %71, %72
-	%74 = zext i1 %73 to i32
-	%75 = load double, double* %6
-	%76 = icmp sgt i32 %74, %75
+	%70 = load double, double* %4
+	%71 = load double, double* %5
+	%72 = fcmp oeq double %70, %71
+	%73 = zext i1 %72 to i32
+	%74 = load double, double* %6
+	%75 = sitofp i32 %73 to double
+	%76 = fcmp oeq double %75, %74
 	%77 = zext i1 %76 to i32
 	%78 = icmp ne i32 %77, 0
-	br i1 %78, label %label20, label %label21
+	br i1 %78, label %label18, label %label19
 
-label20:
+label19:
 	%79 = load double, double* %4
 	%80 = load double, double* %5
-	%81 = icmp sgt i32 %79, %80
+	%81 = fcmp ogt double %79, %80
 	%82 = zext i1 %81 to i32
 	%83 = load double, double* %6
-	%84 = icmp sgt i32 %82, %83
-	%85 = zext i1 %84 to i32
-	%86 = icmp ne i32 %85, 0
-	br i1 %86, label %label20, label %label21
+	%84 = sitofp i32 %82 to double
+	%85 = fcmp ogt double %84, %83
+	%86 = zext i1 %85 to i32
+	%87 = icmp ne i32 %86, 0
+	br i1 %87, label %label20, label %label21
+
+label20:
+	%88 = load double, double* %4
+	%89 = load double, double* %5
+	%90 = fcmp ogt double %88, %89
+	%91 = zext i1 %90 to i32
+	%92 = load double, double* %6
+	%93 = sitofp i32 %91 to double
+	%94 = fcmp ogt double %93, %92
+	%95 = zext i1 %94 to i32
+	%96 = icmp ne i32 %95, 0
+	br i1 %96, label %label20, label %label21
 
 label21:
-	%87 = load double, double* %4
-	%88 = load double, double* %5
-	%89 = icmp slt i32 %87, %88
-	%90 = zext i1 %89 to i32
-	%91 = load double, double* %6
-	%92 = icmp slt i32 %90, %91
-	%93 = zext i1 %92 to i32
-	%94 = icmp ne i32 %93, 0
-	br i1 %94, label %label22, label %label23
+	%97 = load double, double* %4
+	%98 = load double, double* %5
+	%99 = fcmp olt double %97, %98
+	%100 = zext i1 %99 to i32
+	%101 = load double, double* %6
+	%102 = sitofp i32 %100 to double
+	%103 = fcmp olt double %102, %101
+	%104 = zext i1 %103 to i32
+	%105 = icmp ne i32 %104, 0
+	br i1 %105, label %label22, label %label23
 
 label22:
-	%95 = load double, double* %4
-	%96 = load double, double* %5
-	%97 = icmp slt i32 %95, %96
-	%98 = zext i1 %97 to i32
-	%99 = load double, double* %6
-	%100 = icmp slt i32 %98, %99
-	%101 = zext i1 %100 to i32
-	%102 = icmp ne i32 %101, 0
-	br i1 %102, label %label22, label %label23
+	%106 = load double, double* %4
+	%107 = load double, double* %5
+	%108 = fcmp olt double %106, %107
+	%109 = zext i1 %108 to i32
+	%110 = load double, double* %6
+	%111 = sitofp i32 %109 to double
+	%112 = fcmp olt double %111, %110
+	%113 = zext i1 %112 to i32
+	%114 = icmp ne i32 %113, 0
+	br i1 %114, label %label22, label %label23
 
 label23:
-	%103 = load double, double* %4
-	%104 = load double, double* %5
-	%105 = icmp sge i32 %103, %104
-	%106 = zext i1 %105 to i32
-	%107 = load double, double* %6
-	%108 = icmp sge i32 %106, %107
-	%109 = zext i1 %108 to i32
-	%110 = icmp ne i32 %109, 0
-	br i1 %110, label %label24, label %label25
+	%115 = load double, double* %4
+	%116 = load double, double* %5
+	%117 = fcmp oge double %115, %116
+	%118 = zext i1 %117 to i32
+	%119 = load double, double* %6
+	%120 = sitofp i32 %118 to double
+	%121 = fcmp oge double %120, %119
+	%122 = zext i1 %121 to i32
+	%123 = icmp ne i32 %122, 0
+	br i1 %123, label %label24, label %label25
 
 label24:
-	%111 = load double, double* %4
-	%112 = load double, double* %5
-	%113 = icmp sge i32 %111, %112
-	%114 = zext i1 %113 to i32
-	%115 = load double, double* %6
-	%116 = icmp sge i32 %114, %115
-	%117 = zext i1 %116 to i32
-	%118 = icmp ne i32 %117, 0
-	br i1 %118, label %label24, label %label25
+	%124 = load double, double* %4
+	%125 = load double, double* %5
+	%126 = fcmp oge double %124, %125
+	%127 = zext i1 %126 to i32
+	%128 = load double, double* %6
+	%129 = sitofp i32 %127 to double
+	%130 = fcmp oge double %129, %128
+	%131 = zext i1 %130 to i32
+	%132 = icmp ne i32 %131, 0
+	br i1 %132, label %label24, label %label25
 
 label25:
-	%119 = load double, double* %5
-	%120 = load double, double* %6
-	%121 = icmp sle i32 %119, %120
-	%122 = zext i1 %121 to i32
-	%123 = load double, double* %4
-	%124 = icmp sle i32 %123, %122
-	%125 = zext i1 %124 to i32
-	%126 = icmp ne i32 %125, 0
-	br i1 %126, label %label26, label %label27
+	%133 = load double, double* %5
+	%134 = load double, double* %6
+	%135 = fcmp ole double %133, %134
+	%136 = zext i1 %135 to i32
+	%137 = load double, double* %4
+	%138 = sitofp i32 %136 to double
+	%139 = fcmp ole double %137, %138
+	%140 = zext i1 %139 to i32
+	%141 = icmp ne i32 %140, 0
+	br i1 %141, label %label26, label %label27
 
 label26:
-	%127 = load double, double* %5
-	%128 = load double, double* %6
-	%129 = icmp sle i32 %127, %128
-	%130 = zext i1 %129 to i32
-	%131 = load double, double* %4
-	%132 = icmp sle i32 %131, %130
-	%133 = zext i1 %132 to i32
-	%134 = icmp ne i32 %133, 0
-	br i1 %134, label %label26, label %label27
-
-label27:
-	%135 = load double, double* %5
-	%136 = load double, double* %6
-	%137 = icmp ne i32 %135, %136
-	%138 = zext i1 %137 to i32
-	%139 = load double, double* %4
-	%140 = icmp ne i32 %139, %138
-	%141 = zext i1 %140 to i32
-	%142 = icmp ne i32 %141, 0
-	br i1 %142, label %label28, label %label29
-
-label28:
-	%143 = load double, double* %5
-	%144 = load double, double* %6
-	%145 = icmp ne i32 %143, %144
-	%146 = zext i1 %145 to i32
-	%147 = load double, double* %4
-	%148 = icmp ne i32 %147, %146
+	%142 = load double, double* %5
+	%143 = load double, double* %6
+	%144 = fcmp ole double %142, %143
+	%145 = zext i1 %144 to i32
+	%146 = load double, double* %4
+	%147 = sitofp i32 %145 to double
+	%148 = fcmp ole double %146, %147
 	%149 = zext i1 %148 to i32
 	%150 = icmp ne i32 %149, 0
-	br i1 %150, label %label28, label %label29
+	br i1 %150, label %label26, label %label27
+
+label27:
+	%151 = load double, double* %5
+	%152 = load double, double* %6
+	%153 = fcmp une double %151, %152
+	%154 = zext i1 %153 to i32
+	%155 = load double, double* %4
+	%156 = sitofp i32 %154 to double
+	%157 = fcmp une double %155, %156
+	%158 = zext i1 %157 to i32
+	%159 = icmp ne i32 %158, 0
+	br i1 %159, label %label28, label %label29
+
+label28:
+	%160 = load double, double* %5
+	%161 = load double, double* %6
+	%162 = fcmp une double %160, %161
+	%163 = zext i1 %162 to i32
+	%164 = load double, double* %4
+	%165 = sitofp i32 %163 to double
+	%166 = fcmp une double %164, %165
+	%167 = zext i1 %166 to i32
+	%168 = icmp ne i32 %167, 0
+	br i1 %168, label %label28, label %label29
 
 label29:
 	ret i32 0
@@ -1375,13 +1373,14 @@ define i32 @relational5(i32, double, i32) {
 	store i32 %2, i32* %6
 	%7 = load i32, i32* %4
 	%8 = load double, double* %5
-	%9 = icmp eq i32 %7, %8
-	%10 = zext i1 %9 to i32
-	%11 = load i32, i32* %6
-	%12 = icmp eq i32 %10, %11
-	%13 = zext i1 %12 to i32
-	%14 = icmp ne i32 %13, 0
-	br i1 %14, label %label0, label %label1
+	%9 = sitofp i32 %7 to double
+	%10 = fcmp oeq double %9, %8
+	%11 = zext i1 %10 to i32
+	%12 = load i32, i32* %6
+	%13 = icmp eq i32 %11, %12
+	%14 = zext i1 %13 to i32
+	%15 = icmp ne i32 %14, 0
+	br i1 %15, label %label0, label %label1
 
 label0:
 	br label %label2
@@ -1390,15 +1389,16 @@ label1:
 	br label %label2
 
 label2:
-	%15 = load i32, i32* %4
-	%16 = load double, double* %5
-	%17 = icmp sgt i32 %15, %16
-	%18 = zext i1 %17 to i32
-	%19 = load i32, i32* %6
-	%20 = icmp sgt i32 %18, %19
-	%21 = zext i1 %20 to i32
-	%22 = icmp ne i32 %21, 0
-	br i1 %22, label %label3, label %label4
+	%16 = load i32, i32* %4
+	%17 = load double, double* %5
+	%18 = sitofp i32 %16 to double
+	%19 = fcmp ogt double %18, %17
+	%20 = zext i1 %19 to i32
+	%21 = load i32, i32* %6
+	%22 = icmp sgt i32 %20, %21
+	%23 = zext i1 %22 to i32
+	%24 = icmp ne i32 %23, 0
+	br i1 %24, label %label3, label %label4
 
 label3:
 	br label %label5
@@ -1407,15 +1407,16 @@ label4:
 	br label %label5
 
 label5:
-	%23 = load i32, i32* %4
-	%24 = load double, double* %5
-	%25 = icmp slt i32 %23, %24
-	%26 = zext i1 %25 to i32
-	%27 = load i32, i32* %6
-	%28 = icmp slt i32 %26, %27
+	%25 = load i32, i32* %4
+	%26 = load double, double* %5
+	%27 = sitofp i32 %25 to double
+	%28 = fcmp olt double %27, %26
 	%29 = zext i1 %28 to i32
-	%30 = icmp ne i32 %29, 0
-	br i1 %30, label %label6, label %label7
+	%30 = load i32, i32* %6
+	%31 = icmp slt i32 %29, %30
+	%32 = zext i1 %31 to i32
+	%33 = icmp ne i32 %32, 0
+	br i1 %33, label %label6, label %label7
 
 label6:
 	br label %label8
@@ -1424,15 +1425,16 @@ label7:
 	br label %label8
 
 label8:
-	%31 = load i32, i32* %4
-	%32 = load double, double* %5
-	%33 = icmp sge i32 %31, %32
-	%34 = zext i1 %33 to i32
-	%35 = load i32, i32* %6
-	%36 = icmp sge i32 %34, %35
-	%37 = zext i1 %36 to i32
-	%38 = icmp ne i32 %37, 0
-	br i1 %38, label %label9, label %label10
+	%34 = load i32, i32* %4
+	%35 = load double, double* %5
+	%36 = sitofp i32 %34 to double
+	%37 = fcmp oge double %36, %35
+	%38 = zext i1 %37 to i32
+	%39 = load i32, i32* %6
+	%40 = icmp sge i32 %38, %39
+	%41 = zext i1 %40 to i32
+	%42 = icmp ne i32 %41, 0
+	br i1 %42, label %label9, label %label10
 
 label9:
 	br label %label11
@@ -1441,15 +1443,16 @@ label10:
 	br label %label11
 
 label11:
-	%39 = load double, double* %5
-	%40 = load i32, i32* %6
-	%41 = icmp sle i32 %39, %40
-	%42 = zext i1 %41 to i32
-	%43 = load i32, i32* %4
-	%44 = icmp sle i32 %43, %42
-	%45 = zext i1 %44 to i32
-	%46 = icmp ne i32 %45, 0
-	br i1 %46, label %label12, label %label13
+	%43 = load double, double* %5
+	%44 = load i32, i32* %6
+	%45 = sitofp i32 %44 to double
+	%46 = fcmp ole double %43, %45
+	%47 = zext i1 %46 to i32
+	%48 = load i32, i32* %4
+	%49 = icmp sle i32 %48, %47
+	%50 = zext i1 %49 to i32
+	%51 = icmp ne i32 %50, 0
+	br i1 %51, label %label12, label %label13
 
 label12:
 	br label %label14
@@ -1458,15 +1461,16 @@ label13:
 	br label %label14
 
 label14:
-	%47 = load double, double* %5
-	%48 = load i32, i32* %6
-	%49 = icmp ne i32 %47, %48
-	%50 = zext i1 %49 to i32
-	%51 = load i32, i32* %4
-	%52 = icmp ne i32 %51, %50
-	%53 = zext i1 %52 to i32
-	%54 = icmp ne i32 %53, 0
-	br i1 %54, label %label15, label %label16
+	%52 = load double, double* %5
+	%53 = load i32, i32* %6
+	%54 = sitofp i32 %53 to double
+	%55 = fcmp une double %52, %54
+	%56 = zext i1 %55 to i32
+	%57 = load i32, i32* %4
+	%58 = icmp ne i32 %57, %56
+	%59 = zext i1 %58 to i32
+	%60 = icmp ne i32 %59, 0
+	br i1 %60, label %label15, label %label16
 
 label15:
 	br label %label17
@@ -1475,136 +1479,148 @@ label16:
 	br label %label17
 
 label17:
-	%55 = load i32, i32* %4
-	%56 = load double, double* %5
-	%57 = icmp eq i32 %55, %56
-	%58 = zext i1 %57 to i32
-	%59 = load i32, i32* %6
-	%60 = icmp eq i32 %58, %59
-	%61 = zext i1 %60 to i32
-	%62 = icmp ne i32 %61, 0
-	br i1 %62, label %label18, label %label19
+	%61 = load i32, i32* %4
+	%62 = load double, double* %5
+	%63 = sitofp i32 %61 to double
+	%64 = fcmp oeq double %63, %62
+	%65 = zext i1 %64 to i32
+	%66 = load i32, i32* %6
+	%67 = icmp eq i32 %65, %66
+	%68 = zext i1 %67 to i32
+	%69 = icmp ne i32 %68, 0
+	br i1 %69, label %label18, label %label19
 
 label18:
-	%63 = load i32, i32* %4
-	%64 = load double, double* %5
-	%65 = icmp eq i32 %63, %64
-	%66 = zext i1 %65 to i32
-	%67 = load i32, i32* %6
-	%68 = icmp eq i32 %66, %67
-	%69 = zext i1 %68 to i32
-	%70 = icmp ne i32 %69, 0
-	br i1 %70, label %label18, label %label19
-
-label19:
-	%71 = load i32, i32* %4
-	%72 = load double, double* %5
-	%73 = icmp sgt i32 %71, %72
+	%70 = load i32, i32* %4
+	%71 = load double, double* %5
+	%72 = sitofp i32 %70 to double
+	%73 = fcmp oeq double %72, %71
 	%74 = zext i1 %73 to i32
 	%75 = load i32, i32* %6
-	%76 = icmp sgt i32 %74, %75
+	%76 = icmp eq i32 %74, %75
 	%77 = zext i1 %76 to i32
 	%78 = icmp ne i32 %77, 0
-	br i1 %78, label %label20, label %label21
+	br i1 %78, label %label18, label %label19
 
-label20:
+label19:
 	%79 = load i32, i32* %4
 	%80 = load double, double* %5
-	%81 = icmp sgt i32 %79, %80
-	%82 = zext i1 %81 to i32
-	%83 = load i32, i32* %6
-	%84 = icmp sgt i32 %82, %83
-	%85 = zext i1 %84 to i32
-	%86 = icmp ne i32 %85, 0
-	br i1 %86, label %label20, label %label21
+	%81 = sitofp i32 %79 to double
+	%82 = fcmp ogt double %81, %80
+	%83 = zext i1 %82 to i32
+	%84 = load i32, i32* %6
+	%85 = icmp sgt i32 %83, %84
+	%86 = zext i1 %85 to i32
+	%87 = icmp ne i32 %86, 0
+	br i1 %87, label %label20, label %label21
+
+label20:
+	%88 = load i32, i32* %4
+	%89 = load double, double* %5
+	%90 = sitofp i32 %88 to double
+	%91 = fcmp ogt double %90, %89
+	%92 = zext i1 %91 to i32
+	%93 = load i32, i32* %6
+	%94 = icmp sgt i32 %92, %93
+	%95 = zext i1 %94 to i32
+	%96 = icmp ne i32 %95, 0
+	br i1 %96, label %label20, label %label21
 
 label21:
-	%87 = load i32, i32* %4
-	%88 = load double, double* %5
-	%89 = icmp slt i32 %87, %88
-	%90 = zext i1 %89 to i32
-	%91 = load i32, i32* %6
-	%92 = icmp slt i32 %90, %91
-	%93 = zext i1 %92 to i32
-	%94 = icmp ne i32 %93, 0
-	br i1 %94, label %label22, label %label23
+	%97 = load i32, i32* %4
+	%98 = load double, double* %5
+	%99 = sitofp i32 %97 to double
+	%100 = fcmp olt double %99, %98
+	%101 = zext i1 %100 to i32
+	%102 = load i32, i32* %6
+	%103 = icmp slt i32 %101, %102
+	%104 = zext i1 %103 to i32
+	%105 = icmp ne i32 %104, 0
+	br i1 %105, label %label22, label %label23
 
 label22:
-	%95 = load i32, i32* %4
-	%96 = load double, double* %5
-	%97 = icmp slt i32 %95, %96
-	%98 = zext i1 %97 to i32
-	%99 = load i32, i32* %6
-	%100 = icmp slt i32 %98, %99
-	%101 = zext i1 %100 to i32
-	%102 = icmp ne i32 %101, 0
-	br i1 %102, label %label22, label %label23
+	%106 = load i32, i32* %4
+	%107 = load double, double* %5
+	%108 = sitofp i32 %106 to double
+	%109 = fcmp olt double %108, %107
+	%110 = zext i1 %109 to i32
+	%111 = load i32, i32* %6
+	%112 = icmp slt i32 %110, %111
+	%113 = zext i1 %112 to i32
+	%114 = icmp ne i32 %113, 0
+	br i1 %114, label %label22, label %label23
 
 label23:
-	%103 = load i32, i32* %4
-	%104 = load double, double* %5
-	%105 = icmp sge i32 %103, %104
-	%106 = zext i1 %105 to i32
-	%107 = load i32, i32* %6
-	%108 = icmp sge i32 %106, %107
-	%109 = zext i1 %108 to i32
-	%110 = icmp ne i32 %109, 0
-	br i1 %110, label %label24, label %label25
+	%115 = load i32, i32* %4
+	%116 = load double, double* %5
+	%117 = sitofp i32 %115 to double
+	%118 = fcmp oge double %117, %116
+	%119 = zext i1 %118 to i32
+	%120 = load i32, i32* %6
+	%121 = icmp sge i32 %119, %120
+	%122 = zext i1 %121 to i32
+	%123 = icmp ne i32 %122, 0
+	br i1 %123, label %label24, label %label25
 
 label24:
-	%111 = load i32, i32* %4
-	%112 = load double, double* %5
-	%113 = icmp sge i32 %111, %112
-	%114 = zext i1 %113 to i32
-	%115 = load i32, i32* %6
-	%116 = icmp sge i32 %114, %115
-	%117 = zext i1 %116 to i32
-	%118 = icmp ne i32 %117, 0
-	br i1 %118, label %label24, label %label25
+	%124 = load i32, i32* %4
+	%125 = load double, double* %5
+	%126 = sitofp i32 %124 to double
+	%127 = fcmp oge double %126, %125
+	%128 = zext i1 %127 to i32
+	%129 = load i32, i32* %6
+	%130 = icmp sge i32 %128, %129
+	%131 = zext i1 %130 to i32
+	%132 = icmp ne i32 %131, 0
+	br i1 %132, label %label24, label %label25
 
 label25:
-	%119 = load double, double* %5
-	%120 = load i32, i32* %6
-	%121 = icmp sle i32 %119, %120
-	%122 = zext i1 %121 to i32
-	%123 = load i32, i32* %4
-	%124 = icmp sle i32 %123, %122
-	%125 = zext i1 %124 to i32
-	%126 = icmp ne i32 %125, 0
-	br i1 %126, label %label26, label %label27
+	%133 = load double, double* %5
+	%134 = load i32, i32* %6
+	%135 = sitofp i32 %134 to double
+	%136 = fcmp ole double %133, %135
+	%137 = zext i1 %136 to i32
+	%138 = load i32, i32* %4
+	%139 = icmp sle i32 %138, %137
+	%140 = zext i1 %139 to i32
+	%141 = icmp ne i32 %140, 0
+	br i1 %141, label %label26, label %label27
 
 label26:
-	%127 = load double, double* %5
-	%128 = load i32, i32* %6
-	%129 = icmp sle i32 %127, %128
-	%130 = zext i1 %129 to i32
-	%131 = load i32, i32* %4
-	%132 = icmp sle i32 %131, %130
-	%133 = zext i1 %132 to i32
-	%134 = icmp ne i32 %133, 0
-	br i1 %134, label %label26, label %label27
-
-label27:
-	%135 = load double, double* %5
-	%136 = load i32, i32* %6
-	%137 = icmp ne i32 %135, %136
-	%138 = zext i1 %137 to i32
-	%139 = load i32, i32* %4
-	%140 = icmp ne i32 %139, %138
-	%141 = zext i1 %140 to i32
-	%142 = icmp ne i32 %141, 0
-	br i1 %142, label %label28, label %label29
-
-label28:
-	%143 = load double, double* %5
-	%144 = load i32, i32* %6
-	%145 = icmp ne i32 %143, %144
+	%142 = load double, double* %5
+	%143 = load i32, i32* %6
+	%144 = sitofp i32 %143 to double
+	%145 = fcmp ole double %142, %144
 	%146 = zext i1 %145 to i32
 	%147 = load i32, i32* %4
-	%148 = icmp ne i32 %147, %146
+	%148 = icmp sle i32 %147, %146
 	%149 = zext i1 %148 to i32
 	%150 = icmp ne i32 %149, 0
-	br i1 %150, label %label28, label %label29
+	br i1 %150, label %label26, label %label27
+
+label27:
+	%151 = load double, double* %5
+	%152 = load i32, i32* %6
+	%153 = sitofp i32 %152 to double
+	%154 = fcmp une double %151, %153
+	%155 = zext i1 %154 to i32
+	%156 = load i32, i32* %4
+	%157 = icmp ne i32 %156, %155
+	%158 = zext i1 %157 to i32
+	%159 = icmp ne i32 %158, 0
+	br i1 %159, label %label28, label %label29
+
+label28:
+	%160 = load double, double* %5
+	%161 = load i32, i32* %6
+	%162 = sitofp i32 %161 to double
+	%163 = fcmp une double %160, %162
+	%164 = zext i1 %163 to i32
+	%165 = load i32, i32* %4
+	%166 = icmp ne i32 %165, %164
+	%167 = zext i1 %166 to i32
+	%168 = icmp ne i32 %167, 0
+	br i1 %168, label %label28, label %label29
 
 label29:
 	ret i32 0
@@ -1619,13 +1635,14 @@ define i32 @relational6(double, double, double) {
 	store double %2, double* %6
 	%7 = load double, double* %4
 	%8 = load double, double* %5
-	%9 = icmp eq i32 %7, %8
+	%9 = fcmp oeq double %7, %8
 	%10 = zext i1 %9 to i32
 	%11 = load double, double* %6
-	%12 = icmp eq i32 %10, %11
-	%13 = zext i1 %12 to i32
-	%14 = icmp ne i32 %13, 0
-	br i1 %14, label %label0, label %label1
+	%12 = sitofp i32 %10 to double
+	%13 = fcmp oeq double %12, %11
+	%14 = zext i1 %13 to i32
+	%15 = icmp ne i32 %14, 0
+	br i1 %15, label %label0, label %label1
 
 label0:
 	br label %label2
@@ -1634,15 +1651,16 @@ label1:
 	br label %label2
 
 label2:
-	%15 = load double, double* %4
-	%16 = load double, double* %5
-	%17 = icmp sgt i32 %15, %16
-	%18 = zext i1 %17 to i32
-	%19 = load double, double* %6
-	%20 = icmp sgt i32 %18, %19
-	%21 = zext i1 %20 to i32
-	%22 = icmp ne i32 %21, 0
-	br i1 %22, label %label3, label %label4
+	%16 = load double, double* %4
+	%17 = load double, double* %5
+	%18 = fcmp ogt double %16, %17
+	%19 = zext i1 %18 to i32
+	%20 = load double, double* %6
+	%21 = sitofp i32 %19 to double
+	%22 = fcmp ogt double %21, %20
+	%23 = zext i1 %22 to i32
+	%24 = icmp ne i32 %23, 0
+	br i1 %24, label %label3, label %label4
 
 label3:
 	br label %label5
@@ -1651,15 +1669,16 @@ label4:
 	br label %label5
 
 label5:
-	%23 = load double, double* %4
-	%24 = load double, double* %5
-	%25 = icmp slt i32 %23, %24
-	%26 = zext i1 %25 to i32
-	%27 = load double, double* %6
-	%28 = icmp slt i32 %26, %27
-	%29 = zext i1 %28 to i32
-	%30 = icmp ne i32 %29, 0
-	br i1 %30, label %label6, label %label7
+	%25 = load double, double* %4
+	%26 = load double, double* %5
+	%27 = fcmp olt double %25, %26
+	%28 = zext i1 %27 to i32
+	%29 = load double, double* %6
+	%30 = sitofp i32 %28 to double
+	%31 = fcmp olt double %30, %29
+	%32 = zext i1 %31 to i32
+	%33 = icmp ne i32 %32, 0
+	br i1 %33, label %label6, label %label7
 
 label6:
 	br label %label8
@@ -1668,15 +1687,16 @@ label7:
 	br label %label8
 
 label8:
-	%31 = load double, double* %4
-	%32 = load double, double* %5
-	%33 = icmp sge i32 %31, %32
-	%34 = zext i1 %33 to i32
-	%35 = load double, double* %6
-	%36 = icmp sge i32 %34, %35
+	%34 = load double, double* %4
+	%35 = load double, double* %5
+	%36 = fcmp oge double %34, %35
 	%37 = zext i1 %36 to i32
-	%38 = icmp ne i32 %37, 0
-	br i1 %38, label %label9, label %label10
+	%38 = load double, double* %6
+	%39 = sitofp i32 %37 to double
+	%40 = fcmp oge double %39, %38
+	%41 = zext i1 %40 to i32
+	%42 = icmp ne i32 %41, 0
+	br i1 %42, label %label9, label %label10
 
 label9:
 	br label %label11
@@ -1685,15 +1705,16 @@ label10:
 	br label %label11
 
 label11:
-	%39 = load double, double* %5
-	%40 = load double, double* %6
-	%41 = icmp sle i32 %39, %40
-	%42 = zext i1 %41 to i32
-	%43 = load double, double* %4
-	%44 = icmp sle i32 %43, %42
-	%45 = zext i1 %44 to i32
-	%46 = icmp ne i32 %45, 0
-	br i1 %46, label %label12, label %label13
+	%43 = load double, double* %5
+	%44 = load double, double* %6
+	%45 = fcmp ole double %43, %44
+	%46 = zext i1 %45 to i32
+	%47 = load double, double* %4
+	%48 = sitofp i32 %46 to double
+	%49 = fcmp ole double %47, %48
+	%50 = zext i1 %49 to i32
+	%51 = icmp ne i32 %50, 0
+	br i1 %51, label %label12, label %label13
 
 label12:
 	br label %label14
@@ -1702,15 +1723,16 @@ label13:
 	br label %label14
 
 label14:
-	%47 = load double, double* %5
-	%48 = load double, double* %6
-	%49 = icmp ne i32 %47, %48
-	%50 = zext i1 %49 to i32
-	%51 = load double, double* %4
-	%52 = icmp ne i32 %51, %50
-	%53 = zext i1 %52 to i32
-	%54 = icmp ne i32 %53, 0
-	br i1 %54, label %label15, label %label16
+	%52 = load double, double* %5
+	%53 = load double, double* %6
+	%54 = fcmp une double %52, %53
+	%55 = zext i1 %54 to i32
+	%56 = load double, double* %4
+	%57 = sitofp i32 %55 to double
+	%58 = fcmp une double %56, %57
+	%59 = zext i1 %58 to i32
+	%60 = icmp ne i32 %59, 0
+	br i1 %60, label %label15, label %label16
 
 label15:
 	br label %label17
@@ -1719,136 +1741,148 @@ label16:
 	br label %label17
 
 label17:
-	%55 = load double, double* %4
-	%56 = load double, double* %5
-	%57 = icmp eq i32 %55, %56
-	%58 = zext i1 %57 to i32
-	%59 = load double, double* %6
-	%60 = icmp eq i32 %58, %59
-	%61 = zext i1 %60 to i32
-	%62 = icmp ne i32 %61, 0
-	br i1 %62, label %label18, label %label19
+	%61 = load double, double* %4
+	%62 = load double, double* %5
+	%63 = fcmp oeq double %61, %62
+	%64 = zext i1 %63 to i32
+	%65 = load double, double* %6
+	%66 = sitofp i32 %64 to double
+	%67 = fcmp oeq double %66, %65
+	%68 = zext i1 %67 to i32
+	%69 = icmp ne i32 %68, 0
+	br i1 %69, label %label18, label %label19
 
 label18:
-	%63 = load double, double* %4
-	%64 = load double, double* %5
-	%65 = icmp eq i32 %63, %64
-	%66 = zext i1 %65 to i32
-	%67 = load double, double* %6
-	%68 = icmp eq i32 %66, %67
-	%69 = zext i1 %68 to i32
-	%70 = icmp ne i32 %69, 0
-	br i1 %70, label %label18, label %label19
-
-label19:
-	%71 = load double, double* %4
-	%72 = load double, double* %5
-	%73 = icmp sgt i32 %71, %72
-	%74 = zext i1 %73 to i32
-	%75 = load double, double* %6
-	%76 = icmp sgt i32 %74, %75
+	%70 = load double, double* %4
+	%71 = load double, double* %5
+	%72 = fcmp oeq double %70, %71
+	%73 = zext i1 %72 to i32
+	%74 = load double, double* %6
+	%75 = sitofp i32 %73 to double
+	%76 = fcmp oeq double %75, %74
 	%77 = zext i1 %76 to i32
 	%78 = icmp ne i32 %77, 0
-	br i1 %78, label %label20, label %label21
+	br i1 %78, label %label18, label %label19
 
-label20:
+label19:
 	%79 = load double, double* %4
 	%80 = load double, double* %5
-	%81 = icmp sgt i32 %79, %80
+	%81 = fcmp ogt double %79, %80
 	%82 = zext i1 %81 to i32
 	%83 = load double, double* %6
-	%84 = icmp sgt i32 %82, %83
-	%85 = zext i1 %84 to i32
-	%86 = icmp ne i32 %85, 0
-	br i1 %86, label %label20, label %label21
+	%84 = sitofp i32 %82 to double
+	%85 = fcmp ogt double %84, %83
+	%86 = zext i1 %85 to i32
+	%87 = icmp ne i32 %86, 0
+	br i1 %87, label %label20, label %label21
+
+label20:
+	%88 = load double, double* %4
+	%89 = load double, double* %5
+	%90 = fcmp ogt double %88, %89
+	%91 = zext i1 %90 to i32
+	%92 = load double, double* %6
+	%93 = sitofp i32 %91 to double
+	%94 = fcmp ogt double %93, %92
+	%95 = zext i1 %94 to i32
+	%96 = icmp ne i32 %95, 0
+	br i1 %96, label %label20, label %label21
 
 label21:
-	%87 = load double, double* %4
-	%88 = load double, double* %5
-	%89 = icmp slt i32 %87, %88
-	%90 = zext i1 %89 to i32
-	%91 = load double, double* %6
-	%92 = icmp slt i32 %90, %91
-	%93 = zext i1 %92 to i32
-	%94 = icmp ne i32 %93, 0
-	br i1 %94, label %label22, label %label23
+	%97 = load double, double* %4
+	%98 = load double, double* %5
+	%99 = fcmp olt double %97, %98
+	%100 = zext i1 %99 to i32
+	%101 = load double, double* %6
+	%102 = sitofp i32 %100 to double
+	%103 = fcmp olt double %102, %101
+	%104 = zext i1 %103 to i32
+	%105 = icmp ne i32 %104, 0
+	br i1 %105, label %label22, label %label23
 
 label22:
-	%95 = load double, double* %4
-	%96 = load double, double* %5
-	%97 = icmp slt i32 %95, %96
-	%98 = zext i1 %97 to i32
-	%99 = load double, double* %6
-	%100 = icmp slt i32 %98, %99
-	%101 = zext i1 %100 to i32
-	%102 = icmp ne i32 %101, 0
-	br i1 %102, label %label22, label %label23
+	%106 = load double, double* %4
+	%107 = load double, double* %5
+	%108 = fcmp olt double %106, %107
+	%109 = zext i1 %108 to i32
+	%110 = load double, double* %6
+	%111 = sitofp i32 %109 to double
+	%112 = fcmp olt double %111, %110
+	%113 = zext i1 %112 to i32
+	%114 = icmp ne i32 %113, 0
+	br i1 %114, label %label22, label %label23
 
 label23:
-	%103 = load double, double* %4
-	%104 = load double, double* %5
-	%105 = icmp sge i32 %103, %104
-	%106 = zext i1 %105 to i32
-	%107 = load double, double* %6
-	%108 = icmp sge i32 %106, %107
-	%109 = zext i1 %108 to i32
-	%110 = icmp ne i32 %109, 0
-	br i1 %110, label %label24, label %label25
+	%115 = load double, double* %4
+	%116 = load double, double* %5
+	%117 = fcmp oge double %115, %116
+	%118 = zext i1 %117 to i32
+	%119 = load double, double* %6
+	%120 = sitofp i32 %118 to double
+	%121 = fcmp oge double %120, %119
+	%122 = zext i1 %121 to i32
+	%123 = icmp ne i32 %122, 0
+	br i1 %123, label %label24, label %label25
 
 label24:
-	%111 = load double, double* %4
-	%112 = load double, double* %5
-	%113 = icmp sge i32 %111, %112
-	%114 = zext i1 %113 to i32
-	%115 = load double, double* %6
-	%116 = icmp sge i32 %114, %115
-	%117 = zext i1 %116 to i32
-	%118 = icmp ne i32 %117, 0
-	br i1 %118, label %label24, label %label25
+	%124 = load double, double* %4
+	%125 = load double, double* %5
+	%126 = fcmp oge double %124, %125
+	%127 = zext i1 %126 to i32
+	%128 = load double, double* %6
+	%129 = sitofp i32 %127 to double
+	%130 = fcmp oge double %129, %128
+	%131 = zext i1 %130 to i32
+	%132 = icmp ne i32 %131, 0
+	br i1 %132, label %label24, label %label25
 
 label25:
-	%119 = load double, double* %5
-	%120 = load double, double* %6
-	%121 = icmp sle i32 %119, %120
-	%122 = zext i1 %121 to i32
-	%123 = load double, double* %4
-	%124 = icmp sle i32 %123, %122
-	%125 = zext i1 %124 to i32
-	%126 = icmp ne i32 %125, 0
-	br i1 %126, label %label26, label %label27
+	%133 = load double, double* %5
+	%134 = load double, double* %6
+	%135 = fcmp ole double %133, %134
+	%136 = zext i1 %135 to i32
+	%137 = load double, double* %4
+	%138 = sitofp i32 %136 to double
+	%139 = fcmp ole double %137, %138
+	%140 = zext i1 %139 to i32
+	%141 = icmp ne i32 %140, 0
+	br i1 %141, label %label26, label %label27
 
 label26:
-	%127 = load double, double* %5
-	%128 = load double, double* %6
-	%129 = icmp sle i32 %127, %128
-	%130 = zext i1 %129 to i32
-	%131 = load double, double* %4
-	%132 = icmp sle i32 %131, %130
-	%133 = zext i1 %132 to i32
-	%134 = icmp ne i32 %133, 0
-	br i1 %134, label %label26, label %label27
-
-label27:
-	%135 = load double, double* %5
-	%136 = load double, double* %6
-	%137 = icmp ne i32 %135, %136
-	%138 = zext i1 %137 to i32
-	%139 = load double, double* %4
-	%140 = icmp ne i32 %139, %138
-	%141 = zext i1 %140 to i32
-	%142 = icmp ne i32 %141, 0
-	br i1 %142, label %label28, label %label29
-
-label28:
-	%143 = load double, double* %5
-	%144 = load double, double* %6
-	%145 = icmp ne i32 %143, %144
-	%146 = zext i1 %145 to i32
-	%147 = load double, double* %4
-	%148 = icmp ne i32 %147, %146
+	%142 = load double, double* %5
+	%143 = load double, double* %6
+	%144 = fcmp ole double %142, %143
+	%145 = zext i1 %144 to i32
+	%146 = load double, double* %4
+	%147 = sitofp i32 %145 to double
+	%148 = fcmp ole double %146, %147
 	%149 = zext i1 %148 to i32
 	%150 = icmp ne i32 %149, 0
-	br i1 %150, label %label28, label %label29
+	br i1 %150, label %label26, label %label27
+
+label27:
+	%151 = load double, double* %5
+	%152 = load double, double* %6
+	%153 = fcmp une double %151, %152
+	%154 = zext i1 %153 to i32
+	%155 = load double, double* %4
+	%156 = sitofp i32 %154 to double
+	%157 = fcmp une double %155, %156
+	%158 = zext i1 %157 to i32
+	%159 = icmp ne i32 %158, 0
+	br i1 %159, label %label28, label %label29
+
+label28:
+	%160 = load double, double* %5
+	%161 = load double, double* %6
+	%162 = fcmp une double %160, %161
+	%163 = zext i1 %162 to i32
+	%164 = load double, double* %4
+	%165 = sitofp i32 %163 to double
+	%166 = fcmp une double %164, %165
+	%167 = zext i1 %166 to i32
+	%168 = icmp ne i32 %167, 0
+	br i1 %168, label %label28, label %label29
 
 label29:
 	ret i32 0

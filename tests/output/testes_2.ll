@@ -29,14 +29,12 @@ define i32 @f1() {
 	store i32 3, i32* %3
 	%4 = alloca double
 	%5 = load i32, i32* %1
-	%6 = sitofp i32 %5 to double
-	%7 = load i32, i32* %2
-	%8 = sitofp i32 %7 to double
-	%9 = fadd double %6, %8
-	%10 = load i32, i32* %3
-	%11 = sitofp i32 %10 to double
-	%12 = fadd double %9, %11
-	store double %12, double* %4
+	%6 = load i32, i32* %2
+	%7 = add i32 %5, %6
+	%8 = load i32, i32* %3
+	%9 = add i32 %7, %8
+	%10 = sitofp i32 %9 to double
+	store double %10, double* %4
 	ret i32 0
 }
 
@@ -49,13 +47,12 @@ define i32 @f2() {
 	store double 3.000000e+00, double* %3
 	%4 = alloca double
 	%5 = load i32, i32* %1
-	%6 = sitofp i32 %5 to double
-	%7 = load i32, i32* %2
-	%8 = sitofp i32 %7 to double
-	%9 = fadd double %6, %8
-	%10 = load double, double* %3
-	%11 = fadd double %9, %10
-	store double %11, double* %4
+	%6 = load i32, i32* %2
+	%7 = add i32 %5, %6
+	%8 = load double, double* %3
+	%9 = sitofp i32 %7 to double
+	%10 = fadd double %9, %8
+	store double %10, double* %4
 	ret i32 0
 }
 
@@ -69,9 +66,9 @@ define i32 @f3() {
 	%5 = sitofp i32 %4 to double
 	%6 = fcmp olt double %3, %5
 	%7 = zext i1 %6 to i32
-	%8 = sitofp i32 %7 to double
-	%9 = load double, double* %1
-	%10 = fcmp oeq double %9, %8
+	%8 = load double, double* %1
+	%9 = sitofp i32 %7 to double
+	%10 = fcmp oeq double %8, %9
 	%11 = zext i1 %10 to i32
 	%12 = sitofp i32 %11 to double
 	%13 = alloca double
@@ -87,27 +84,23 @@ define i32 @f4() {
 	%5 = alloca i32
 	store i32 %4, i32* %5
 	%6 = add i32 0, 1
-	%7 = sitofp i32 %6 to double
-	%8 = add i32 0, 10
-	%9 = sitofp i32 %8 to double
-	%10 = fcmp oeq double %7, %9
-	%11 = zext i1 %10 to i32
-	%12 = sitofp i32 %11 to double
-	%13 = alloca double
-	store double %12, double* %13
-	%14 = alloca i32
-	store i32 2, i32* %14
-	%15 = alloca i32
-	store i32 3, i32* %15
-	%16 = load i32, i32* %14
-	%17 = sitofp i32 %16 to double
-	%18 = load i32, i32* %15
-	%19 = sitofp i32 %18 to double
-	%20 = fcmp oeq double %17, %19
-	%21 = zext i1 %20 to i32
-	%22 = sitofp i32 %21 to double
-	%23 = alloca double
-	store double %22, double* %23
+	%7 = add i32 0, 10
+	%8 = icmp eq i32 %6, %7
+	%9 = zext i1 %8 to i32
+	%10 = sitofp i32 %9 to double
+	%11 = alloca double
+	store double %10, double* %11
+	%12 = alloca i32
+	store i32 2, i32* %12
+	%13 = alloca i32
+	store i32 3, i32* %13
+	%14 = load i32, i32* %12
+	%15 = load i32, i32* %13
+	%16 = icmp eq i32 %14, %15
+	%17 = zext i1 %16 to i32
+	%18 = sitofp i32 %17 to double
+	%19 = alloca double
+	store double %18, double* %19
 	ret i32 0
 }
 
@@ -200,13 +193,12 @@ define i32 @f7() {
 	%8 = alloca i32
 	store i32 %7, i32* %8
 	%9 = add i32 0, 1
-	%10 = sitofp i32 %9 to double
-	%11 = fsub double 0.0, %10
-	%12 = add i32 0, 2
+	%10 = sub i32 0, %9
+	%11 = add i32 0, 2
+	%12 = add i32 %10, %11
 	%13 = sitofp i32 %12 to double
-	%14 = fadd double %11, %13
-	%15 = alloca double
-	store double %14, double* %15
+	%14 = alloca double
+	store double %13, double* %14
 	ret i32 0
 }
 
@@ -275,13 +267,12 @@ define i32 @f12() {
 	%9 = alloca i32
 	store i32 %8, i32* %9
 	%10 = add i32 0, 1
-	%11 = sitofp i32 %10 to double
-	%12 = fsub double 0.0, %11
-	%13 = add i32 0, 2
+	%11 = sub i32 0, %10
+	%12 = add i32 0, 2
+	%13 = add i32 %11, %12
 	%14 = sitofp i32 %13 to double
-	%15 = fadd double %12, %14
-	%16 = alloca double
-	store double %15, double* %16
+	%15 = alloca double
+	store double %14, double* %15
 	ret i32 0
 }
 
@@ -397,31 +388,27 @@ define i32 @f20() {
 	%5 = alloca i32
 	store i32 %4, i32* %5
 	%6 = add i32 0, 1
-	%7 = sitofp i32 %6 to double
-	%8 = add i32 0, 10
-	%9 = sitofp i32 %8 to double
-	%10 = fcmp oeq double %7, %9
-	%11 = zext i1 %10 to i32
-	%12 = sitofp i32 %11 to double
-	%13 = alloca double
-	store double %12, double* %13
-	%14 = alloca i32
-	store i32 2, i32* %14
-	%15 = alloca i32
-	store i32 3, i32* %15
-	%16 = load i32, i32* %14
-	%17 = sitofp i32 %16 to double
-	%18 = load i32, i32* %15
-	%19 = sitofp i32 %18 to double
-	%20 = fcmp oeq double %17, %19
+	%7 = add i32 0, 10
+	%8 = icmp eq i32 %6, %7
+	%9 = zext i1 %8 to i32
+	%10 = sitofp i32 %9 to double
+	%11 = alloca double
+	store double %10, double* %11
+	%12 = alloca i32
+	store i32 2, i32* %12
+	%13 = alloca i32
+	store i32 3, i32* %13
+	%14 = load i32, i32* %12
+	%15 = load i32, i32* %13
+	%16 = icmp eq i32 %14, %15
+	%17 = zext i1 %16 to i32
+	%18 = load double, double* %11
+	%19 = sitofp i32 %17 to double
+	%20 = fcmp oeq double %19, %18
 	%21 = zext i1 %20 to i32
 	%22 = sitofp i32 %21 to double
-	%23 = load double, double* %13
-	%24 = fcmp oeq double %22, %23
-	%25 = zext i1 %24 to i32
-	%26 = sitofp i32 %25 to double
-	%27 = alloca double
-	store double %26, double* %27
+	%23 = alloca double
+	store double %22, double* %23
 	ret i32 0
 }
 
@@ -433,32 +420,26 @@ define i32 @f21() {
 	%5 = alloca i32
 	store i32 %4, i32* %5
 	%6 = add i32 0, 1
-	%7 = sitofp i32 %6 to double
-	%8 = add i32 0, 10
-	%9 = sitofp i32 %8 to double
-	%10 = fcmp oeq double %7, %9
-	%11 = zext i1 %10 to i32
-	%12 = sitofp i32 %11 to double
-	%13 = alloca double
-	store double %12, double* %13
-	%14 = alloca i32
-	store i32 2, i32* %14
-	%15 = alloca i32
-	store i32 3, i32* %15
-	%16 = load i32, i32* %14
-	%17 = sitofp i32 %16 to double
-	%18 = load i32, i32* %15
-	%19 = sitofp i32 %18 to double
-	%20 = fcmp oeq double %17, %19
-	%21 = zext i1 %20 to i32
-	%22 = sitofp i32 %21 to double
-	%23 = add i32 0, 2
-	%24 = sitofp i32 %23 to double
-	%25 = fcmp oeq double %22, %24
-	%26 = zext i1 %25 to i32
-	%27 = sitofp i32 %26 to double
-	%28 = alloca double
-	store double %27, double* %28
+	%7 = add i32 0, 10
+	%8 = icmp eq i32 %6, %7
+	%9 = zext i1 %8 to i32
+	%10 = sitofp i32 %9 to double
+	%11 = alloca double
+	store double %10, double* %11
+	%12 = alloca i32
+	store i32 2, i32* %12
+	%13 = alloca i32
+	store i32 3, i32* %13
+	%14 = load i32, i32* %12
+	%15 = load i32, i32* %13
+	%16 = icmp eq i32 %14, %15
+	%17 = zext i1 %16 to i32
+	%18 = add i32 0, 2
+	%19 = icmp eq i32 %17, %18
+	%20 = zext i1 %19 to i32
+	%21 = sitofp i32 %20 to double
+	%22 = alloca double
+	store double %21, double* %22
 	ret i32 0
 }
 
@@ -470,32 +451,26 @@ define i32 @f22() {
 	%5 = alloca i32
 	store i32 %4, i32* %5
 	%6 = add i32 0, 1
-	%7 = sitofp i32 %6 to double
-	%8 = add i32 0, 10
-	%9 = sitofp i32 %8 to double
-	%10 = fcmp oeq double %7, %9
-	%11 = zext i1 %10 to i32
-	%12 = sitofp i32 %11 to double
-	%13 = alloca double
-	store double %12, double* %13
-	%14 = alloca i32
-	store i32 2, i32* %14
-	%15 = alloca i32
-	store i32 3, i32* %15
-	%16 = load i32, i32* %15
-	%17 = sitofp i32 %16 to double
-	%18 = add i32 0, 2
-	%19 = sitofp i32 %18 to double
-	%20 = fcmp ogt double %17, %19
-	%21 = zext i1 %20 to i32
-	%22 = sitofp i32 %21 to double
-	%23 = load i32, i32* %14
-	%24 = sitofp i32 %23 to double
-	%25 = fcmp oeq double %24, %22
-	%26 = zext i1 %25 to i32
-	%27 = sitofp i32 %26 to double
-	%28 = alloca double
-	store double %27, double* %28
+	%7 = add i32 0, 10
+	%8 = icmp eq i32 %6, %7
+	%9 = zext i1 %8 to i32
+	%10 = sitofp i32 %9 to double
+	%11 = alloca double
+	store double %10, double* %11
+	%12 = alloca i32
+	store i32 2, i32* %12
+	%13 = alloca i32
+	store i32 3, i32* %13
+	%14 = load i32, i32* %13
+	%15 = add i32 0, 2
+	%16 = icmp sgt i32 %14, %15
+	%17 = zext i1 %16 to i32
+	%18 = load i32, i32* %12
+	%19 = icmp eq i32 %18, %17
+	%20 = zext i1 %19 to i32
+	%21 = sitofp i32 %20 to double
+	%22 = alloca double
+	store double %21, double* %22
 	ret i32 0
 }
 
@@ -507,32 +482,26 @@ define i32 @f23() {
 	%5 = alloca i32
 	store i32 %4, i32* %5
 	%6 = add i32 0, 1
-	%7 = sitofp i32 %6 to double
-	%8 = add i32 0, 10
-	%9 = sitofp i32 %8 to double
-	%10 = fcmp oeq double %7, %9
-	%11 = zext i1 %10 to i32
-	%12 = sitofp i32 %11 to double
-	%13 = alloca double
-	store double %12, double* %13
-	%14 = alloca i32
-	store i32 2, i32* %14
-	%15 = alloca i32
-	store i32 3, i32* %15
-	%16 = load i32, i32* %14
-	%17 = sitofp i32 %16 to double
-	%18 = load i32, i32* %15
-	%19 = sitofp i32 %18 to double
-	%20 = fcmp ogt double %17, %19
-	%21 = zext i1 %20 to i32
-	%22 = sitofp i32 %21 to double
-	%23 = add i32 0, 2
-	%24 = sitofp i32 %23 to double
-	%25 = fcmp oeq double %22, %24
-	%26 = zext i1 %25 to i32
-	%27 = sitofp i32 %26 to double
-	%28 = alloca double
-	store double %27, double* %28
+	%7 = add i32 0, 10
+	%8 = icmp eq i32 %6, %7
+	%9 = zext i1 %8 to i32
+	%10 = sitofp i32 %9 to double
+	%11 = alloca double
+	store double %10, double* %11
+	%12 = alloca i32
+	store i32 2, i32* %12
+	%13 = alloca i32
+	store i32 3, i32* %13
+	%14 = load i32, i32* %12
+	%15 = load i32, i32* %13
+	%16 = icmp sgt i32 %14, %15
+	%17 = zext i1 %16 to i32
+	%18 = add i32 0, 2
+	%19 = icmp eq i32 %17, %18
+	%20 = zext i1 %19 to i32
+	%21 = sitofp i32 %20 to double
+	%22 = alloca double
+	store double %21, double* %22
 	ret i32 0
 }
 
@@ -544,32 +513,26 @@ define i32 @f24() {
 	%5 = alloca i32
 	store i32 %4, i32* %5
 	%6 = add i32 0, 1
-	%7 = sitofp i32 %6 to double
-	%8 = add i32 0, 10
-	%9 = sitofp i32 %8 to double
-	%10 = fcmp oeq double %7, %9
-	%11 = zext i1 %10 to i32
-	%12 = sitofp i32 %11 to double
-	%13 = alloca double
-	store double %12, double* %13
-	%14 = alloca i32
-	store i32 2, i32* %14
-	%15 = alloca i32
-	store i32 3, i32* %15
-	%16 = load i32, i32* %14
-	%17 = sitofp i32 %16 to double
-	%18 = load i32, i32* %15
-	%19 = sitofp i32 %18 to double
-	%20 = fcmp ogt double %17, %19
-	%21 = zext i1 %20 to i32
-	%22 = sitofp i32 %21 to double
-	%23 = load i32, i32* %5
-	%24 = sitofp i32 %23 to double
-	%25 = fcmp ogt double %22, %24
-	%26 = zext i1 %25 to i32
-	%27 = sitofp i32 %26 to double
-	%28 = alloca double
-	store double %27, double* %28
+	%7 = add i32 0, 10
+	%8 = icmp eq i32 %6, %7
+	%9 = zext i1 %8 to i32
+	%10 = sitofp i32 %9 to double
+	%11 = alloca double
+	store double %10, double* %11
+	%12 = alloca i32
+	store i32 2, i32* %12
+	%13 = alloca i32
+	store i32 3, i32* %13
+	%14 = load i32, i32* %12
+	%15 = load i32, i32* %13
+	%16 = icmp sgt i32 %14, %15
+	%17 = zext i1 %16 to i32
+	%18 = load i32, i32* %5
+	%19 = icmp sgt i32 %17, %18
+	%20 = zext i1 %19 to i32
+	%21 = sitofp i32 %20 to double
+	%22 = alloca double
+	store double %21, double* %22
 	ret i32 0
 }
 
@@ -581,32 +544,26 @@ define i32 @f25() {
 	%5 = alloca i32
 	store i32 %4, i32* %5
 	%6 = add i32 0, 1
-	%7 = sitofp i32 %6 to double
-	%8 = add i32 0, 10
-	%9 = sitofp i32 %8 to double
-	%10 = fcmp oeq double %7, %9
-	%11 = zext i1 %10 to i32
-	%12 = sitofp i32 %11 to double
-	%13 = alloca double
-	store double %12, double* %13
-	%14 = alloca i32
-	store i32 2, i32* %14
-	%15 = alloca i32
-	store i32 3, i32* %15
-	%16 = load i32, i32* %15
-	%17 = sitofp i32 %16 to double
-	%18 = add i32 0, 2
-	%19 = sitofp i32 %18 to double
-	%20 = fcmp oge double %17, %19
-	%21 = zext i1 %20 to i32
-	%22 = sitofp i32 %21 to double
-	%23 = load i32, i32* %14
-	%24 = sitofp i32 %23 to double
-	%25 = fcmp oeq double %24, %22
-	%26 = zext i1 %25 to i32
-	%27 = sitofp i32 %26 to double
-	%28 = alloca double
-	store double %27, double* %28
+	%7 = add i32 0, 10
+	%8 = icmp eq i32 %6, %7
+	%9 = zext i1 %8 to i32
+	%10 = sitofp i32 %9 to double
+	%11 = alloca double
+	store double %10, double* %11
+	%12 = alloca i32
+	store i32 2, i32* %12
+	%13 = alloca i32
+	store i32 3, i32* %13
+	%14 = load i32, i32* %13
+	%15 = add i32 0, 2
+	%16 = icmp sge i32 %14, %15
+	%17 = zext i1 %16 to i32
+	%18 = load i32, i32* %12
+	%19 = icmp eq i32 %18, %17
+	%20 = zext i1 %19 to i32
+	%21 = sitofp i32 %20 to double
+	%22 = alloca double
+	store double %21, double* %22
 	ret i32 0
 }
 
@@ -983,9 +940,9 @@ define double @aux(i32, double) {
 	%4 = alloca double
 	store double %1, double* %4
 	%5 = load i32, i32* %3
-	%6 = sitofp i32 %5 to double
-	%7 = load double, double* %4
-	%8 = fadd double %6, %7
+	%6 = load double, double* %4
+	%7 = sitofp i32 %5 to double
+	%8 = fadd double %7, %6
 	%9 = alloca double
 	store double %8, double* %9
 	ret double 0.000000e+00
