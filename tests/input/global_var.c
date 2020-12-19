@@ -2,7 +2,8 @@
 int a;
 double b;
 
-int a = 1 + 1;
+// we dont do this here!
+//int a = 1 + 1;
 
 int int_global_var(void) {
     int x = 1, y = 2;
