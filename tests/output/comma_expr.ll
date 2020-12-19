@@ -183,40 +183,68 @@ define i32 @comma_char_tests() {
 	store i32 1, i32* %1
 	%2 = alloca i32
 	store i32 2, i32* %2
-	%3 = add i32 0, 10
-	%4 = alloca i32
-	store i32 %3, i32* %4
-	%5 = call i32 @f2()
-	%6 = alloca i32
-	store i32 %5, i32* %6
-	%7 = load i32, i32* %4
+	%3 = load i32, i32* %1
+	%4 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %3)
+	%5 = load i32, i32* %2
+	%6 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %5)
+	%7 = add i32 0, 10
 	%8 = alloca i32
 	store i32 %7, i32* %8
+	%9 = load i32, i32* %8
+	%10 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %9)
+	%11 = call i32 @f2()
+	%12 = alloca i32
+	store i32 %11, i32* %12
+	%13 = load i32, i32* %12
+	%14 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %13)
+	%15 = load i32, i32* %8
+	%16 = alloca i32
+	store i32 %15, i32* %16
+	%17 = load i32, i32* %1
+	%18 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %17)
+	%19 = load i32, i32* %8
+	%20 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %19)
+	%21 = load i32, i32* %16
+	%22 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %21)
 	store i32 2, i32* %1
-	store i32 4, i32* %4
-	store i32 4, i32* %4
-	%9 = load i32, i32* %4
-	%10 = alloca i32
-	store i32 %9, i32* %10
+	store i32 4, i32* %8
+	store i32 4, i32* %8
+	%23 = load i32, i32* %8
+	%24 = alloca i32
+	store i32 %23, i32* %24
+	%25 = load i32, i32* %1
+	%26 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %25)
+	%27 = load i32, i32* %8
+	%28 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %27)
+	%29 = load i32, i32* %24
+	%30 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %29)
 	store i32 2, i32* %1
 	store i32 2, i32* %1
-	%11 = load i32, i32* %1
-	%12 = call i32 @f2()
-	store i32 %12, i32* %2
-	%13 = call i32 @f2()
-	store i32 %13, i32* %2
-	%14 = load i32, i32* %2
-	%15 = load i32, i32* %4
-	%16 = add i32 0, 3
-	%17 = alloca i32
-	store i32 %16, i32* %17
-	%18 = call i32 @f1()
-	%19 = load i32, i32* %6
+	%31 = load i32, i32* %1
+	%32 = call i32 @f2()
+	store i32 %32, i32* %2
+	%33 = call i32 @f2()
+	store i32 %33, i32* %2
+	%34 = load i32, i32* %2
+	%35 = load i32, i32* %8
+	%36 = add i32 0, 3
+	%37 = alloca i32
+	store i32 %36, i32* %37
+	%38 = load i32, i32* %37
+	%39 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %38)
+	%40 = load i32, i32* %1
+	%41 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %40)
+	%42 = load i32, i32* %8
+	%43 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %42)
+	%44 = load i32, i32* %2
+	%45 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %44)
+	%46 = call i32 @f1()
+	%47 = load i32, i32* %12
 	store i32 2, i32* %1
 	store i32 2, i32* %1
-	%20 = load i32, i32* %1
-	%21 = add i32 0, 10
-	ret i32 %21
+	%48 = load i32, i32* %1
+	%49 = add i32 0, 10
+	ret i32 %49
 }
 
 define i32 @comma_short_tests() {
@@ -224,40 +252,68 @@ define i32 @comma_short_tests() {
 	store i32 1, i32* %1
 	%2 = alloca i32
 	store i32 2, i32* %2
-	%3 = add i32 0, 10
-	%4 = alloca i32
-	store i32 %3, i32* %4
-	%5 = call i32 @f4()
-	%6 = alloca i32
-	store i32 %5, i32* %6
-	%7 = load i32, i32* %4
+	%3 = load i32, i32* %1
+	%4 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %3)
+	%5 = load i32, i32* %2
+	%6 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %5)
+	%7 = add i32 0, 10
 	%8 = alloca i32
 	store i32 %7, i32* %8
+	%9 = load i32, i32* %8
+	%10 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %9)
+	%11 = call i32 @f4()
+	%12 = alloca i32
+	store i32 %11, i32* %12
+	%13 = load i32, i32* %12
+	%14 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %13)
+	%15 = load i32, i32* %8
+	%16 = alloca i32
+	store i32 %15, i32* %16
+	%17 = load i32, i32* %1
+	%18 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %17)
+	%19 = load i32, i32* %8
+	%20 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %19)
+	%21 = load i32, i32* %16
+	%22 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %21)
 	store i32 2, i32* %1
-	store i32 4, i32* %4
-	store i32 4, i32* %4
-	%9 = load i32, i32* %4
-	%10 = alloca i32
-	store i32 %9, i32* %10
+	store i32 4, i32* %8
+	store i32 4, i32* %8
+	%23 = load i32, i32* %8
+	%24 = alloca i32
+	store i32 %23, i32* %24
+	%25 = load i32, i32* %1
+	%26 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %25)
+	%27 = load i32, i32* %8
+	%28 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %27)
+	%29 = load i32, i32* %24
+	%30 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %29)
 	store i32 2, i32* %1
 	store i32 2, i32* %1
-	%11 = load i32, i32* %1
-	%12 = call i32 @f4()
-	store i32 %12, i32* %2
-	%13 = call i32 @f4()
-	store i32 %13, i32* %2
-	%14 = load i32, i32* %2
-	%15 = load i32, i32* %4
-	%16 = add i32 0, 3
-	%17 = alloca i32
-	store i32 %16, i32* %17
-	%18 = call i32 @f3()
-	%19 = load i32, i32* %6
+	%31 = load i32, i32* %1
+	%32 = call i32 @f4()
+	store i32 %32, i32* %2
+	%33 = call i32 @f4()
+	store i32 %33, i32* %2
+	%34 = load i32, i32* %2
+	%35 = load i32, i32* %8
+	%36 = add i32 0, 3
+	%37 = alloca i32
+	store i32 %36, i32* %37
+	%38 = load i32, i32* %37
+	%39 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %38)
+	%40 = load i32, i32* %1
+	%41 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %40)
+	%42 = load i32, i32* %8
+	%43 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %42)
+	%44 = load i32, i32* %2
+	%45 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %44)
+	%46 = call i32 @f3()
+	%47 = load i32, i32* %12
 	store i32 2, i32* %1
 	store i32 2, i32* %1
-	%20 = load i32, i32* %1
-	%21 = add i32 0, 10
-	ret i32 %21
+	%48 = load i32, i32* %1
+	%49 = add i32 0, 10
+	ret i32 %49
 }
 
 define i32 @comma_int_tests() {
@@ -265,40 +321,68 @@ define i32 @comma_int_tests() {
 	store i32 1, i32* %1
 	%2 = alloca i32
 	store i32 2, i32* %2
-	%3 = add i32 0, 10
-	%4 = alloca i32
-	store i32 %3, i32* %4
-	%5 = call i32 @f6()
-	%6 = alloca i32
-	store i32 %5, i32* %6
-	%7 = load i32, i32* %4
+	%3 = load i32, i32* %1
+	%4 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %3)
+	%5 = load i32, i32* %2
+	%6 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %5)
+	%7 = add i32 0, 10
 	%8 = alloca i32
 	store i32 %7, i32* %8
+	%9 = load i32, i32* %8
+	%10 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %9)
+	%11 = call i32 @f6()
+	%12 = alloca i32
+	store i32 %11, i32* %12
+	%13 = load i32, i32* %12
+	%14 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %13)
+	%15 = load i32, i32* %8
+	%16 = alloca i32
+	store i32 %15, i32* %16
+	%17 = load i32, i32* %1
+	%18 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %17)
+	%19 = load i32, i32* %8
+	%20 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %19)
+	%21 = load i32, i32* %16
+	%22 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %21)
 	store i32 2, i32* %1
-	store i32 4, i32* %4
-	store i32 4, i32* %4
-	%9 = load i32, i32* %4
-	%10 = alloca i32
-	store i32 %9, i32* %10
+	store i32 4, i32* %8
+	store i32 4, i32* %8
+	%23 = load i32, i32* %8
+	%24 = alloca i32
+	store i32 %23, i32* %24
+	%25 = load i32, i32* %1
+	%26 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %25)
+	%27 = load i32, i32* %8
+	%28 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %27)
+	%29 = load i32, i32* %24
+	%30 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %29)
 	store i32 2, i32* %1
 	store i32 2, i32* %1
-	%11 = load i32, i32* %1
-	%12 = call i32 @f6()
-	store i32 %12, i32* %2
-	%13 = call i32 @f6()
-	store i32 %13, i32* %2
-	%14 = load i32, i32* %2
-	%15 = load i32, i32* %4
-	%16 = add i32 0, 3
-	%17 = alloca i32
-	store i32 %16, i32* %17
-	%18 = call i32 @f5()
-	%19 = load i32, i32* %6
+	%31 = load i32, i32* %1
+	%32 = call i32 @f6()
+	store i32 %32, i32* %2
+	%33 = call i32 @f6()
+	store i32 %33, i32* %2
+	%34 = load i32, i32* %2
+	%35 = load i32, i32* %8
+	%36 = add i32 0, 3
+	%37 = alloca i32
+	store i32 %36, i32* %37
+	%38 = load i32, i32* %37
+	%39 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %38)
+	%40 = load i32, i32* %1
+	%41 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %40)
+	%42 = load i32, i32* %8
+	%43 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %42)
+	%44 = load i32, i32* %2
+	%45 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %44)
+	%46 = call i32 @f5()
+	%47 = load i32, i32* %12
 	store i32 2, i32* %1
 	store i32 2, i32* %1
-	%20 = load i32, i32* %1
-	%21 = add i32 0, 10
-	ret i32 %21
+	%48 = load i32, i32* %1
+	%49 = add i32 0, 10
+	ret i32 %49
 }
 
 define double @comma_double_tests() {
