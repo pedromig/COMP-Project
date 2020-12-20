@@ -17,8 +17,8 @@ define i32 @error_in_C_problem() {
 	%5 = sub i32 0, %4
 	store i32 %5, i32* %2
 	store i32 0, i32* %3
-	%6 = add i32 0, 027
-	%7 = add i32 0, 01365
+	%6 = add i32 0, 23
+	%7 = add i32 0, 757
 	%8 = mul i32 %6, %7
 	%9 = add i32 0, 65
 	%10 = add i32 %8, %9
@@ -119,117 +119,102 @@ label14:
 	%60 = load i32, i32* %2
 	%61 = add i32 0, 1
 	%62 = add i32 %60, %61
-	%63 = load i32, i32* %2
-	%64 = add i32 0, 1
-	%65 = add i32 %63, %64
-	store i32 %65, i32* %2
-	%66 = load i32, i32* %1
+	%63 = load i32, i32* %1
 	br label %label15
 
 label15:
-	%67 = icmp ne i32 %66, 0
-	br i1 %67, label %label16, label %label17
+	%64 = icmp ne i32 %63, 0
+	br i1 %64, label %label16, label %label17
 
 label16:
-	%68 = icmp ne i32 %65, 0
+	%65 = icmp ne i32 %-1, 0
 	br label %label17
 
 label17:
-	%69 = phi i1 [ false, %label15 ], [ %68, %label16 ]
-	%70 = zext i1 %69 to i32
-	%71 = load i32, i32* %3
+	%66 = phi i1 [ false, %label15 ], [ %65, %label16 ]
+	%67 = zext i1 %66 to i32
+	%68 = load i32, i32* %3
 	br label %label18
 
 label18:
-	%72 = icmp ne i32 %70, 0
-	br i1 %72, label %label19, label %label20
+	%69 = icmp ne i32 %67, 0
+	br i1 %69, label %label19, label %label20
 
 label19:
-	%73 = icmp ne i32 %71, 0
+	%70 = icmp ne i32 %68, 0
 	br label %label20
 
 label20:
-	%74 = phi i1 [ false, %label18 ], [ %73, %label19 ]
-	%75 = zext i1 %74 to i32
-	%76 = load i32, i32* %2
-	%77 = add i32 0, 4
-	%78 = add i32 %76, %77
-	%79 = load i32, i32* %2
-	%80 = add i32 0, 4
-	%81 = add i32 %79, %80
-	store i32 %81, i32* %2
-	%82 = load i32, i32* %1
-	%83 = add i32 0, 5
-	%84 = sub i32 %82, %83
-	%85 = load i32, i32* %1
-	%86 = add i32 0, 5
-	%87 = sub i32 %85, %86
-	store i32 %87, i32* %1
+	%71 = phi i1 [ false, %label18 ], [ %70, %label19 ]
+	%72 = zext i1 %71 to i32
+	%73 = load i32, i32* %2
+	%74 = add i32 0, 4
+	%75 = add i32 %73, %74
+	%76 = load i32, i32* %1
+	%77 = add i32 0, 5
+	%78 = sub i32 %76, %77
 	br label %label21
 
 label21:
-	%88 = icmp ne i32 %81, 0
-	br i1 %88, label %label22, label %label23
+	%79 = icmp ne i32 %-1, 0
+	br i1 %79, label %label22, label %label23
 
 label22:
-	%89 = icmp ne i32 %87, 0
+	%80 = icmp ne i32 %-1, 0
 	br label %label23
 
 label23:
-	%90 = phi i1 [ false, %label21 ], [ %89, %label22 ]
-	%91 = zext i1 %90 to i32
+	%81 = phi i1 [ false, %label21 ], [ %80, %label22 ]
+	%82 = zext i1 %81 to i32
 	br label %label24
 
 label24:
-	%92 = icmp ne i32 %75, 0
-	br i1 %92, label %label25, label %label26
+	%83 = icmp ne i32 %72, 0
+	br i1 %83, label %label25, label %label26
 
 label25:
-	%93 = icmp ne i32 %91, 0
+	%84 = icmp ne i32 %82, 0
 	br label %label26
 
 label26:
-	%94 = phi i1 [ true, %label24 ], [ %93, %label25 ]
-	%95 = zext i1 %94 to i32
-	%96 = add i32 0, 1
+	%85 = phi i1 [ true, %label24 ], [ %84, %label25 ]
+	%86 = zext i1 %85 to i32
+	%87 = add i32 0, 1
 	br label %label27
 
 label27:
-	%97 = icmp ne i32 %95, 0
-	br i1 %97, label %label28, label %label29
+	%88 = icmp ne i32 %86, 0
+	br i1 %88, label %label28, label %label29
 
 label28:
-	%98 = icmp ne i32 %96, 0
+	%89 = icmp ne i32 %87, 0
 	br label %label29
 
 label29:
-	%99 = phi i1 [ true, %label27 ], [ %98, %label28 ]
-	%100 = zext i1 %99 to i32
-	%101 = add i32 0, 1
-	%102 = sub i32 0, %101
-	%103 = add i32 0, 1
-	%104 = sub i32 0, %103
-	store i32 %104, i32* %3
+	%90 = phi i1 [ true, %label27 ], [ %89, %label28 ]
+	%91 = zext i1 %90 to i32
+	%92 = add i32 0, 1
+	%93 = sub i32 0, %92
 	br label %label30
 
 label30:
-	%105 = icmp ne i32 %100, 0
-	br i1 %105, label %label31, label %label32
+	%94 = icmp ne i32 %91, 0
+	br i1 %94, label %label31, label %label32
 
 label31:
-	%106 = icmp ne i32 %104, 0
+	%95 = icmp ne i32 %-1, 0
 	br label %label32
 
 label32:
-	%107 = phi i1 [ true, %label30 ], [ %106, %label31 ]
-	%108 = zext i1 %107 to i32
-	%109 = add i32 0, 65
-	%110 = add i32 %108, %109
-	%111 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %110)
-	%112 = load i32, i32* %1
-	%113 = add i32 0, 65
-	%114 = add i32 %112, %113
-	%115 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %114)
+	%96 = phi i1 [ true, %label30 ], [ %95, %label31 ]
+	%97 = zext i1 %96 to i32
+	%98 = add i32 0, 65
+	%99 = add i32 %97, %98
+	%100 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %99)
+	%101 = load i32, i32* %1
+	%102 = add i32 0, 65
+	%103 = add i32 %101, %102
+	%104 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %103)
 	ret i32 0
 }
 
@@ -257,44 +242,51 @@ define i32 @error_in_D_problem() {
 	%17 = load i32, i32* %4
 	%18 = add i32 0, 1
 	%19 = add i32 %17, %18
-	%20 = load i32, i32* %4
-	%21 = add i32 0, 1
+	%20 = load i32, i32* %1
+	%21 = load i32, i32* %4
 	%22 = add i32 %20, %21
-	store i32 %22, i32* %4
-	%23 = load i32, i32* %1
-	%24 = load i32, i32* %4
+	%23 = load i32, i32* %4
+	%24 = add i32 0, 1
 	%25 = add i32 %23, %24
+	store i32 %25, i32* %4
 	%26 = load i32, i32* %1
 	%27 = load i32, i32* %4
 	%28 = add i32 %26, %27
 	store i32 %28, i32* %1
 	%29 = load i32, i32* %1
-	%30 = load i32, i32* %4
-	%31 = add i32 %29, %30
-	store i32 %31, i32* %1
-	%32 = load i32, i32* %1
-	%33 = add i32 0, 2
-	%34 = load i32, i32* %4
-	%35 = mul i32 %33, %34
-	%36 = add i32 0, 2
+	%30 = add i32 0, 2
+	%31 = load i32, i32* %4
+	%32 = mul i32 %30, %31
+	%33 = load i32, i32* %4
+	%34 = add i32 0, 1
+	%35 = add i32 %33, %34
+	%36 = load i32, i32* %1
 	%37 = load i32, i32* %4
-	%38 = mul i32 %36, %37
-	store i32 %38, i32* %4
-	%39 = add i32 0, 2
-	%40 = load i32, i32* %4
-	%41 = mul i32 %39, %40
+	%38 = add i32 %36, %37
+	%39 = load i32, i32* %4
+	%40 = add i32 0, 1
+	%41 = add i32 %39, %40
 	store i32 %41, i32* %4
-	%42 = load i32, i32* %4
-	%43 = add i32 0, 5
-	%44 = sub i32 %42, %43
-	%45 = alloca i32
-	store i32 %44, i32* %45
-	%46 = load i32, i32* %1
-	%47 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %46)
-	%48 = load i32, i32* %4
-	%49 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %48)
-	%50 = load i32, i32* %45
-	%51 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %50)
+	%42 = load i32, i32* %1
+	%43 = load i32, i32* %4
+	%44 = add i32 %42, %43
+	store i32 %44, i32* %1
+	%45 = load i32, i32* %1
+	%46 = add i32 0, 2
+	%47 = load i32, i32* %4
+	%48 = mul i32 %46, %47
+	store i32 %48, i32* %4
+	%49 = load i32, i32* %4
+	%50 = add i32 0, 5
+	%51 = sub i32 %49, %50
+	%52 = alloca i32
+	store i32 %51, i32* %52
+	%53 = load i32, i32* %1
+	%54 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %53)
+	%55 = load i32, i32* %4
+	%56 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %55)
+	%57 = load i32, i32* %52
+	%58 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %57)
 	ret i32 0
 }
 
@@ -387,29 +379,39 @@ define i32 @random_tests() {
 	%25 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %24)
 	%26 = alloca i32
 	store i32 67, i32* %26
-	%27 = add i32 0, 1
-	%28 = icmp ne i32 %27, 0
-	br i1 %28, label %label0, label %label1
+	call void @f()
+	store i32 65, i32* %26
+	%27 = load i32, i32* %26
+	call void @f()
+	store i32 65, i32* %26
+	%28 = load i32, i32* %26
+	%29 = add i32 0, 1
+	%30 = icmp ne i32 %29, 0
+	br i1 %30, label %label0, label %label1
 
 label0:
-	%29 = load i32, i32* %26
-	%30 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %29)
-	%31 = add i32 0, 88
+	%31 = load i32, i32* %26
 	%32 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %31)
-	%33 = load i32, i32* @cc
+	%33 = add i32 0, 88
 	%34 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %33)
+	%35 = load i32, i32* @cc
+	%36 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %35)
 	br label %label2
 
 label1:
-	%35 = load i32, i32* %26
-	%36 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %35)
-	%37 = add i32 0, 31
-	%38 = icmp ne i32 %37, 0
-	br i1 %38, label %label3, label %label4
+	%37 = load i32, i32* %26
+	%38 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %37)
+	%39 = add i32 0, 1
+	%40 = add i32 0, 2
+	%41 = add i32 0, 1
+	%42 = add i32 0, 2
+	%43 = add i32 0, 31
+	%44 = icmp ne i32 %43, 0
+	br i1 %44, label %label3, label %label4
 
 label3:
-	%39 = add i32 0, 66
-	%40 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %39)
+	%45 = add i32 0, 66
+	%46 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %45)
 	br label %label5
 
 label4:
@@ -419,8 +421,8 @@ label5:
 	br label %label2
 
 label2:
-	%41 = load i32, i32* %26
-	%42 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %41)
+	%47 = load i32, i32* %26
+	%48 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %47)
 	ret i32 0
 }
 

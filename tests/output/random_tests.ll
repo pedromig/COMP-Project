@@ -76,13 +76,16 @@ define i32 @asd(i32) {
 	%31 = load i32, i32* %3
 	%32 = sub i32 0, %31
 	%33 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %32)
-	%34 = add i32 0, 2
+	%34 = add i32 0, 1
 	%35 = add i32 0, 2
 	%36 = call i32 @oi(i32 %34, i32 %35)
-	%37 = add i32 0, 192
+	%37 = add i32 0, 2
 	%38 = add i32 0, 2
 	%39 = call i32 @oi(i32 %37, i32 %38)
-	ret i32 %39
+	%40 = add i32 0, 192
+	%41 = add i32 0, 2
+	%42 = call i32 @oi(i32 %40, i32 %41)
+	ret i32 %42
 }
 
 define i32 @xddx(i32, i32, double, i32) {
@@ -423,8 +426,12 @@ label7:
 
 label8:
 	%38 = add i32 0, 2
-	%39 = icmp ne i32 %38, 0
-	br i1 %39, label %label9, label %label10
+	%39 = add i32 0, 1
+	%40 = add i32 0, 2
+	%41 = add i32 0, 1
+	%42 = add i32 0, 2
+	%43 = icmp ne i32 %42, 0
+	br i1 %43, label %label9, label %label10
 
 label9:
 	br label %label11
