@@ -40,5 +40,6 @@ bool is_statement_id(const char *operator);
 int ord(const char *str);
 const char *type_to_llvm(const char *type);
 int insert_default_return(const char *llvm_type, bool has_return_keyword);
+int intlit_to_int(const char *str);
 
 #endif //UTILS_H

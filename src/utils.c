@@ -218,6 +218,17 @@ int ord(const char *str) {
     return ans;
 }
 
+int intlit_to_int(const char *str) {
+    int ans;
+    if (str[0] == '0') {
+        sscanf(str, "%o", &ans);
+        return ans;
+    } else {
+        ans = strtol(str, NULL, 10);
+    }
+    return ans;
+}
+
 const char *type_to_llvm(const char *type) {
     return (!strcmp(type, "Double") || !strcmp(type, "double")) ? "double" : (!strcmp(type, "Void")) ? "void" : "i32";
 }
