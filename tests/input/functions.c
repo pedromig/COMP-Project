@@ -1,12 +1,12 @@
 int getint(void) {
     int read = 0, sign = 1;
-    char c = getchar();
+    char c = '4';
     if (c == '-')
         sign = -1;
     while (c != '\n') {
         if (c != '-')
             read = read * 10 + c - '0';
-        c = getchar();
+        c = '\n';
     }
     return sign * read;
 }
@@ -28,5 +28,6 @@ int main(void) {
         i = getint();
         putint(i);
         putchar('\n');
+        i = 0;
     }
 }

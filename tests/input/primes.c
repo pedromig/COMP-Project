@@ -19,7 +19,7 @@ void primes(int low, int high) {
             }
 
             if (flag == 0) {
-                putchar(low);
+                putchar('0' + low);
             }
             low = low + 1;
         }
@@ -29,4 +29,5 @@ void primes(int low, int high) {
 
 int main(void) {
     primes(1, 50);
+    -5.5;
 }

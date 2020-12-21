@@ -129,31 +129,31 @@ define i32 @xddx(i32, i32, double, i32) {
 	%37 = load i32, i32* %8
 	%38 = icmp ne i32 %36, %37
 	%39 = zext i1 %38 to i32
-	%40 = load i32, i32* %5
-	%41 = load i32, i32* %8
 	br label %label0
 
 label0:
-	%42 = icmp ne i32 %40, 0
-	br i1 %42, label %label1, label %label2
+	%40 = load i32, i32* %5
+	%41 = icmp ne i32 %40, 0
+	br i1 %41, label %label1, label %label2
 
 label1:
-	%43 = icmp ne i32 %41, 0
+	%42 = load i32, i32* %8
+	%43 = icmp ne i32 %42, 0
 	br label %label2
 
 label2:
 	%44 = phi i1 [ false, %label0 ], [ %43, %label1 ]
 	%45 = zext i1 %44 to i32
-	%46 = load i32, i32* %5
-	%47 = load i32, i32* %8
 	br label %label3
 
 label3:
-	%48 = icmp ne i32 %46, 0
-	br i1 %48, label %label4, label %label5
+	%46 = load i32, i32* %5
+	%47 = icmp ne i32 %46, 0
+	br i1 %47, label %label5, label %label4
 
 label4:
-	%49 = icmp ne i32 %47, 0
+	%48 = load i32, i32* %8
+	%49 = icmp ne i32 %48, 0
 	br label %label5
 
 label5:
@@ -200,22 +200,22 @@ label1:
 	br label %label2
 
 label2:
+	br label %label3
+
+label3:
 	%4 = load i32, i32* %1
 	%5 = add i32 0, 1
 	%6 = icmp eq i32 %4, %5
 	%7 = zext i1 %6 to i32
-	%8 = load i32, i32* %1
-	%9 = add i32 0, 1
-	%10 = icmp ne i32 %8, %9
-	%11 = zext i1 %10 to i32
-	br label %label3
-
-label3:
-	%12 = icmp ne i32 %7, 0
-	br i1 %12, label %label4, label %label5
+	%8 = icmp ne i32 %7, 0
+	br i1 %8, label %label4, label %label5
 
 label4:
-	%13 = icmp ne i32 %11, 0
+	%9 = load i32, i32* %1
+	%10 = add i32 0, 1
+	%11 = icmp ne i32 %9, %10
+	%12 = zext i1 %11 to i32
+	%13 = icmp ne i32 %12, 0
 	br label %label5
 
 label5:
@@ -225,41 +225,41 @@ label5:
 	br i1 %16, label %label6, label %label7
 
 label6:
+	br label %label9
+
+label9:
 	%17 = load i32, i32* %1
 	%18 = add i32 0, 0
 	%19 = icmp ne i32 %17, %18
 	%20 = zext i1 %19 to i32
-	%21 = load i32, i32* %1
-	%22 = call i32 @statements()
-	%23 = icmp ne i32 %21, %22
-	%24 = zext i1 %23 to i32
-	br label %label9
-
-label9:
-	%25 = icmp ne i32 %20, 0
-	br i1 %25, label %label10, label %label11
+	%21 = icmp ne i32 %20, 0
+	br i1 %21, label %label10, label %label11
 
 label10:
-	%26 = icmp ne i32 %24, 0
+	%22 = load i32, i32* %1
+	%23 = call i32 @statements()
+	%24 = icmp ne i32 %22, %23
+	%25 = zext i1 %24 to i32
+	%26 = icmp ne i32 %25, 0
 	br label %label11
 
 label11:
 	%27 = phi i1 [ false, %label9 ], [ %26, %label10 ]
 	%28 = zext i1 %27 to i32
-	%29 = load i32, i32* %1
-	%30 = add i32 0, 2
-	%31 = srem i32 %29, %30
-	%32 = load i32, i32* %1
-	%33 = add i32 0, 2
-	%34 = xor i32 %32, %33
 	br label %label12
 
 label12:
-	%35 = icmp ne i32 %31, 0
-	br i1 %35, label %label13, label %label14
+	%29 = load i32, i32* %1
+	%30 = add i32 0, 2
+	%31 = srem i32 %29, %30
+	%32 = icmp ne i32 %31, 0
+	br i1 %32, label %label13, label %label14
 
 label13:
-	%36 = icmp ne i32 %34, 0
+	%33 = load i32, i32* %1
+	%34 = add i32 0, 2
+	%35 = xor i32 %33, %34
+	%36 = icmp ne i32 %35, 0
 	br label %label14
 
 label14:
@@ -269,7 +269,7 @@ label14:
 
 label15:
 	%39 = icmp ne i32 %28, 0
-	br i1 %39, label %label16, label %label17
+	br i1 %39, label %label17, label %label16
 
 label16:
 	%40 = icmp ne i32 %38, 0
@@ -298,6 +298,9 @@ label18:
 	br i1 %56, label %label21, label %label22
 
 label21:
+	br label %label24
+
+label24:
 	%57 = load i32, i32* %1
 	%58 = icmp ne i32 %57, 0
 	%59 = xor i1 %58, true
@@ -307,15 +310,12 @@ label21:
 	%63 = zext i1 %62 to i32
 	%64 = call i32 @statements()
 	%65 = mul i32 %63, %64
-	%66 = add i32 0, 2
-	br label %label24
-
-label24:
-	%67 = icmp ne i32 %65, 0
-	br i1 %67, label %label25, label %label26
+	%66 = icmp ne i32 %65, 0
+	br i1 %66, label %label25, label %label26
 
 label25:
-	%68 = icmp ne i32 %66, 0
+	%67 = add i32 0, 2
+	%68 = icmp ne i32 %67, 0
 	br label %label26
 
 label26:
@@ -375,39 +375,39 @@ define i32 @m(i32, i32, i32) {
 	%12 = alloca i32
 	%13 = alloca i32
 	%14 = alloca i32
+	br label %label0
+
+label0:
 	%15 = load i32, i32* %7
 	%16 = load i32, i32* %8
 	%17 = icmp sgt i32 %15, %16
 	%18 = zext i1 %17 to i32
-	%19 = load i32, i32* %9
-	%20 = load i32, i32* %8
-	%21 = icmp sgt i32 %19, %20
-	%22 = zext i1 %21 to i32
-	br label %label0
-
-label0:
-	%23 = icmp ne i32 %18, 0
-	br i1 %23, label %label1, label %label2
+	%19 = icmp ne i32 %18, 0
+	br i1 %19, label %label1, label %label2
 
 label1:
-	%24 = icmp ne i32 %22, 0
+	%20 = load i32, i32* %9
+	%21 = load i32, i32* %8
+	%22 = icmp sgt i32 %20, %21
+	%23 = zext i1 %22 to i32
+	%24 = icmp ne i32 %23, 0
 	br label %label2
 
 label2:
 	%25 = phi i1 [ false, %label0 ], [ %24, %label1 ]
 	%26 = zext i1 %25 to i32
-	%27 = load i32, i32* %9
-	%28 = load i32, i32* %7
-	%29 = icmp ne i32 %27, %28
-	%30 = zext i1 %29 to i32
 	br label %label3
 
 label3:
-	%31 = icmp ne i32 %26, 0
-	br i1 %31, label %label4, label %label5
+	%27 = icmp ne i32 %26, 0
+	br i1 %27, label %label5, label %label4
 
 label4:
-	%32 = icmp ne i32 %30, 0
+	%28 = load i32, i32* %9
+	%29 = load i32, i32* %7
+	%30 = icmp ne i32 %28, %29
+	%31 = zext i1 %30 to i32
+	%32 = icmp ne i32 %31, 0
 	br label %label5
 
 label5:
@@ -428,10 +428,8 @@ label8:
 	%38 = add i32 0, 2
 	%39 = add i32 0, 1
 	%40 = add i32 0, 2
-	%41 = add i32 0, 1
-	%42 = add i32 0, 2
-	%43 = icmp ne i32 %42, 0
-	br i1 %43, label %label9, label %label10
+	%41 = icmp ne i32 %40, 0
+	br i1 %41, label %label9, label %label10
 
 label9:
 	br label %label11

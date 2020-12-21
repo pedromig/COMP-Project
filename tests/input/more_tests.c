@@ -12,6 +12,13 @@ int error_in_C_problem(void) {
     c = 0;
 
     putchar(027 * 01365 + 'A');
+    putchar((!a || !b || !c));
+    putchar(!a);
+    putchar(!b);
+    putchar((!b || !a));
+    putchar((!a || !b || !c) && -2);
+    putchar((!a || !b || !c) && -2 && (!b || !a));
+    putchar(!((!a || !b || !c) && -2 && (!b || !a)));
     putchar(!((!a || !b || !c) && -2 && (!b || !a)) + 'A');
     putchar((a && (b = b + 1) && c || (b = b + 4) && (a = a - 5) || 1 || (c = -1)) + 'A');
     putchar(a + 'A');
@@ -71,8 +78,29 @@ int random_tests(void) {
     return 0;
 }
 
+int lol(void) {
+    char a, b;
+    int c;
+    a = 10;
+    b = -5;
+
+    putchar(!a);
+    putchar(!b);
+    c = (!b || !a);
+    putchar(c);
+    c = !b && !a;
+    putchar(c);
+    putchar((!b || !a));
+    if (!b || !a)
+        putchar('t');
+    else
+        putchar('f');
+    return 0;
+}
+
 int main(void) {
 
+    lol();
     error_in_C_problem();
     putchar('\n');
     error_in_D_problem();

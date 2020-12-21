@@ -25,5 +25,8 @@ void code_generator(ast_node_t *node, bool is_if);
 int operator_code_generator(ast_node_t *node, bool logical);
 void store_code_generator(ast_node_t *node);
 const char* get_type(ast_node_t* node);
+int load_terminal(ast_node_t *node);
+bool is_logical(ast_node_t *node);
+int logical_operator_code_generator(ast_node_t *node);
 
 #endif // __CODEGEN_H

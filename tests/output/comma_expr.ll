@@ -44,10 +44,11 @@ define i32 @comma_expr_tests() {
 	%3 = alloca i32
 	store i32 3, i32* %3
 	store i32 1, i32* %1
+	%4 = load i32, i32* %1
 	store i32 2, i32* %3
-	%4 = load i32, i32* %3
-	%5 = icmp ne i32 %4, 0
-	br i1 %5, label %label0, label %label1
+	%5 = load i32, i32* %3
+	%6 = icmp ne i32 %5, 0
+	br i1 %6, label %label0, label %label1
 
 label0:
 	br label %label2
@@ -56,10 +57,10 @@ label1:
 	br label %label2
 
 label2:
-	%6 = add i32 0, 5
-	%7 = add i32 0, 10
-	%8 = icmp ne i32 %7, 0
-	br i1 %8, label %label3, label %label4
+	%7 = add i32 0, 5
+	%8 = add i32 0, 10
+	%9 = icmp ne i32 %8, 0
+	br i1 %9, label %label3, label %label4
 
 label3:
 	br label %label5
@@ -68,10 +69,10 @@ label4:
 	br label %label5
 
 label5:
-	%9 = call i32 @f1()
-	%10 = call i32 @f2()
-	%11 = icmp ne i32 %10, 0
-	br i1 %11, label %label6, label %label7
+	%10 = call i32 @f1()
+	%11 = call i32 @f2()
+	%12 = icmp ne i32 %11, 0
+	br i1 %12, label %label6, label %label7
 
 label6:
 	br label %label8
@@ -80,10 +81,10 @@ label7:
 	br label %label8
 
 label8:
-	%12 = load i32, i32* %1
-	%13 = load i32, i32* %3
-	%14 = icmp ne i32 %13, 0
-	br i1 %14, label %label9, label %label10
+	%13 = load i32, i32* %1
+	%14 = load i32, i32* %3
+	%15 = icmp ne i32 %14, 0
+	br i1 %15, label %label9, label %label10
 
 label9:
 	br label %label11
@@ -93,10 +94,11 @@ label10:
 
 label11:
 	store i32 2, i32* %1
+	%16 = load i32, i32* %1
 	store i32 4, i32* %2
-	%15 = load i32, i32* %2
-	%16 = icmp ne i32 %15, 0
-	br i1 %16, label %label12, label %label13
+	%17 = load i32, i32* %2
+	%18 = icmp ne i32 %17, 0
+	br i1 %18, label %label12, label %label13
 
 label12:
 	br label %label14
@@ -105,49 +107,17 @@ label13:
 	br label %label14
 
 label14:
-	%17 = call i32 @f1()
-	store i32 2, i32* %1
-	%18 = load i32, i32* %1
 	%19 = call i32 @f1()
 	store i32 2, i32* %1
 	%20 = load i32, i32* %1
 	%21 = call i32 @f2()
 	store i32 %21, i32* %3
 	%22 = load i32, i32* %3
-	%23 = call i32 @f1()
-	store i32 2, i32* %1
-	%24 = load i32, i32* %1
-	%25 = call i32 @f1()
-	store i32 2, i32* %1
-	%26 = load i32, i32* %1
-	%27 = call i32 @f2()
-	store i32 %27, i32* %3
-	%28 = load i32, i32* %3
 	store i32 3, i32* %2
-	%29 = load i32, i32* %2
-	%30 = call i32 @f1()
-	store i32 2, i32* %1
-	%31 = load i32, i32* %1
-	%32 = call i32 @f1()
-	store i32 2, i32* %1
-	%33 = load i32, i32* %1
-	%34 = call i32 @f2()
-	store i32 %34, i32* %3
-	%35 = load i32, i32* %3
-	%36 = call i32 @f1()
-	store i32 2, i32* %1
-	%37 = load i32, i32* %1
-	%38 = call i32 @f1()
-	store i32 2, i32* %1
-	%39 = load i32, i32* %1
-	%40 = call i32 @f2()
-	store i32 %40, i32* %3
-	%41 = load i32, i32* %3
-	store i32 3, i32* %2
-	%42 = load i32, i32* %2
-	%43 = add i32 0, 1
-	%44 = icmp ne i32 %43, 0
-	br i1 %44, label %label15, label %label16
+	%23 = load i32, i32* %2
+	%24 = add i32 0, 1
+	%25 = icmp ne i32 %24, 0
+	br i1 %25, label %label15, label %label16
 
 label15:
 	br label %label17
@@ -157,157 +127,97 @@ label16:
 
 label17:
 	store i32 1, i32* %1
+	%26 = load i32, i32* %1
 	store i32 2, i32* %3
-	%45 = load i32, i32* %3
-	%46 = icmp ne i32 %45, 0
-	br i1 %46, label %label18, label %label19
+	%27 = load i32, i32* %3
+	%28 = icmp ne i32 %27, 0
+	br i1 %28, label %label18, label %label19
 
 label18:
 	store i32 1, i32* %1
+	%29 = load i32, i32* %1
 	store i32 2, i32* %3
-	%47 = load i32, i32* %3
-	%48 = icmp ne i32 %47, 0
-	br i1 %48, label %label18, label %label19
+	%30 = load i32, i32* %3
+	%31 = icmp ne i32 %30, 0
+	br i1 %31, label %label18, label %label19
 
 label19:
-	%49 = add i32 0, 5
-	%50 = add i32 0, 10
-	%51 = icmp ne i32 %50, 0
-	br i1 %51, label %label20, label %label21
+	%32 = add i32 0, 5
+	%33 = add i32 0, 10
+	%34 = icmp ne i32 %33, 0
+	br i1 %34, label %label20, label %label21
 
 label20:
-	%52 = add i32 0, 5
-	%53 = add i32 0, 10
-	%54 = icmp ne i32 %53, 0
-	br i1 %54, label %label20, label %label21
+	%35 = add i32 0, 5
+	%36 = add i32 0, 10
+	%37 = icmp ne i32 %36, 0
+	br i1 %37, label %label20, label %label21
 
 label21:
-	%55 = call i32 @f1()
-	%56 = call i32 @f2()
-	%57 = icmp ne i32 %56, 0
-	br i1 %57, label %label22, label %label23
+	%38 = call i32 @f1()
+	%39 = call i32 @f2()
+	%40 = icmp ne i32 %39, 0
+	br i1 %40, label %label22, label %label23
 
 label22:
-	%58 = call i32 @f1()
-	%59 = call i32 @f2()
-	%60 = icmp ne i32 %59, 0
-	br i1 %60, label %label22, label %label23
+	%41 = call i32 @f1()
+	%42 = call i32 @f2()
+	%43 = icmp ne i32 %42, 0
+	br i1 %43, label %label22, label %label23
 
 label23:
-	%61 = load i32, i32* %1
-	%62 = load i32, i32* %3
-	%63 = icmp ne i32 %62, 0
-	br i1 %63, label %label24, label %label25
+	%44 = load i32, i32* %1
+	%45 = load i32, i32* %3
+	%46 = icmp ne i32 %45, 0
+	br i1 %46, label %label24, label %label25
 
 label24:
-	%64 = load i32, i32* %1
-	%65 = load i32, i32* %3
-	%66 = icmp ne i32 %65, 0
-	br i1 %66, label %label24, label %label25
+	%47 = load i32, i32* %1
+	%48 = load i32, i32* %3
+	%49 = icmp ne i32 %48, 0
+	br i1 %49, label %label24, label %label25
 
 label25:
 	store i32 2, i32* %1
+	%50 = load i32, i32* %1
 	store i32 4, i32* %2
-	%67 = load i32, i32* %2
-	%68 = icmp ne i32 %67, 0
-	br i1 %68, label %label26, label %label27
+	%51 = load i32, i32* %2
+	%52 = icmp ne i32 %51, 0
+	br i1 %52, label %label26, label %label27
 
 label26:
 	store i32 2, i32* %1
+	%53 = load i32, i32* %1
 	store i32 4, i32* %2
-	%69 = load i32, i32* %2
-	%70 = icmp ne i32 %69, 0
-	br i1 %70, label %label26, label %label27
+	%54 = load i32, i32* %2
+	%55 = icmp ne i32 %54, 0
+	br i1 %55, label %label26, label %label27
 
 label27:
-	%71 = call i32 @f1()
+	%56 = call i32 @f1()
 	store i32 2, i32* %1
-	%72 = load i32, i32* %1
-	%73 = call i32 @f1()
-	store i32 2, i32* %1
-	%74 = load i32, i32* %1
-	%75 = call i32 @f2()
-	store i32 %75, i32* %3
-	%76 = load i32, i32* %3
-	%77 = call i32 @f1()
-	store i32 2, i32* %1
-	%78 = load i32, i32* %1
-	%79 = call i32 @f1()
-	store i32 2, i32* %1
-	%80 = load i32, i32* %1
-	%81 = call i32 @f2()
-	store i32 %81, i32* %3
-	%82 = load i32, i32* %3
+	%57 = load i32, i32* %1
+	%58 = call i32 @f2()
+	store i32 %58, i32* %3
+	%59 = load i32, i32* %3
 	store i32 3, i32* %2
-	%83 = load i32, i32* %2
-	%84 = call i32 @f1()
-	store i32 2, i32* %1
-	%85 = load i32, i32* %1
-	%86 = call i32 @f1()
-	store i32 2, i32* %1
-	%87 = load i32, i32* %1
-	%88 = call i32 @f2()
-	store i32 %88, i32* %3
-	%89 = load i32, i32* %3
-	%90 = call i32 @f1()
-	store i32 2, i32* %1
-	%91 = load i32, i32* %1
-	%92 = call i32 @f1()
-	store i32 2, i32* %1
-	%93 = load i32, i32* %1
-	%94 = call i32 @f2()
-	store i32 %94, i32* %3
-	%95 = load i32, i32* %3
-	store i32 3, i32* %2
-	%96 = load i32, i32* %2
-	%97 = add i32 0, 1
-	%98 = icmp ne i32 %97, 0
-	br i1 %98, label %label28, label %label29
+	%60 = load i32, i32* %2
+	%61 = add i32 0, 1
+	%62 = icmp ne i32 %61, 0
+	br i1 %62, label %label28, label %label29
 
 label28:
-	%99 = call i32 @f1()
+	%63 = call i32 @f1()
 	store i32 2, i32* %1
-	%100 = load i32, i32* %1
-	%101 = call i32 @f1()
-	store i32 2, i32* %1
-	%102 = load i32, i32* %1
-	%103 = call i32 @f2()
-	store i32 %103, i32* %3
-	%104 = load i32, i32* %3
-	%105 = call i32 @f1()
-	store i32 2, i32* %1
-	%106 = load i32, i32* %1
-	%107 = call i32 @f1()
-	store i32 2, i32* %1
-	%108 = load i32, i32* %1
-	%109 = call i32 @f2()
-	store i32 %109, i32* %3
-	%110 = load i32, i32* %3
+	%64 = load i32, i32* %1
+	%65 = call i32 @f2()
+	store i32 %65, i32* %3
+	%66 = load i32, i32* %3
 	store i32 3, i32* %2
-	%111 = load i32, i32* %2
-	%112 = call i32 @f1()
-	store i32 2, i32* %1
-	%113 = load i32, i32* %1
-	%114 = call i32 @f1()
-	store i32 2, i32* %1
-	%115 = load i32, i32* %1
-	%116 = call i32 @f2()
-	store i32 %116, i32* %3
-	%117 = load i32, i32* %3
-	%118 = call i32 @f1()
-	store i32 2, i32* %1
-	%119 = load i32, i32* %1
-	%120 = call i32 @f1()
-	store i32 2, i32* %1
-	%121 = load i32, i32* %1
-	%122 = call i32 @f2()
-	store i32 %122, i32* %3
-	%123 = load i32, i32* %3
-	store i32 3, i32* %2
-	%124 = load i32, i32* %2
-	%125 = add i32 0, 1
-	%126 = icmp ne i32 %125, 0
-	br i1 %126, label %label28, label %label29
+	%67 = load i32, i32* %2
+	%68 = add i32 0, 1
+	%69 = icmp ne i32 %68, 0
+	br i1 %69, label %label28, label %label29
 
 label29:
 	ret i32 0
@@ -345,79 +255,42 @@ define i32 @comma_char_tests() {
 	%24 = load i32, i32* %19
 	%25 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %24)
 	store i32 2, i32* %1
+	%26 = load i32, i32* %1
 	store i32 4, i32* %9
-	%26 = load i32, i32* %9
-	%27 = alloca i32
-	store i32 %26, i32* %27
-	%28 = load i32, i32* %1
-	%29 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %28)
-	%30 = load i32, i32* %9
-	%31 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %30)
-	%32 = load i32, i32* %27
-	%33 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %32)
-	%34 = call i32 @f1()
+	%27 = load i32, i32* %9
+	%28 = alloca i32
+	store i32 %27, i32* %28
+	%29 = load i32, i32* %1
+	%30 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %29)
+	%31 = load i32, i32* %9
+	%32 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %31)
+	%33 = load i32, i32* %28
+	%34 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %33)
+	%35 = call i32 @f1()
 	store i32 2, i32* %1
-	%35 = load i32, i32* %1
-	%36 = call i32 @f1()
-	store i32 2, i32* %1
-	%37 = load i32, i32* %1
-	%38 = call i32 @f2()
-	store i32 %38, i32* %2
-	%39 = load i32, i32* %2
-	%40 = call i32 @f1()
-	store i32 2, i32* %1
-	%41 = load i32, i32* %1
-	%42 = call i32 @f1()
-	store i32 2, i32* %1
-	%43 = load i32, i32* %1
-	%44 = call i32 @f2()
-	store i32 %44, i32* %2
-	%45 = load i32, i32* %2
+	%36 = load i32, i32* %1
+	%37 = call i32 @f2()
+	store i32 %37, i32* %2
+	%38 = load i32, i32* %2
+	%39 = load i32, i32* %9
+	%40 = add i32 0, 3
+	%41 = alloca i32
+	store i32 %40, i32* %41
+	%42 = load i32, i32* %41
+	%43 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %42)
+	%44 = load i32, i32* %1
+	%45 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %44)
 	%46 = load i32, i32* %9
-	%47 = call i32 @f1()
-	store i32 2, i32* %1
-	%48 = load i32, i32* %1
-	%49 = call i32 @f1()
-	store i32 2, i32* %1
+	%47 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %46)
+	%48 = load i32, i32* %2
+	%49 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %48)
 	%50 = load i32, i32* %1
-	%51 = call i32 @f2()
-	store i32 %51, i32* %2
-	%52 = load i32, i32* %2
-	%53 = call i32 @f1()
+	%51 = call i32 @f1()
+	%52 = load i32, i32* %14
 	store i32 2, i32* %1
-	%54 = load i32, i32* %1
-	%55 = call i32 @f1()
-	store i32 2, i32* %1
-	%56 = load i32, i32* %1
-	%57 = call i32 @f2()
-	store i32 %57, i32* %2
-	%58 = load i32, i32* %2
-	%59 = load i32, i32* %9
-	%60 = add i32 0, 3
-	%61 = alloca i32
-	store i32 %60, i32* %61
-	%62 = load i32, i32* %61
-	%63 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %62)
-	%64 = load i32, i32* %1
-	%65 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %64)
-	%66 = load i32, i32* %9
-	%67 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %66)
-	%68 = load i32, i32* %2
-	%69 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %68)
-	%70 = load i32, i32* %1
-	%71 = call i32 @f1()
-	%72 = load i32, i32* %1
-	%73 = call i32 @f1()
-	%74 = load i32, i32* %14
-	%75 = load i32, i32* %1
-	%76 = call i32 @f1()
-	%77 = load i32, i32* %1
-	%78 = call i32 @f1()
-	%79 = load i32, i32* %14
-	store i32 2, i32* %1
-	%80 = load i32, i32* %1
-	%81 = add i32 0, 10
-	ret i32 %81
+	%53 = load i32, i32* %1
+	%54 = add i32 0, 10
+	ret i32 %54
 }
 
 define i32 @comma_short_tests() {
@@ -452,79 +325,42 @@ define i32 @comma_short_tests() {
 	%24 = load i32, i32* %19
 	%25 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %24)
 	store i32 2, i32* %1
+	%26 = load i32, i32* %1
 	store i32 4, i32* %9
-	%26 = load i32, i32* %9
-	%27 = alloca i32
-	store i32 %26, i32* %27
-	%28 = load i32, i32* %1
-	%29 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %28)
-	%30 = load i32, i32* %9
-	%31 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %30)
-	%32 = load i32, i32* %27
-	%33 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %32)
-	%34 = call i32 @f3()
+	%27 = load i32, i32* %9
+	%28 = alloca i32
+	store i32 %27, i32* %28
+	%29 = load i32, i32* %1
+	%30 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %29)
+	%31 = load i32, i32* %9
+	%32 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %31)
+	%33 = load i32, i32* %28
+	%34 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %33)
+	%35 = call i32 @f3()
 	store i32 2, i32* %1
-	%35 = load i32, i32* %1
-	%36 = call i32 @f3()
-	store i32 2, i32* %1
-	%37 = load i32, i32* %1
-	%38 = call i32 @f4()
-	store i32 %38, i32* %2
-	%39 = load i32, i32* %2
-	%40 = call i32 @f3()
-	store i32 2, i32* %1
-	%41 = load i32, i32* %1
-	%42 = call i32 @f3()
-	store i32 2, i32* %1
-	%43 = load i32, i32* %1
-	%44 = call i32 @f4()
-	store i32 %44, i32* %2
-	%45 = load i32, i32* %2
+	%36 = load i32, i32* %1
+	%37 = call i32 @f4()
+	store i32 %37, i32* %2
+	%38 = load i32, i32* %2
+	%39 = load i32, i32* %9
+	%40 = add i32 0, 3
+	%41 = alloca i32
+	store i32 %40, i32* %41
+	%42 = load i32, i32* %41
+	%43 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %42)
+	%44 = load i32, i32* %1
+	%45 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %44)
 	%46 = load i32, i32* %9
-	%47 = call i32 @f3()
-	store i32 2, i32* %1
-	%48 = load i32, i32* %1
-	%49 = call i32 @f3()
-	store i32 2, i32* %1
+	%47 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %46)
+	%48 = load i32, i32* %2
+	%49 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %48)
 	%50 = load i32, i32* %1
-	%51 = call i32 @f4()
-	store i32 %51, i32* %2
-	%52 = load i32, i32* %2
-	%53 = call i32 @f3()
+	%51 = call i32 @f3()
+	%52 = load i32, i32* %14
 	store i32 2, i32* %1
-	%54 = load i32, i32* %1
-	%55 = call i32 @f3()
-	store i32 2, i32* %1
-	%56 = load i32, i32* %1
-	%57 = call i32 @f4()
-	store i32 %57, i32* %2
-	%58 = load i32, i32* %2
-	%59 = load i32, i32* %9
-	%60 = add i32 0, 3
-	%61 = alloca i32
-	store i32 %60, i32* %61
-	%62 = load i32, i32* %61
-	%63 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %62)
-	%64 = load i32, i32* %1
-	%65 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %64)
-	%66 = load i32, i32* %9
-	%67 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %66)
-	%68 = load i32, i32* %2
-	%69 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %68)
-	%70 = load i32, i32* %1
-	%71 = call i32 @f3()
-	%72 = load i32, i32* %1
-	%73 = call i32 @f3()
-	%74 = load i32, i32* %14
-	%75 = load i32, i32* %1
-	%76 = call i32 @f3()
-	%77 = load i32, i32* %1
-	%78 = call i32 @f3()
-	%79 = load i32, i32* %14
-	store i32 2, i32* %1
-	%80 = load i32, i32* %1
-	%81 = add i32 0, 10
-	ret i32 %81
+	%53 = load i32, i32* %1
+	%54 = add i32 0, 10
+	ret i32 %54
 }
 
 define i32 @comma_int_tests() {
@@ -559,79 +395,42 @@ define i32 @comma_int_tests() {
 	%24 = load i32, i32* %19
 	%25 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %24)
 	store i32 2, i32* %1
+	%26 = load i32, i32* %1
 	store i32 4, i32* %9
-	%26 = load i32, i32* %9
-	%27 = alloca i32
-	store i32 %26, i32* %27
-	%28 = load i32, i32* %1
-	%29 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %28)
-	%30 = load i32, i32* %9
-	%31 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %30)
-	%32 = load i32, i32* %27
-	%33 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %32)
-	%34 = call i32 @f5()
+	%27 = load i32, i32* %9
+	%28 = alloca i32
+	store i32 %27, i32* %28
+	%29 = load i32, i32* %1
+	%30 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %29)
+	%31 = load i32, i32* %9
+	%32 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %31)
+	%33 = load i32, i32* %28
+	%34 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %33)
+	%35 = call i32 @f5()
 	store i32 2, i32* %1
-	%35 = load i32, i32* %1
-	%36 = call i32 @f5()
-	store i32 2, i32* %1
-	%37 = load i32, i32* %1
-	%38 = call i32 @f6()
-	store i32 %38, i32* %2
-	%39 = load i32, i32* %2
-	%40 = call i32 @f5()
-	store i32 2, i32* %1
-	%41 = load i32, i32* %1
-	%42 = call i32 @f5()
-	store i32 2, i32* %1
-	%43 = load i32, i32* %1
-	%44 = call i32 @f6()
-	store i32 %44, i32* %2
-	%45 = load i32, i32* %2
+	%36 = load i32, i32* %1
+	%37 = call i32 @f6()
+	store i32 %37, i32* %2
+	%38 = load i32, i32* %2
+	%39 = load i32, i32* %9
+	%40 = add i32 0, 3
+	%41 = alloca i32
+	store i32 %40, i32* %41
+	%42 = load i32, i32* %41
+	%43 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %42)
+	%44 = load i32, i32* %1
+	%45 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %44)
 	%46 = load i32, i32* %9
-	%47 = call i32 @f5()
-	store i32 2, i32* %1
-	%48 = load i32, i32* %1
-	%49 = call i32 @f5()
-	store i32 2, i32* %1
+	%47 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %46)
+	%48 = load i32, i32* %2
+	%49 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %48)
 	%50 = load i32, i32* %1
-	%51 = call i32 @f6()
-	store i32 %51, i32* %2
-	%52 = load i32, i32* %2
-	%53 = call i32 @f5()
+	%51 = call i32 @f5()
+	%52 = load i32, i32* %14
 	store i32 2, i32* %1
-	%54 = load i32, i32* %1
-	%55 = call i32 @f5()
-	store i32 2, i32* %1
-	%56 = load i32, i32* %1
-	%57 = call i32 @f6()
-	store i32 %57, i32* %2
-	%58 = load i32, i32* %2
-	%59 = load i32, i32* %9
-	%60 = add i32 0, 3
-	%61 = alloca i32
-	store i32 %60, i32* %61
-	%62 = load i32, i32* %61
-	%63 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %62)
-	%64 = load i32, i32* %1
-	%65 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %64)
-	%66 = load i32, i32* %9
-	%67 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %66)
-	%68 = load i32, i32* %2
-	%69 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %68)
-	%70 = load i32, i32* %1
-	%71 = call i32 @f5()
-	%72 = load i32, i32* %1
-	%73 = call i32 @f5()
-	%74 = load i32, i32* %14
-	%75 = load i32, i32* %1
-	%76 = call i32 @f5()
-	%77 = load i32, i32* %1
-	%78 = call i32 @f5()
-	%79 = load i32, i32* %14
-	store i32 2, i32* %1
-	%80 = load i32, i32* %1
-	%81 = add i32 0, 10
-	ret i32 %81
+	%53 = load i32, i32* %1
+	%54 = add i32 0, 10
+	ret i32 %54
 }
 
 define double @comma_double_tests() {
@@ -652,77 +451,28 @@ define double @comma_double_tests() {
 	%11 = alloca double
 	store double %10, double* %11
 	store double 2.100000e+00, double* %1
+	%12 = load double, double* %1
 	store double 4.000000e+00, double* %5
-	%12 = load double, double* %5
-	%13 = alloca double
-	store double %12, double* %13
-	%14 = call double @f7()
+	%13 = load double, double* %5
+	%14 = alloca double
+	store double %13, double* %14
+	%15 = call double @f7()
 	store double 2.000000e+00, double* %1
-	%15 = load double, double* %1
-	%16 = call double @f7()
+	%16 = load double, double* %1
+	%17 = call double @f8()
+	store double %17, double* %2
+	%18 = load double, double* %2
+	%19 = load double, double* %5
+	%20 = fadd double 0.0, 3.200000e+00
+	%21 = alloca double
+	store double %20, double* %21
+	%22 = load double, double* %1
+	%23 = call double @f7()
+	%24 = load double, double* %8
 	store double 2.000000e+00, double* %1
-	%17 = load double, double* %1
-	%18 = call double @f8()
-	store double %18, double* %2
-	%19 = load double, double* %2
-	%20 = call double @f7()
-	store double 2.000000e+00, double* %1
-	%21 = load double, double* %1
-	%22 = call double @f7()
-	store double 2.000000e+00, double* %1
-	%23 = load double, double* %1
-	%24 = call double @f8()
-	store double %24, double* %2
-	%25 = load double, double* %2
-	%26 = load double, double* %5
-	%27 = call double @f7()
-	store double 2.000000e+00, double* %1
-	%28 = load double, double* %1
-	%29 = call double @f7()
-	store double 2.000000e+00, double* %1
-	%30 = load double, double* %1
-	%31 = call double @f8()
-	store double %31, double* %2
-	%32 = load double, double* %2
-	%33 = call double @f7()
-	store double 2.000000e+00, double* %1
-	%34 = load double, double* %1
-	%35 = call double @f7()
-	store double 2.000000e+00, double* %1
-	%36 = load double, double* %1
-	%37 = call double @f8()
-	store double %37, double* %2
-	%38 = load double, double* %2
-	%39 = load double, double* %5
-	%40 = fadd double 0.0, 3.200000e+00
-	%41 = alloca double
-	store double %40, double* %41
-	%42 = load double, double* %1
-	%43 = call double @f7()
-	%44 = load double, double* %1
-	%45 = call double @f7()
-	%46 = load double, double* %8
-	%47 = load double, double* %1
-	%48 = call double @f7()
-	%49 = load double, double* %1
-	%50 = call double @f7()
-	%51 = load double, double* %8
-	store double 2.000000e+00, double* %1
-	%52 = load double, double* %1
-	%53 = load double, double* %1
-	%54 = call double @f7()
-	%55 = load double, double* %1
-	%56 = call double @f7()
-	%57 = load double, double* %8
-	%58 = load double, double* %1
-	%59 = call double @f7()
-	%60 = load double, double* %1
-	%61 = call double @f7()
-	%62 = load double, double* %8
-	store double 2.000000e+00, double* %1
-	%63 = load double, double* %1
-	%64 = fadd double 0.0, 1.010200e+01
-	ret double %64
+	%25 = load double, double* %1
+	%26 = fadd double 0.0, 1.010200e+01
+	ret double %26
 }
 
 define i32 @main() {

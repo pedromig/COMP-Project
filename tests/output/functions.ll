@@ -7,70 +7,68 @@ define i32 @getint() {
 	store i32 0, i32* %1
 	%2 = alloca i32
 	store i32 1, i32* %2
-	%3 = call i32 (...) @getchar()
-	%4 = alloca i32
-	store i32 %3, i32* %4
-	%5 = load i32, i32* %4
-	%6 = add i32 0, 45
-	%7 = icmp eq i32 %5, %6
-	%8 = zext i1 %7 to i32
-	%9 = icmp ne i32 %8, 0
-	br i1 %9, label %label0, label %label1
+	%3 = alloca i32
+	store i32 52, i32* %3
+	%4 = load i32, i32* %3
+	%5 = add i32 0, 45
+	%6 = icmp eq i32 %4, %5
+	%7 = zext i1 %6 to i32
+	%8 = icmp ne i32 %7, 0
+	br i1 %8, label %label0, label %label1
 
 label0:
-	%10 = add i32 0, 1
-	%11 = sub i32 0, %10
-	store i32 %11, i32* %2
+	%9 = add i32 0, 1
+	%10 = sub i32 0, %9
+	store i32 %10, i32* %2
 	br label %label2
 
 label1:
 	br label %label2
 
 label2:
-	%12 = load i32, i32* %4
-	%13 = add i32 0, 10
-	%14 = icmp ne i32 %12, %13
-	%15 = zext i1 %14 to i32
-	%16 = icmp ne i32 %15, 0
-	br i1 %16, label %label3, label %label4
+	%11 = load i32, i32* %3
+	%12 = add i32 0, 10
+	%13 = icmp ne i32 %11, %12
+	%14 = zext i1 %13 to i32
+	%15 = icmp ne i32 %14, 0
+	br i1 %15, label %label3, label %label4
 
 label3:
-	%17 = load i32, i32* %4
-	%18 = add i32 0, 45
-	%19 = icmp ne i32 %17, %18
-	%20 = zext i1 %19 to i32
-	%21 = icmp ne i32 %20, 0
-	br i1 %21, label %label5, label %label6
+	%16 = load i32, i32* %3
+	%17 = add i32 0, 45
+	%18 = icmp ne i32 %16, %17
+	%19 = zext i1 %18 to i32
+	%20 = icmp ne i32 %19, 0
+	br i1 %20, label %label5, label %label6
 
 label5:
-	%22 = load i32, i32* %1
-	%23 = add i32 0, 10
-	%24 = mul i32 %22, %23
-	%25 = load i32, i32* %4
-	%26 = add i32 %24, %25
-	%27 = add i32 0, 48
-	%28 = sub i32 %26, %27
-	store i32 %28, i32* %1
+	%21 = load i32, i32* %1
+	%22 = add i32 0, 10
+	%23 = mul i32 %21, %22
+	%24 = load i32, i32* %3
+	%25 = add i32 %23, %24
+	%26 = add i32 0, 48
+	%27 = sub i32 %25, %26
+	store i32 %27, i32* %1
 	br label %label7
 
 label6:
 	br label %label7
 
 label7:
-	%29 = call i32 (...) @getchar()
-	store i32 %29, i32* %4
-	%30 = load i32, i32* %4
-	%31 = add i32 0, 10
-	%32 = icmp ne i32 %30, %31
-	%33 = zext i1 %32 to i32
-	%34 = icmp ne i32 %33, 0
-	br i1 %34, label %label3, label %label4
+	store i32 10, i32* %3
+	%28 = load i32, i32* %3
+	%29 = add i32 0, 10
+	%30 = icmp ne i32 %28, %29
+	%31 = zext i1 %30 to i32
+	%32 = icmp ne i32 %31, 0
+	br i1 %32, label %label3, label %label4
 
 label4:
-	%35 = load i32, i32* %2
-	%36 = load i32, i32* %1
-	%37 = mul i32 %35, %36
-	ret i32 %37
+	%33 = load i32, i32* %2
+	%34 = load i32, i32* %1
+	%35 = mul i32 %33, %34
+	ret i32 %35
 }
 
 define void @putint(i32) {
@@ -138,6 +136,7 @@ label0:
 	call void @putint(i32 %8)
 	%9 = add i32 0, 10
 	%10 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %9)
+	store i32 0, i32* %1
 	%11 = load i32, i32* %1
 	%12 = add i32 0, 0
 	%13 = icmp ne i32 %11, %12

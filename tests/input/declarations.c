@@ -6,6 +6,6 @@ double dd(double d);
 
 int main(void) {
     putchar('A');
-    getchar();
+    // getchar();
     return 0;
 }

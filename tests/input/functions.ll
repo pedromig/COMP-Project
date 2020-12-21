@@ -10,57 +10,51 @@ define i32 @getint() #0 {
   %3 = alloca i8, align 1
   store i32 0, i32* %1, align 4
   store i32 1, i32* %2, align 4
-  %4 = call i32 (...) @getchar()
-  %5 = trunc i32 %4 to i8
-  store i8 %5, i8* %3, align 1
-  %6 = load i8, i8* %3, align 1
-  %7 = sext i8 %6 to i32
-  %8 = icmp eq i32 %7, 45
-  br i1 %8, label %9, label %10
+  store i8 52, i8* %3, align 1
+  %4 = load i8, i8* %3, align 1
+  %5 = sext i8 %4 to i32
+  %6 = icmp eq i32 %5, 45
+  br i1 %6, label %7, label %8
 
-; <label>:9:                                      ; preds = %0
+; <label>:7:                                      ; preds = %0
   store i32 -1, i32* %2, align 4
-  br label %10
+  br label %8
 
-; <label>:10:                                     ; preds = %9, %0
-  br label %11
+; <label>:8:                                      ; preds = %7, %0
+  br label %9
 
-; <label>:11:                                     ; preds = %26, %10
-  %12 = load i8, i8* %3, align 1
-  %13 = sext i8 %12 to i32
-  %14 = icmp ne i32 %13, 10
-  br i1 %14, label %15, label %29
+; <label>:9:                                      ; preds = %24, %8
+  %10 = load i8, i8* %3, align 1
+  %11 = sext i8 %10 to i32
+  %12 = icmp ne i32 %11, 10
+  br i1 %12, label %13, label %25
 
-; <label>:15:                                     ; preds = %11
-  %16 = load i8, i8* %3, align 1
-  %17 = sext i8 %16 to i32
-  %18 = icmp ne i32 %17, 45
-  br i1 %18, label %19, label %26
+; <label>:13:                                     ; preds = %9
+  %14 = load i8, i8* %3, align 1
+  %15 = sext i8 %14 to i32
+  %16 = icmp ne i32 %15, 45
+  br i1 %16, label %17, label %24
 
-; <label>:19:                                     ; preds = %15
-  %20 = load i32, i32* %1, align 4
-  %21 = mul nsw i32 %20, 10
-  %22 = load i8, i8* %3, align 1
-  %23 = sext i8 %22 to i32
-  %24 = add nsw i32 %21, %23
-  %25 = sub nsw i32 %24, 48
-  store i32 %25, i32* %1, align 4
-  br label %26
+; <label>:17:                                     ; preds = %13
+  %18 = load i32, i32* %1, align 4
+  %19 = mul nsw i32 %18, 10
+  %20 = load i8, i8* %3, align 1
+  %21 = sext i8 %20 to i32
+  %22 = add nsw i32 %19, %21
+  %23 = sub nsw i32 %22, 48
+  store i32 %23, i32* %1, align 4
+  br label %24
 
-; <label>:26:                                     ; preds = %19, %15
-  %27 = call i32 (...) @getchar()
-  %28 = trunc i32 %27 to i8
-  store i8 %28, i8* %3, align 1
-  br label %11
+; <label>:24:                                     ; preds = %17, %13
+  store i8 10, i8* %3, align 1
+  br label %9
 
-; <label>:29:                                     ; preds = %11
-  %30 = load i32, i32* %2, align 4
-  %31 = load i32, i32* %1, align 4
-  %32 = mul nsw i32 %30, %31
-  ret i32 %32
+; <label>:25:                                     ; preds = %9
+  %26 = load i32, i32* %2, align 4
+  %27 = load i32, i32* %1, align 4
+  %28 = mul nsw i32 %26, %27
+  ret i32 %28
 }
-
-declare i32 @getchar(...) #1
 
 ; Function Attrs: nounwind uwtable
 define void @putint(i32) #0 {
@@ -118,6 +112,7 @@ define i32 @main() #0 {
   %8 = load i32, i32* %2, align 4
   call void @putint(i32 %8)
   %9 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 10)
+  store i32 0, i32* %2, align 4
   br label %3
 
 ; <label>:10:                                     ; preds = %3

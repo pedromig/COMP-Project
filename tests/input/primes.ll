@@ -14,11 +14,11 @@ define void @primes(i32, i32) #0 {
   store i32 %1, i32* %4, align 4
   br label %8
 
-; <label>:8:                                      ; preds = %48, %2
+; <label>:8:                                      ; preds = %49, %2
   %9 = load i32, i32* %3, align 4
   %10 = load i32, i32* %4, align 4
   %11 = icmp slt i32 %9, %10
-  br i1 %11, label %12, label %49
+  br i1 %11, label %12, label %50
 
 ; <label>:12:                                     ; preds = %8
   store i32 0, i32* %6, align 4
@@ -30,7 +30,7 @@ define void @primes(i32, i32) #0 {
   %16 = load i32, i32* %3, align 4
   %17 = add nsw i32 %16, 1
   store i32 %17, i32* %3, align 4
-  br label %48
+  br label %49
 
 ; <label>:18:                                     ; preds = %12
   store i32 2, i32* %5, align 4
@@ -75,23 +75,24 @@ define void @primes(i32, i32) #0 {
 ; <label>:39:                                     ; preds = %28
   %40 = load i32, i32* %6, align 4
   %41 = icmp eq i32 %40, 0
-  br i1 %41, label %42, label %45
+  br i1 %41, label %42, label %46
 
 ; <label>:42:                                     ; preds = %39
   %43 = load i32, i32* %3, align 4
-  %44 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %43)
-  br label %45
+  %44 = add nsw i32 48, %43
+  %45 = call i32 (i32, ...) bitcast (i32 (...)* @putchar to i32 (i32, ...)*)(i32 %44)
+  br label %46
 
-; <label>:45:                                     ; preds = %42, %39
-  %46 = load i32, i32* %3, align 4
-  %47 = add nsw i32 %46, 1
-  store i32 %47, i32* %3, align 4
-  br label %48
+; <label>:46:                                     ; preds = %42, %39
+  %47 = load i32, i32* %3, align 4
+  %48 = add nsw i32 %47, 1
+  store i32 %48, i32* %3, align 4
+  br label %49
 
-; <label>:48:                                     ; preds = %45, %15
+; <label>:49:                                     ; preds = %46, %15
   br label %8
 
-; <label>:49:                                     ; preds = %8
+; <label>:50:                                     ; preds = %8
   ret void
 }
 
