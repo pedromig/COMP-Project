@@ -42,9 +42,6 @@ int main(void) {
     putchar('d');
     putchar(' ');
     print_equality(d, 1.200000);
-    putchar('e');
-    putchar(' ');
-    print_equality(e, 179.769313);
     putchar('f');
     putchar(' ');
     print_equality(f, 2157.231762);

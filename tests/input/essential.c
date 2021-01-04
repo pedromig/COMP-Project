@@ -1,8 +1,8 @@
 char global_char = '\000';
-char global_char1 = '\777';
+char global_char1 = '\1';
 char global_char2 = '\4';
 char global_char3 = '\44';
-char global_char4 = '\444';
+char global_char4 = '\24';
 
 char global_a = 'A';
 short global_b = 'B';

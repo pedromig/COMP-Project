@@ -2,10 +2,10 @@ declare i32 @putchar(...)
 declare i32 @getchar(...)
 
 @global_char = global i32 0
-@global_char1 = global i32 511
+@global_char1 = global i32 1
 @global_char2 = global i32 4
 @global_char3 = global i32 36
-@global_char4 = global i32 292
+@global_char4 = global i32 20
 @global_a = global i32 65
 @global_b = global i32 66
 @global_c = global i32 67

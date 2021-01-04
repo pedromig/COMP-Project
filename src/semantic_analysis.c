@@ -393,32 +393,31 @@ void annotate_return(ast_node_t *node) {
     sym_t *function_return = current_table->symlist;
 
     if (!strcmp(function_return->type, "void")) {
-        //verificar se é algo que está na tabela global
 
-        if (expr_list->annotation.parameters) { // é function   -> return f;
+        if (expr_list->annotation.parameters) {
             sym_t aux = (sym_t){.id = NULL, .type = expr_list->annotation.type, .parameters = expr_list->annotation.parameters};
             confliting_types_error(&aux, function_return, node->token.line, node->token.column);
             return;
         }
 
-        if (expr_list->annotation.type && !strcmp(expr_list->annotation.type, "void")) { //espera void e recebe void
+        if (expr_list->annotation.type && !strcmp(expr_list->annotation.type, "void")) {
             return;
         }
 
-        if (strcmp(expr_list->id, "Null")) { //espera void recebe != void
+        if (strcmp(expr_list->id, "Null")) { 
             sym_t aux = (sym_t){.id = NULL, .type = expr_list->annotation.type, .parameters = expr_list->annotation.parameters};
             confliting_types_error(&aux, function_return, node->token.line, node->token.column);
             return;
         }
 
-    } else {                                  // não é void
-        if (!strcmp(expr_list->id, "Null")) { //não é void mas não tem return
+    } else {                                
+        if (!strcmp(expr_list->id, "Null")) { 
             sym_t aux = (sym_t){.id = NULL, .type = "void", .parameters = expr_list->annotation.parameters};
-            confliting_types_error(&aux, function_return, node->token.line, node->token.column); //got void, expected != void
+            confliting_types_error(&aux, function_return, node->token.line, node->token.column); 
             return;
         }
 
-        if (invalid_assign(current_table->symlist->type, expr_list->annotation.type)) { //verificar se o return type da função é menos geral que o recebido
+        if (invalid_assign(current_table->symlist->type, expr_list->annotation.type)) {
             sym_t aux1 = (sym_t){.id = NULL, .type = expr_list->annotation.type, .parameters = expr_list->annotation.parameters};
             confliting_types_error(&aux1, current_table->symlist, node->token.line, node->token.column);
         }
