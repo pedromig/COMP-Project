@@ -13,9 +13,9 @@ RESET="\x1B[0m"
 BLUE="\x1B[34m"
 
 # Default Directory Search Path and Compiler Output Paths
-INPUT_DIR="../tests/input"
-OUTPUT_DIR="../tests/output"
-TEST_INPUT_DIR="../tests/input_files"
+INPUT_DIR="../tests/meta4/input"
+OUTPUT_DIR="../tests/meta4/output"
+TEST_INPUT_DIR="../tests/meta4/input_files"
 
 # Default Configurations
 LEXER="uccompiler.l"
