@@ -7,9 +7,12 @@ The construction of a compiler for the "UC" programming language, a subset of th
   - Bison (yacc)
   - LLVM (llvm-3.9)
   - Clang (clang-3.9)
+### Other Tools Used
+  - valgrind
+  - gdb
 ## Instalation 
  - cd src 
- - flex uccompiler.l && yacc $2 uccompiler.y -d && clang-3.9 -Wall *.c -o uccompiler
+ - flex uccompiler.l && yacc uccompiler.y -d && clang-3.9 -Wall *.c -o uccompiler
 ## Usage
   - ./uccompiler < input.uc > output.out && llc-3.9 output.out && clang-3.9 output.s -o output
   - The compiler can be tested using the test.sh shell script. To know more about it, execute it by following these steps: 
